@@ -1,18 +1,7 @@
-"use client";
-
-import { useState } from "react";
+import Link from "next/link";
 
 /* ───── Hero ───── */
 function Hero() {
-  const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    // TODO: wire up to Supabase later
-    setSubmitted(true);
-  }
-
   return (
     <section className="flex min-h-[85vh] flex-col items-center justify-center px-6 text-center">
       <h1 className="text-5xl font-extrabold tracking-tight sm:text-6xl">
@@ -22,31 +11,20 @@ function Hero() {
         Draft your dream deck, compete with friends, and climb the leaderboard.
       </p>
 
-      {submitted ? (
-        <p className="mt-8 rounded-lg bg-green-900/40 px-6 py-3 text-green-300">
-          You&apos;re on the list! We&apos;ll be in touch. ⚡
-        </p>
-      ) : (
-        <form
-          onSubmit={handleSubmit}
-          className="mt-8 flex w-full max-w-sm flex-col gap-3 sm:flex-row"
+      <div className="mt-8 flex gap-3">
+        <Link
+          href="/auth/signup"
+          className="rounded-lg bg-yellow-400 px-6 py-3 text-sm font-semibold text-gray-900 hover:bg-yellow-300 active:bg-yellow-500"
         >
-          <input
-            type="email"
-            required
-            placeholder="you@email.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="flex-1 rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 text-sm placeholder-gray-500 focus:border-yellow-400 focus:outline-none"
-          />
-          <button
-            type="submit"
-            className="rounded-lg bg-yellow-400 px-6 py-3 text-sm font-semibold text-gray-900 hover:bg-yellow-300 active:bg-yellow-500"
-          >
-            Join the waitlist
-          </button>
-        </form>
-      )}
+          Get started
+        </Link>
+        <Link
+          href="/auth/login"
+          className="rounded-lg border border-gray-700 px-6 py-3 text-sm font-semibold text-gray-300 hover:border-gray-500 hover:text-white"
+        >
+          Log in
+        </Link>
+      </div>
     </section>
   );
 }
