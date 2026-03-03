@@ -21,19 +21,20 @@ export async function fetchMetaDecks(): Promise<MetaDeck[]> {
   const html = await res.text();
 
   const decks: MetaDeck[] = [];
-  // Match rows: deck link with id, name, points, share%
+  // Match table rows: rank, deck link (may contain <span> tags), points, share%
   const rowRegex =
-    /\/decks\/(\d+)[^>]*>([^<]+)<[\s\S]*?(\d[\d,]*)\s*\n\s*([\d.]+)%/g;
+    /<td>(\d+)<\/td>\s*<td><a href="\/decks\/(\d+)">([\s\S]*?)<\/a><\/td>\s*<td>([\d,]+)<\/td>\s*<td>([\d.]+)%<\/td>/g;
   let match;
-  let rank = 1;
 
   while ((match = rowRegex.exec(html)) !== null) {
+    // Strip HTML tags from deck name (e.g. <span class="annotation">ex</span>)
+    const name = match[3].replace(/<[^>]+>/g, "").trim();
     decks.push({
-      rank: rank++,
-      name: match[2].trim(),
-      limitlessId: parseInt(match[1]),
-      points: parseInt(match[3].replace(",", "")),
-      metaShare: parseFloat(match[4]),
+      rank: parseInt(match[1]),
+      name,
+      limitlessId: parseInt(match[2]),
+      points: parseInt(match[4].replace(",", "")),
+      metaShare: parseFloat(match[5]),
     });
   }
 
