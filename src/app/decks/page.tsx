@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import Image from "next/image";
 
 interface Deck {
   id: number;
@@ -6,6 +7,7 @@ interface Deck {
   meta_share: number;
   cost: number;
   tier: string;
+  image_url: string | null;
 }
 
 const tierColors: Record<string, string> = {
@@ -44,21 +46,39 @@ export default async function DecksPage() {
               key={deck.id}
               className="flex items-center gap-4 rounded-lg border border-gray-800 p-4"
             >
-              <span className="w-6 text-right text-sm text-gray-500">
+              <span className="w-6 shrink-0 text-right text-sm text-gray-500">
                 {i + 1}
               </span>
+
+              {/* Pokémon image */}
+              <div className="h-10 w-10 shrink-0">
+                {deck.image_url ? (
+                  <Image
+                    src={deck.image_url}
+                    alt={deck.name}
+                    width={40}
+                    height={40}
+                    className="h-10 w-10 object-contain"
+                  />
+                ) : (
+                  <div className="h-10 w-10 rounded bg-gray-800" />
+                )}
+              </div>
+
               <span
-                className={`rounded px-2 py-0.5 text-xs font-bold ${tierColors[deck.tier] || tierColors.D}`}
+                className={`shrink-0 rounded px-2 py-0.5 text-xs font-bold ${tierColors[deck.tier] || tierColors.D}`}
               >
                 {deck.tier}
               </span>
-              <div className="flex-1">
-                <p className="font-medium">{deck.name}</p>
+
+              <div className="flex-1 min-w-0">
+                <p className="truncate font-medium">{deck.name}</p>
                 <p className="text-xs text-gray-500">
                   {deck.meta_share}% meta share
                 </p>
               </div>
-              <div className="text-right">
+
+              <div className="shrink-0 text-right">
                 <p className="text-lg font-bold text-yellow-400">
                   {deck.cost}
                   <span className="ml-1 text-xs text-gray-500">pts</span>
