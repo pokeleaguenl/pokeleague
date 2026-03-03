@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import Image from "next/image";
 import DeckBrowser from "./deck-browser";
+import { THEMES, DEFAULT_THEME, type Theme } from "@/lib/themes";
 
 export interface Deck {
   id: number;
@@ -13,13 +14,13 @@ export interface Deck {
   image_url: string | null;
 }
 
-interface SlotId {
+interface SlotKey {
   key: "active" | "bench_1" | "bench_2" | "bench_3" | "bench_4" | "bench_5";
   label: string;
   isActive?: boolean;
 }
 
-const SLOTS: SlotId[] = [
+const SLOTS: SlotKey[] = [
   { key: "active", label: "Active", isActive: true },
   { key: "bench_1", label: "Bench 1" },
   { key: "bench_2", label: "Bench 2" },
@@ -28,9 +29,11 @@ const SLOTS: SlotId[] = [
   { key: "bench_5", label: "Bench 5" },
 ];
 
-type Squad = Record<SlotId["key"], Deck | null>;
+const BUDGET = 100;
 
-const tierColors: Record<string, string> = {
+type Squad = Record<SlotKey["key"], Deck | null>;
+
+const tierBorders: Record<string, string> = {
   S: "border-yellow-400",
   A: "border-purple-500",
   B: "border-blue-500",
@@ -54,25 +57,53 @@ export default function Playmat({ allDecks, initialSquad, locked: initialLocked 
     bench_5: initialSquad.bench_5 ?? null,
   });
   const [locked, setLocked] = useState(initialLocked);
-  const [openSlot, setOpenSlot] = useState<SlotId["key"] | null>(null);
+  const [openSlot, setOpenSlot] = useState<SlotKey["key"] | null>(null);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [theme, setTheme] = useState<Theme>(DEFAULT_THEME);
+  const [showThemePicker, setShowThemePicker] = useState(false);
 
+  // Load theme from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem("pokeleague-theme");
+    if (saved) {
+      const found = THEMES.find((t) => t.id === saved);
+      if (found) setTheme(found);
+    }
+  }, []);
+
+  function selectTheme(t: Theme) {
+    setTheme(t);
+    localStorage.setItem("pokeleague-theme", t.id);
+    setShowThemePicker(false);
+  }
+
+  const totalCost = Object.values(squad)
+    .filter(Boolean)
+    .reduce((sum, d) => sum + d!.cost, 0);
+  const remaining = BUDGET - totalCost;
+  const budgetPct = Math.min((totalCost / BUDGET) * 100, 100);
   const filledCount = Object.values(squad).filter(Boolean).length;
 
   const handleSelectDeck = useCallback((deck: Deck) => {
     if (!openSlot || locked) return;
-    // Remove deck from any other slot first
+    // Check if adding this deck would exceed budget (accounting for existing deck in slot)
+    const currentSlotDeck = squad[openSlot];
+    const currentSlotCost = currentSlotDeck?.cost ?? 0;
+    const newCost = totalCost - currentSlotCost + deck.cost;
+    if (newCost > BUDGET) return; // over budget, silently reject
+
     const newSquad = { ...squad };
-    (Object.keys(newSquad) as SlotId["key"][]).forEach((k) => {
+    // Remove deck from any other slot first
+    (Object.keys(newSquad) as SlotKey["key"][]).forEach((k) => {
       if (newSquad[k]?.id === deck.id) newSquad[k] = null;
     });
     newSquad[openSlot] = deck;
     setSquad(newSquad);
     setOpenSlot(null);
-  }, [openSlot, squad, locked]);
+  }, [openSlot, squad, locked, totalCost]);
 
-  const handleRemove = (key: SlotId["key"]) => {
+  const handleRemove = (key: SlotKey["key"]) => {
     if (locked) return;
     setSquad((s) => ({ ...s, [key]: null }));
   };
@@ -101,71 +132,110 @@ export default function Playmat({ allDecks, initialSquad, locked: initialLocked 
   const handleLock = async () => {
     const newLocked = !locked;
     setLocked(newLocked);
-    // Save with current squad when locking
     if (newLocked) await handleSave();
   };
 
   const usedIds = new Set(Object.values(squad).filter(Boolean).map((d) => d!.id));
 
   return (
-    <div className="flex flex-col gap-6">
-      {/* Active slot */}
-      <div className="flex flex-col items-center gap-2">
-        <p className="text-xs font-semibold uppercase tracking-widest text-yellow-400">Active (1.5×)</p>
-        <DeckSlot
-          slot={SLOTS[0]}
-          deck={squad.active}
-          locked={locked}
-          onOpen={() => !locked && setOpenSlot("active")}
-          onRemove={() => handleRemove("active")}
-        />
-      </div>
+    <div className={`relative min-h-screen rounded-2xl ${theme.bg} p-4`}>
+      {/* Subtle playmat grid overlay */}
+      <div className={`pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-b ${theme.overlay} opacity-60`} />
+      <div className="pointer-events-none absolute inset-0 rounded-2xl"
+        style={{ backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px)", backgroundSize: "32px 32px" }} />
 
-      {/* Bench row */}
-      <div>
-        <p className="mb-2 text-center text-xs font-semibold uppercase tracking-widest text-gray-500">Bench</p>
+      <div className="relative z-10 flex flex-col gap-5">
+        {/* Header row: budget + theme picker */}
+        <div className="flex items-center justify-between">
+          <button
+            onClick={() => setShowThemePicker((v) => !v)}
+            className="flex items-center gap-2 rounded-lg border border-white/10 bg-black/20 px-3 py-1.5 text-sm backdrop-blur-sm hover:bg-black/30"
+          >
+            <span>{theme.emoji}</span>
+            <span className={`font-medium ${theme.accent}`}>{theme.name}</span>
+            <span className="text-gray-500 text-xs">▾</span>
+          </button>
+
+          {/* Budget display */}
+          <div className="text-right">
+            <p className={`text-xs font-semibold ${remaining < 10 ? "text-red-400" : theme.accent}`}>
+              {remaining} / {BUDGET} pts remaining
+            </p>
+            <div className="mt-1 h-1.5 w-32 rounded-full bg-white/10">
+              <div
+                className={`h-1.5 rounded-full transition-all ${budgetPct > 90 ? "bg-red-500" : budgetPct > 70 ? "bg-orange-400" : "bg-yellow-400"}`}
+                style={{ width: `${budgetPct}%` }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Theme picker */}
+        {showThemePicker && (
+          <div className="grid grid-cols-4 gap-2 rounded-xl border border-white/10 bg-black/40 p-3 backdrop-blur-sm">
+            {THEMES.map((t) => (
+              <button key={t.id} onClick={() => selectTheme(t)}
+                className={`flex flex-col items-center gap-1 rounded-lg p-2 text-xs transition-all
+                  ${theme.id === t.id ? "bg-white/20 ring-1 ring-white/40" : "hover:bg-white/10"}`}>
+                <span className="text-xl">{t.emoji}</span>
+                <span className="text-gray-300">{t.name}</span>
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Zone labels */}
+        <div className="flex flex-col items-center gap-1">
+          <div className={`text-xs font-semibold uppercase tracking-widest ${theme.accent}`}>
+            ⭐ Active Zone — 1.5× points
+          </div>
+        </div>
+
+        {/* Active slot */}
+        <div className="flex justify-center">
+          <DeckSlot slot={SLOTS[0]} deck={squad.active} locked={locked} theme={theme}
+            onOpen={() => !locked && setOpenSlot("active")}
+            onRemove={() => handleRemove("active")}
+            remaining={remaining}
+          />
+        </div>
+
+        {/* Divider */}
+        <div className="flex items-center gap-3">
+          <div className="h-px flex-1 bg-white/10" />
+          <span className="text-xs text-gray-600 uppercase tracking-widest">Bench</span>
+          <div className="h-px flex-1 bg-white/10" />
+        </div>
+
+        {/* Bench row */}
         <div className="grid grid-cols-5 gap-2">
           {SLOTS.slice(1).map((slot) => (
-            <DeckSlot
-              key={slot.key}
-              slot={slot}
-              deck={squad[slot.key]}
-              locked={locked}
+            <DeckSlot key={slot.key} slot={slot} deck={squad[slot.key]} locked={locked} theme={theme}
               onOpen={() => !locked && setOpenSlot(slot.key)}
               onRemove={() => handleRemove(slot.key)}
+              remaining={remaining}
             />
           ))}
         </div>
-      </div>
 
-      {/* Actions */}
-      <div className="flex items-center justify-between gap-3">
-        <button
-          onClick={handleClear}
-          disabled={locked}
-          className="rounded-lg border border-gray-700 px-4 py-2 text-sm text-gray-400 hover:border-gray-500 hover:text-white disabled:opacity-30"
-        >
-          Clear All
-        </button>
-
-        <div className="flex gap-2">
-          <button
-            onClick={handleSave}
-            disabled={saving || locked}
-            className="rounded-lg bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-30"
-          >
-            {saving ? "Saving..." : saved ? "✅ Saved" : "Save"}
+        {/* Actions */}
+        <div className="flex items-center justify-between gap-3 pt-2">
+          <button onClick={handleClear} disabled={locked}
+            className="rounded-lg border border-white/10 bg-black/20 px-4 py-2 text-sm text-gray-400 hover:text-white disabled:opacity-30 backdrop-blur-sm">
+            Clear All
           </button>
-          <button
-            onClick={handleLock}
-            className={`rounded-lg px-4 py-2 text-sm font-semibold ${
-              locked
-                ? "bg-red-600 text-white hover:bg-red-500"
-                : "bg-yellow-400 text-gray-900 hover:bg-yellow-300"
-            }`}
-          >
-            {locked ? "🔒 Locked" : `Lock In (${filledCount}/6)`}
-          </button>
+          <div className="flex gap-2">
+            <button onClick={handleSave} disabled={saving || locked}
+              className="rounded-lg bg-black/30 px-4 py-2 text-sm font-medium text-white border border-white/10 hover:bg-black/40 disabled:opacity-30 backdrop-blur-sm">
+              {saving ? "Saving..." : saved ? "✅ Saved" : "Save"}
+            </button>
+            <button onClick={handleLock}
+              className={`rounded-lg px-4 py-2 text-sm font-semibold transition-colors ${
+                locked ? "bg-red-600 text-white hover:bg-red-500" : `${theme.accent === "text-yellow-400" ? "bg-yellow-400" : "bg-white/20 border border-white/20"} text-gray-900 hover:opacity-90`
+              }`}>
+              {locked ? "🔒 Locked" : `Lock In (${filledCount}/6)`}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -174,63 +244,73 @@ export default function Playmat({ allDecks, initialSquad, locked: initialLocked 
         <DeckBrowser
           decks={allDecks}
           usedIds={usedIds}
+          remaining={remaining}
+          currentSlotCost={squad[openSlot]?.cost ?? 0}
           onSelect={handleSelectDeck}
           onClose={() => setOpenSlot(null)}
+          theme={theme}
         />
       )}
     </div>
   );
 }
 
-function DeckSlot({ slot, deck, locked, onOpen, onRemove }: {
-  slot: SlotId;
+function DeckSlot({ slot, deck, locked, theme, onOpen, onRemove, remaining }: {
+  slot: SlotKey;
   deck: Deck | null;
   locked: boolean;
+  theme: Theme;
   onOpen: () => void;
   onRemove: () => void;
+  remaining: number;
 }) {
-  const borderColor = deck ? (tierColors[deck.tier] || "border-gray-600") : "border-gray-700";
+  const border = deck ? (tierBorders[deck.tier] || "border-gray-600") : `border-white/10`;
   const isActive = slot.isActive;
+  const canAdd = remaining > 0;
 
   return (
     <div
-      className={`relative flex flex-col items-center justify-center rounded-xl border-2 ${borderColor} bg-gray-900 transition-all
-        ${isActive ? "h-40 w-32" : "h-28 w-full"}
-        ${!locked && !deck ? "cursor-pointer hover:border-yellow-400/50" : ""}
-        ${!locked && deck ? "cursor-pointer" : ""}
+      className={`relative flex flex-col items-center justify-center rounded-xl border-2 ${border} backdrop-blur-sm transition-all
+        ${deck ? "bg-black/30" : `${theme.cardBg}`}
+        ${isActive ? "h-44 w-36" : "h-28 w-full"}
+        ${!locked && !deck && canAdd ? "cursor-pointer hover:border-white/30 hover:scale-105" : ""}
+        ${!locked && deck ? "" : ""}
       `}
       onClick={deck ? undefined : onOpen}
+      style={{ boxShadow: deck ? `0 0 12px 0 rgba(0,0,0,0.4)` : undefined }}
     >
       {deck ? (
         <>
+          {isActive && (
+            <div className={`absolute inset-0 rounded-xl opacity-20 bg-gradient-to-b ${theme.overlay}`} />
+          )}
           {deck.image_url && (
-            <Image
-              src={deck.image_url}
-              alt={deck.name}
-              width={isActive ? 64 : 44}
-              height={isActive ? 64 : 44}
-              className="object-contain"
+            <Image src={deck.image_url} alt={deck.name}
+              width={isActive ? 72 : 44} height={isActive ? 72 : 44}
+              className={`relative z-10 object-contain drop-shadow-lg ${isActive ? "animate-pulse-slow" : ""}`}
             />
           )}
-          <p className={`mt-1 text-center font-medium leading-tight ${isActive ? "text-sm" : "text-[10px]"} px-1`}>
+          <p className={`relative z-10 mt-1 text-center font-semibold leading-tight ${isActive ? "text-sm" : "text-[9px]"} px-1 text-white`}>
             {deck.name}
           </p>
-          <p className={`text-yellow-400 ${isActive ? "text-xs" : "text-[9px]"}`}>
+          <p className={`relative z-10 text-yellow-400 ${isActive ? "text-xs" : "text-[8px]"}`}>
             {deck.cost}pts
           </p>
+          {isActive && (
+            <span className="relative z-10 mt-0.5 rounded bg-yellow-400/20 px-1 py-0.5 text-[8px] text-yellow-400">1.5×</span>
+          )}
           {!locked && (
-            <button
-              onClick={(e) => { e.stopPropagation(); onRemove(); }}
-              className="absolute right-1 top-1 rounded-full bg-gray-800 p-0.5 text-[10px] text-gray-400 hover:text-red-400"
-            >
+            <button onClick={(e) => { e.stopPropagation(); onRemove(); }}
+              className="absolute right-1 top-1 z-20 rounded-full bg-black/50 p-0.5 text-[10px] text-gray-400 hover:text-red-400">
               ✕
             </button>
           )}
         </>
       ) : (
-        <div className="flex flex-col items-center gap-1 text-gray-600">
+        <div className={`flex flex-col items-center gap-1 ${canAdd ? "text-white/30" : "text-white/10"}`}>
           <span className={isActive ? "text-3xl" : "text-2xl"}>+</span>
-          <span className={isActive ? "text-xs" : "text-[10px]"}>{slot.label}</span>
+          <span className={isActive ? "text-xs" : "text-[9px]"}>{slot.label}</span>
+          {!canAdd && <span className="text-[8px] text-red-400">Over budget</span>}
         </div>
       )}
     </div>

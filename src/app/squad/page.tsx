@@ -7,7 +7,6 @@ export default async function SquadPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/login");
 
-  // Ensure profile exists
   await supabase.from("profiles").upsert({ id: user.id }, { onConflict: "id" });
 
   const [{ data: decks }, { data: squadRaw }] = await Promise.all([
@@ -26,7 +25,6 @@ export default async function SquadPage() {
       .maybeSingle(),
   ]);
 
-  // Supabase returns joined relations as arrays; normalize
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const sq = squadRaw as any;
   const initialSquad = {
@@ -39,17 +37,15 @@ export default async function SquadPage() {
   };
 
   return (
-    <div className="mx-auto max-w-xl px-4 py-8">
-      <h1 className="mb-2 text-3xl font-bold">
-        My <span className="text-yellow-400">Squad</span>
-      </h1>
-      <p className="mb-6 text-sm text-gray-400">
-        Pick 1 active deck (earns 1.5× points) and 5 bench decks. Lock in before the tournament starts.
-      </p>
+    <div className="mx-auto max-w-xl px-2 py-4">
+      <div className="mb-4 px-2">
+        <h1 className="text-2xl font-bold">My <span className="text-yellow-400">Squad</span></h1>
+        <p className="text-xs text-gray-400 mt-1">Pick 1 active (1.5×) + 5 bench decks within 100pts. Lock in before the tournament.</p>
+      </div>
       <Playmat
         allDecks={decks ?? []}
         initialSquad={initialSquad}
-        locked={squadRaw?.locked ?? false}
+        locked={sq?.locked ?? false}
       />
     </div>
   );
