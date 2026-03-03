@@ -43,6 +43,7 @@ export async function POST() {
             meta_share: deck.metaShare,
             cost: calculateCost(deck.metaShare),
             tier: calculateTier(deck.metaShare),
+            image_url: deck.imageUrl,
             updated_at: new Date().toISOString(),
           },
           { onConflict: "name" }

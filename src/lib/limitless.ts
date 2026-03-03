@@ -5,6 +5,7 @@ export interface MetaDeck {
   rank: number;
   name: string;
   limitlessId: number;
+  imageUrl: string;
   metaShare: number; // percentage, e.g. 20.76
   points: number; // limitless ranking points
 }
@@ -21,20 +22,24 @@ export async function fetchMetaDecks(): Promise<MetaDeck[]> {
   const html = await res.text();
 
   const decks: MetaDeck[] = [];
-  // Match table rows: rank, deck link (may contain <span> tags), points, share%
+  // Match table rows: rank, image(s), deck link (may contain <span> tags), points, share%
   const rowRegex =
-    /<td>(\d+)<\/td>\s*<td><a href="\/decks\/(\d+)">([\s\S]*?)<\/a><\/td>\s*<td>([\d,]+)<\/td>\s*<td>([\d.]+)%<\/td>/g;
+    /<td>(\d+)<\/td>\s*<td>((?:<img[^>]*>)+)<\/td>\s*<td><a href="\/decks\/(\d+)">([\s\S]*?)<\/a><\/td>\s*<td>([\d,]+)<\/td>\s*<td>([\d.]+)%<\/td>/g;
   let match;
 
   while ((match = rowRegex.exec(html)) !== null) {
     // Strip HTML tags from deck name (e.g. <span class="annotation">ex</span>)
-    const name = match[3].replace(/<[^>]+>/g, "").trim();
+    const name = match[4].replace(/<[^>]+>/g, "").trim();
+    // Extract first image URL from the image cell
+    const imgMatch = match[2].match(/src="([^"]*)"/);
+    const imageUrl = imgMatch ? imgMatch[1] : "";
     decks.push({
       rank: parseInt(match[1]),
       name,
-      limitlessId: parseInt(match[2]),
-      points: parseInt(match[4].replace(",", "")),
-      metaShare: parseFloat(match[5]),
+      limitlessId: parseInt(match[3]),
+      imageUrl,
+      points: parseInt(match[5].replace(",", "")),
+      metaShare: parseFloat(match[6]),
     });
   }
 
