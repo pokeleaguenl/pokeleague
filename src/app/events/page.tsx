@@ -33,7 +33,9 @@ export default async function EventsPage() {
                 className="flex items-center justify-between rounded-xl border border-yellow-400/20 bg-yellow-400/5 p-4 hover:border-yellow-400/50 transition-colors">
                 <div>
                   <p className="font-semibold">{t.name}</p>
-                  <p className="text-xs text-gray-400">{t.event_date} · {t.format}</p>
+                  <p className="text-xs text-gray-400">
+                    {t.event_date}{(t as {city?: string}).city ? ` · ${(t as {city?: string}).city}` : ""}
+                  </p>
                 </div>
                 <span className="rounded-full bg-yellow-400/20 px-2 py-0.5 text-xs text-yellow-400">Upcoming →</span>
               </Link>
@@ -51,12 +53,11 @@ export default async function EventsPage() {
                 className="flex items-center justify-between rounded-xl border border-gray-800 p-4 hover:border-gray-600 transition-colors">
                 <div>
                   <p className="font-semibold">{t.name}</p>
-                  <p className="text-xs text-gray-500">{t.event_date} · {t.format}</p>
+                  <p className="text-xs text-gray-500">
+                    {t.event_date}{(t as {city?: string}).city ? ` · ${(t as {city?: string}).city}` : ""}
+                  </p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-gray-500">Event {past.length - i}</span>
-                  <span className="text-gray-600">→</span>
-                </div>
+                <span className="text-gray-600 text-sm">→</span>
               </Link>
             ))}
           </div>
