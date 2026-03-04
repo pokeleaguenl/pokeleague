@@ -50,6 +50,29 @@ export async function POST() {
       }
     }
 
+    // Write ingest watermark
+    const eventDates = events.map((e) => e.startDate).filter(Boolean).sort();
+    await supabase.from("ingest_runs").insert({
+      source: "rk9",
+      min_date: eventDates[0] ?? null,
+      max_date: eventDates[eventDates.length - 1] ?? null,
+      event_count: synced,
+      status: failed.length > 0 ? "partial" : "ok",
+      notes: failed.length > 0 ? failed.join("; ") : null,
+    });
+
+    // Update ingest_events_seen
+    for (const event of events) {
+      await supabase.from("ingest_events_seen").upsert(
+        {
+          source: "rk9",
+          source_event_id: event.rk9Id,
+          last_seen_at: new Date().toISOString(),
+        },
+        { onConflict: "source,source_event_id" }
+      );
+    }
+
     return NextResponse.json({
       message: `Synced ${synced} TCG events from RK9`,
       total: events.length,
