@@ -20,6 +20,7 @@ export default function TournamentManager({ tournaments: initial, decks }: Props
   const [top8, setTop8] = useState(false);
   const [won, setWon] = useState(false);
   const [winRate, setWinRate] = useState("");
+  const [hadWin, setHadWin] = useState(false);
   const [logging, setLogging] = useState(false);
   const [logMessage, setLogMessage] = useState<string | null>(null);
 
@@ -46,7 +47,7 @@ export default function TournamentManager({ tournaments: initial, decks }: Props
     const res = await fetch(`/api/tournaments/${selectedT}/results`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ deck_id: parseInt(deckId), made_day2: day2, top8, won, win_rate: parseFloat(winRate) || 0 }),
+      body: JSON.stringify({ deck_id: parseInt(deckId), made_day2: day2, top8, won, win_rate: parseFloat(winRate) || 0, had_win: hadWin }),
     });
     const data = await res.json();
     setLogMessage(res.ok ? `✅ Logged! Base points: ${data.base_points}` : `❌ ${data.error}`);
@@ -88,7 +89,7 @@ export default function TournamentManager({ tournaments: initial, decks }: Props
             placeholder="Win rate % (0-100)"
             className="w-full rounded-lg border border-gray-700 bg-gray-900 px-4 py-2 text-sm focus:border-yellow-400 focus:outline-none" />
           <div className="flex flex-wrap gap-4 text-sm">
-            {[["Made Day 2 (+3)", day2, setDay2], ["Top 8 (+10)", top8, setTop8], ["Won (+25)", won, setWon]].map(([label, val, setter]) => (
+            {[["Made Day 2 (+3)", day2, setDay2], ["Top 8 (+10)", top8, setTop8], ["Won (+25)", won, setWon], ["Had a Win (+1)", hadWin, setHadWin]].map(([label, val, setter]) => (
               <label key={label as string} className="flex items-center gap-2 cursor-pointer">
                 <input type="checkbox" checked={val as boolean} onChange={(e) => (setter as (v: boolean) => void)(e.target.checked)}
                   className="accent-yellow-400" />

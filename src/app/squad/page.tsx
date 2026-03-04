@@ -9,7 +9,7 @@ export default async function SquadPage() {
 
   await supabase.from("profiles").upsert({ id: user.id }, { onConflict: "id" });
 
-  const [{ data: decks }, { data: squadRaw }, { data: allVariants }] = await Promise.all([
+  const [{ data: decks }, { data: squadRaw }] = await Promise.all([
     supabase.from("decks").select("*").order("meta_share", { ascending: false }),
     supabase.from("squads")
       .select(`
@@ -19,22 +19,34 @@ export default async function SquadPage() {
         bench2:decks!squads_bench_2_fkey(*),
         bench3:decks!squads_bench_3_fkey(*),
         bench4:decks!squads_bench_4_fkey(*),
-        bench5:decks!squads_bench_5_fkey(*)
+        bench5:decks!squads_bench_5_fkey(*),
+        hand1:decks!squads_hand_1_fkey(*),
+        hand2:decks!squads_hand_2_fkey(*),
+        hand3:decks!squads_hand_3_fkey(*),
+        hand4:decks!squads_hand_4_fkey(*)
       `)
       .eq("user_id", user.id)
       .maybeSingle(),
-    supabase.from("deck_variants").select("*"),
   ]);
+
+  const variantResult = await supabase.from("deck_variants").select("*");
+  const allVariants = variantResult.data ?? [];
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const sq = squadRaw as any;
+  const norm = (val: unknown) => (Array.isArray(val) ? val[0] ?? null : val ?? null);
+
   const initialSquad = {
-    active: sq ? (Array.isArray(sq.active_deck) ? sq.active_deck[0] ?? null : sq.active_deck) : null,
-    bench_1: sq ? (Array.isArray(sq.bench1) ? sq.bench1[0] ?? null : sq.bench1) : null,
-    bench_2: sq ? (Array.isArray(sq.bench2) ? sq.bench2[0] ?? null : sq.bench2) : null,
-    bench_3: sq ? (Array.isArray(sq.bench3) ? sq.bench3[0] ?? null : sq.bench3) : null,
-    bench_4: sq ? (Array.isArray(sq.bench4) ? sq.bench4[0] ?? null : sq.bench4) : null,
-    bench_5: sq ? (Array.isArray(sq.bench5) ? sq.bench5[0] ?? null : sq.bench5) : null,
+    active: sq ? norm(sq.active_deck) : null,
+    bench_1: sq ? norm(sq.bench1) : null,
+    bench_2: sq ? norm(sq.bench2) : null,
+    bench_3: sq ? norm(sq.bench3) : null,
+    bench_4: sq ? norm(sq.bench4) : null,
+    bench_5: sq ? norm(sq.bench5) : null,
+    hand_1: sq ? norm(sq.hand1) : null,
+    hand_2: sq ? norm(sq.hand2) : null,
+    hand_3: sq ? norm(sq.hand3) : null,
+    hand_4: sq ? norm(sq.hand4) : null,
   };
 
   const initialVariants = sq ? {
@@ -44,27 +56,39 @@ export default async function SquadPage() {
     bench_3: sq.bench_3_variant ?? null,
     bench_4: sq.bench_4_variant ?? null,
     bench_5: sq.bench_5_variant ?? null,
+    hand_1: sq.hand_1_variant ?? null,
+    hand_2: sq.hand_2_variant ?? null,
+    hand_3: sq.hand_3_variant ?? null,
+    hand_4: sq.hand_4_variant ?? null,
   } : {};
 
-  // Group variants by deck_id
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const variantsByDeckId: Record<number, any[]> = {};
-  for (const v of allVariants ?? []) {
+  for (const v of allVariants) {
     if (!variantsByDeckId[v.deck_id]) variantsByDeckId[v.deck_id] = [];
     variantsByDeckId[v.deck_id].push(v);
   }
+
+  const stadiumEffects = sq ? {
+    x3Used: sq.x3_effect_used ?? false,
+    handBoostUsed: sq.hand_boost_used ?? false,
+    eventEffect: sq.event_effect ?? null,
+  } : { x3Used: false, handBoostUsed: false, eventEffect: null };
 
   return (
     <div className="mx-auto max-w-xl px-2 py-4">
       <div className="mb-4 px-2">
         <h1 className="text-2xl font-bold">My <span className="text-yellow-400">Squad</span></h1>
-        <p className="text-xs text-gray-400 mt-1">Pick 1 active (1.5×) + 5 bench decks within 100pts. Pick a variant to earn bonus points.</p>
+        <p className="text-xs text-gray-400 mt-1">
+          Pick 1 Active (2×) + 5 Bench + 4 Hand within 200pts. Use Stadium Effects to boost your score.
+        </p>
       </div>
       <Playmat
         allDecks={decks ?? []}
         initialSquad={initialSquad}
         initialVariants={initialVariants}
         variantsByDeckId={variantsByDeckId}
+        stadiumEffects={stadiumEffects}
         locked={sq?.locked ?? false}
       />
     </div>
