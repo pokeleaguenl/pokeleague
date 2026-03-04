@@ -13,7 +13,11 @@ export async function POST() {
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   try {
-    const events = await fetchRK9Events();
+    const allEvents = await fetchRK9Events();
+
+    // Only keep Sept 2025 onwards
+    const CUTOFF = "2025-09-01";
+    const events = allEvents.filter((e) => e.startDate >= CUTOFF);
 
     if (events.length === 0) {
       return NextResponse.json({ error: "No TCG events found from RK9" }, { status: 502 });
