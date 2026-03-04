@@ -10,13 +10,13 @@ export async function POST(req: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { name } = await req.json();
+  const { name, is_public } = await req.json();
   if (!name) return NextResponse.json({ error: "Name required" }, { status: 400 });
 
   const code = generateCode();
   const { data, error } = await supabase
     .from("leagues")
-    .insert({ name, code, owner_id: user.id })
+    .insert({ name, code, owner_id: user.id, is_public: is_public ?? false })
     .select()
     .single();
 
