@@ -5,7 +5,7 @@ export interface RK9Event {
   city: string;
   startDate: string; // YYYY-MM-DD
   endDate: string;   // YYYY-MM-DD
-  rk9Id: string;     // tournament ID from TCG link
+  rk9Id: string;     // TCG tournament ID
   rk9Url: string;    // full TCG tournament URL
   upcoming: boolean;
 }
@@ -18,7 +18,6 @@ const MONTH_MAP: Record<string, string> = {
 
 /**
  * Parse a date string like "March 14-15, 2026" or "February 27-March 1, 2026"
- * Returns { start: "YYYY-MM-DD", end: "YYYY-MM-DD" }
  */
 function parseDateRange(raw: string): { start: string; end: string } {
   raw = raw.trim();
@@ -53,54 +52,68 @@ function parseDateRange(raw: string): { start: string; end: string } {
     return { start: d, end: d };
   }
 
-  // Fallback
   const today = new Date().toISOString().split("T")[0];
   return { start: today, end: today };
+}
+
+/**
+ * Parse a section of HTML (upcoming or past) into events.
+ * Iterates <tr>...</tr> blocks manually to handle very large rows.
+ */
+function parseSection(section: string, upcoming: boolean): RK9Event[] {
+  const events: RK9Event[] = [];
+  let start = 0;
+
+  while (true) {
+    const trStart = section.indexOf("<tr", start);
+    if (trStart === -1) break;
+    const trEnd = section.indexOf("</tr>", trStart);
+    if (trEnd === -1) break;
+    const row = section.slice(trStart, trEnd + 5);
+
+    // Date: first <td> containing month name text
+    const dateMatch = row.match(/<td[^>]*>\s*([A-Za-z][^<]+?)\s*<\/td>/);
+    // Event name from /event/ link
+    const nameMatch = row.match(/<a href="\/event\/[^"]*"[^>]*>\s*([^<]+?)\s*<\/a>/);
+    // City: 4th <td> — the one right after the event name cell closing tag
+    // Strategy: get all <td> text contents, city is index 3 (0-based)
+    const tdTexts = [...row.matchAll(/<td[^>]*>([\s\S]*?)<\/td>/g)].map((m) =>
+      m[1].replace(/<[^>]+>/g, "").trim()
+    );
+    const city = tdTexts[3] ?? "";
+    // TCG tournament ID
+    const tcgMatch = row.match(/href="\/tournament\/([^"]+)"[^>]*>\s*TCG\s*</);
+
+    if (dateMatch && nameMatch && tcgMatch) {
+      const { start: startDate, end: endDate } = parseDateRange(dateMatch[1].trim());
+      events.push({
+        name: nameMatch[1].trim(),
+        city: city.trim(),
+        startDate,
+        endDate,
+        rk9Id: tcgMatch[1],
+        rk9Url: `https://rk9.gg/tournament/${tcgMatch[1]}`,
+        upcoming,
+      });
+    }
+
+    start = trEnd + 1;
+  }
+
+  return events;
 }
 
 export async function fetchRK9Events(): Promise<RK9Event[]> {
   const res = await fetch(RK9_URL, { next: { revalidate: 3600 } });
   const html = await res.text();
 
+  // Split into upcoming and past sections (handle extra whitespace in headings)
+  const upcomingMatch = html.match(/Upcoming\s+Pok[^<]*Events([\s\S]*?)Past\s+Pok[^<]*Events/);
+  const pastMatch = html.match(/Past\s+Pok[^<]*Events([\s\S]*?)$/);
+
   const events: RK9Event[] = [];
-
-  // Split into upcoming and past sections
-  const upcomingMatch = html.match(/Upcoming Pokémon Events([\s\S]*?)Past Pokémon Events/);
-  const pastMatch = html.match(/Past Pokémon Events([\s\S]*?)$/);
-
-  function parseSection(section: string, upcoming: boolean) {
-    // Each event row: date cell, event name link, city cell, links
-    const rowRegex =
-      /<tr[\s\S]*?<td[^>]*>([\s\S]*?)<\/td>\s*<td[^>]*><a href="\/event\/[^"]*">([\s\S]*?)<\/a><\/td>\s*<td[^>]*>([\s\S]*?)<\/td>([\s\S]*?)<\/tr>/g;
-
-    let match;
-    while ((match = rowRegex.exec(section)) !== null) {
-      const rawDate = match[1].replace(/<[^>]+>/g, "").trim();
-      const name = match[2].replace(/<[^>]+>/g, "").trim();
-      const city = match[3].replace(/<[^>]+>/g, "").trim();
-      const linksHtml = match[4];
-
-      // Must have a TCG link
-      const tcgMatch = linksHtml.match(/href="\/tournament\/([^"]+)"[^>]*>\s*TCG\s*</);
-      if (!tcgMatch) continue;
-
-      const rk9Id = tcgMatch[1];
-      const { start, end } = parseDateRange(rawDate);
-
-      events.push({
-        name,
-        city,
-        startDate: start,
-        endDate: end,
-        rk9Id,
-        rk9Url: `https://rk9.gg/tournament/${rk9Id}`,
-        upcoming,
-      });
-    }
-  }
-
-  if (upcomingMatch) parseSection(upcomingMatch[1], true);
-  if (pastMatch) parseSection(pastMatch[1], false);
+  if (upcomingMatch) events.push(...parseSection(upcomingMatch[1], true));
+  if (pastMatch) events.push(...parseSection(pastMatch[1], false));
 
   return events;
 }
