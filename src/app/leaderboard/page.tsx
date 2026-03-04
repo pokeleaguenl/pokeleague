@@ -129,7 +129,7 @@ function MiniDeckCard({ deck, label, isActive }: { deck: Deck | null; label: str
             <Image src={deck.image_url} alt={deck.name} width={isActive ? 40 : 28} height={isActive ? 40 : 28} className="object-contain" />
           )}
           <p className="mt-0.5 text-center text-[9px] leading-tight line-clamp-2">{deck.name}</p>
-          {isActive && <p className="text-[9px] text-yellow-400">1.5×</p>}
+          {isActive && <p className="text-[9px] text-yellow-400">2×</p>}
         </>
       ) : (
         <div className="flex h-8 w-full items-center justify-center">

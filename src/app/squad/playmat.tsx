@@ -66,7 +66,13 @@ interface Props {
   initialVariants?: Partial<VariantMap>;
   variantsByDeckId: Record<number, Variant[]>;
   stadiumEffects: StadiumEffects;
+  nextEventName: string | null;
   locked: boolean;
+}
+
+interface HistoryEntry {
+  squad: Squad;
+  variants: VariantMap;
 }
 
 export default function Playmat({
@@ -75,6 +81,7 @@ export default function Playmat({
   initialVariants,
   variantsByDeckId,
   stadiumEffects: initialEffects,
+  nextEventName,
   locked: initialLocked,
 }: Props) {
   const emptySquad: Squad = {
@@ -91,13 +98,28 @@ export default function Playmat({
   const [squad, setSquad] = useState<Squad>({ ...emptySquad, ...initialSquad });
   const [variants, setVariants] = useState<VariantMap>({ ...emptyVariants, ...initialVariants });
   const [effects, setEffects] = useState<StadiumEffects>(initialEffects);
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [locked, setLocked] = useState(initialLocked);
   const [openSlot, setOpenSlot] = useState<SlotKey | null>(null);
   const [variantSlot, setVariantSlot] = useState<SlotKey | null>(null);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [showLockConfirm, setShowLockConfirm] = useState(false);
   const [theme, setTheme] = useState<Theme>(DEFAULT_THEME);
   const [showThemePicker, setShowThemePicker] = useState(false);
+
+  // Push current state to history before a change
+  const pushHistory = useCallback((currentSquad: Squad, currentVariants: VariantMap) => {
+    setHistory((h) => [...h.slice(-9), { squad: currentSquad, variants: currentVariants }]);
+  }, []);
+
+  const handleUndo = () => {
+    if (history.length === 0 || locked) return;
+    const prev = history[history.length - 1];
+    setSquad(prev.squad);
+    setVariants(prev.variants);
+    setHistory((h) => h.slice(0, -1));
+  };
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("pokeleague-theme");
@@ -125,6 +147,7 @@ export default function Playmat({
     const newCost = totalCost - currentSlotCost + deck.cost;
     if (newCost > BUDGET) return;
 
+    pushHistory(squad, variants);
     const newSquad = { ...squad };
     (Object.keys(newSquad) as SlotKey[]).forEach((k) => {
       if (newSquad[k]?.id === deck.id) newSquad[k] = null;
@@ -138,7 +161,7 @@ export default function Playmat({
     if (deckVariants.length > 0) {
       setVariantSlot(openSlot);
     }
-  }, [openSlot, squad, locked, totalCost, variantsByDeckId]);
+  }, [openSlot, squad, variants, locked, totalCost, variantsByDeckId, pushHistory]);
 
   const handleSelectVariant = useCallback((variantName: string | null) => {
     if (!variantSlot) return;
@@ -148,12 +171,14 @@ export default function Playmat({
 
   const handleRemove = (key: SlotKey) => {
     if (locked) return;
+    pushHistory(squad, variants);
     setSquad((s) => ({ ...s, [key]: null }));
     setVariants((v) => ({ ...v, [key]: null }));
   };
 
   const handleClear = () => {
     if (locked) return;
+    pushHistory(squad, variants);
     setSquad(emptySquad);
     setVariants(emptyVariants);
   };
@@ -200,9 +225,19 @@ export default function Playmat({
   };
 
   const handleLock = async () => {
-    const newLocked = !locked;
-    setLocked(newLocked);
-    if (newLocked) await handleSave();
+    if (!locked) {
+      // Show confirmation before locking
+      setShowLockConfirm(true);
+    } else {
+      // Unlock
+      setLocked(false);
+    }
+  };
+
+  const confirmLock = async () => {
+    setShowLockConfirm(false);
+    setLocked(true);
+    await handleSave();
   };
 
   const usedIds = new Set(Object.values(squad).filter(Boolean).map((d) => d!.id));
@@ -345,10 +380,20 @@ export default function Playmat({
 
         {/* Actions */}
         <div className="flex items-center justify-between gap-3 pt-2">
-          <button onClick={handleClear} disabled={locked}
-            className="rounded-lg border border-white/10 bg-black/20 px-4 py-2 text-sm text-gray-400 hover:text-white disabled:opacity-30 backdrop-blur-sm">
-            Clear All
-          </button>
+          <div className="flex gap-2">
+            <button onClick={handleClear} disabled={locked}
+              className="rounded-lg border border-white/10 bg-black/20 px-4 py-2 text-sm text-gray-400 hover:text-white disabled:opacity-30 backdrop-blur-sm">
+              Clear
+            </button>
+            <button
+              onClick={handleUndo}
+              disabled={locked || history.length === 0}
+              title="Undo last change"
+              className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-gray-400 hover:text-white disabled:opacity-30 backdrop-blur-sm"
+            >
+              ↩ Undo
+            </button>
+          </div>
           <div className="flex gap-2">
             <button onClick={handleSave} disabled={saving || locked}
               className="rounded-lg bg-black/30 px-4 py-2 text-sm font-medium text-white border border-white/10 hover:bg-black/40 disabled:opacity-30 backdrop-blur-sm">
@@ -365,6 +410,33 @@ export default function Playmat({
           </div>
         </div>
       </div>
+
+      {/* Lock confirmation modal */}
+      {showLockConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm px-4">
+          <div className="w-full max-w-sm rounded-2xl border border-yellow-400/30 bg-gray-950 p-6">
+            <h2 className="text-lg font-bold mb-1">Lock In Squad?</h2>
+            {nextEventName ? (
+              <p className="text-sm text-gray-400 mb-1">
+                You are locking in for: <span className="font-semibold text-yellow-400">{nextEventName}</span>
+              </p>
+            ) : (
+              <p className="text-sm text-gray-400 mb-1">No upcoming event found — you can still lock in.</p>
+            )}
+            <p className="text-xs text-gray-600 mb-5">Your squad cannot be changed until after the event deadline passes.</p>
+            <div className="flex gap-3">
+              <button onClick={() => setShowLockConfirm(false)}
+                className="flex-1 rounded-xl border border-gray-700 py-2.5 text-sm text-gray-300 hover:border-gray-500">
+                Cancel
+              </button>
+              <button onClick={confirmLock}
+                className="flex-1 rounded-xl bg-yellow-400 py-2.5 text-sm font-bold text-gray-900 hover:bg-yellow-300">
+                🔒 Lock In
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {openSlot && (
         <DeckBrowser

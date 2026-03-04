@@ -45,7 +45,7 @@ function DeckCard({ deck, isActive }: { deck: any; isActive?: boolean }) {
           width={isActive ? 44 : 30} height={isActive ? 44 : 30} className="object-contain" />
       )}
       <p className="mt-1 text-center text-[9px] leading-tight line-clamp-2 text-gray-300">{deck.name}</p>
-      {isActive && <p className="text-[9px] text-yellow-400 font-semibold mt-0.5">1.5×</p>}
+      {isActive && <p className="text-[9px] text-yellow-400 font-semibold mt-0.5">2×</p>}
     </div>
   );
 }

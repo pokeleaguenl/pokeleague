@@ -2,9 +2,10 @@ import Link from "next/link";
 
 const links = [
   { href: "/squad", icon: "🎴", label: "Squad" },
-  { href: "/events", icon: "📊", label: "Points" },
-  { href: "/leaderboard", icon: "🏆", label: "Rankings" },
+  { href: "/events", icon: "📅", label: "Events" },
+  { href: "/leagues/global", icon: "🌍", label: "Global" },
   { href: "/leagues", icon: "🏅", label: "Leagues" },
+  { href: "/how-to-score", icon: "📖", label: "Rules" },
   { href: "/profile", icon: "👤", label: "Profile" },
 ];
 

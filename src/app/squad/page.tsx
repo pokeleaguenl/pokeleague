@@ -9,7 +9,9 @@ export default async function SquadPage() {
 
   await supabase.from("profiles").upsert({ id: user.id }, { onConflict: "id" });
 
-  const [{ data: decks }, { data: squadRaw }] = await Promise.all([
+  const today = new Date().toISOString().split("T")[0];
+
+  const [{ data: decks }, { data: squadRaw }, { data: nextEvent }] = await Promise.all([
     supabase.from("decks").select("*").order("meta_share", { ascending: false }),
     supabase.from("squads")
       .select(`
@@ -26,6 +28,12 @@ export default async function SquadPage() {
         hand4:decks!squads_hand_4_fkey(*)
       `)
       .eq("user_id", user.id)
+      .maybeSingle(),
+    supabase.from("tournaments")
+      .select("id, name, event_date")
+      .gte("event_date", today)
+      .order("event_date", { ascending: true })
+      .limit(1)
       .maybeSingle(),
   ]);
 
@@ -82,6 +90,11 @@ export default async function SquadPage() {
         <p className="text-xs text-gray-400 mt-1">
           Pick 1 Active (2×) + 5 Bench + 4 Hand within 200pts. Use Stadium Effects to boost your score.
         </p>
+        {nextEvent && (
+          <p className="text-xs text-yellow-400/70 mt-0.5">
+            Next event: <span className="font-semibold text-yellow-400">{nextEvent.name}</span> — {nextEvent.event_date}
+          </p>
+        )}
       </div>
       <Playmat
         allDecks={decks ?? []}
@@ -89,6 +102,7 @@ export default async function SquadPage() {
         initialVariants={initialVariants}
         variantsByDeckId={variantsByDeckId}
         stadiumEffects={stadiumEffects}
+        nextEventName={nextEvent?.name ?? null}
         locked={sq?.locked ?? false}
       />
     </div>
