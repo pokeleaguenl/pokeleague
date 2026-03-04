@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect } from "react";
 import Image from "next/image";
 import DeckBrowser from "./deck-browser";
+import VariantPicker, { type Variant } from "./variant-picker";
 import { THEMES, DEFAULT_THEME, type Theme } from "@/lib/themes";
 
 export interface Deck {
@@ -32,6 +33,7 @@ const SLOTS: SlotKey[] = [
 const BUDGET = 100;
 
 type Squad = Record<SlotKey["key"], Deck | null>;
+type VariantMap = Record<SlotKey["key"], string | null>;
 
 const tierBorders: Record<string, string> = {
   S: "border-yellow-400",
@@ -44,10 +46,12 @@ const tierBorders: Record<string, string> = {
 interface Props {
   allDecks: Deck[];
   initialSquad: Partial<Squad>;
+  initialVariants?: Partial<VariantMap>;
+  variantsByDeckId: Record<number, Variant[]>;
   locked: boolean;
 }
 
-export default function Playmat({ allDecks, initialSquad, locked: initialLocked }: Props) {
+export default function Playmat({ allDecks, initialSquad, initialVariants, variantsByDeckId, locked: initialLocked }: Props) {
   const [squad, setSquad] = useState<Squad>({
     active: initialSquad.active ?? null,
     bench_1: initialSquad.bench_1 ?? null,
@@ -56,14 +60,22 @@ export default function Playmat({ allDecks, initialSquad, locked: initialLocked 
     bench_4: initialSquad.bench_4 ?? null,
     bench_5: initialSquad.bench_5 ?? null,
   });
+  const [variants, setVariants] = useState<VariantMap>({
+    active: initialVariants?.active ?? null,
+    bench_1: initialVariants?.bench_1 ?? null,
+    bench_2: initialVariants?.bench_2 ?? null,
+    bench_3: initialVariants?.bench_3 ?? null,
+    bench_4: initialVariants?.bench_4 ?? null,
+    bench_5: initialVariants?.bench_5 ?? null,
+  });
   const [locked, setLocked] = useState(initialLocked);
   const [openSlot, setOpenSlot] = useState<SlotKey["key"] | null>(null);
+  const [variantSlot, setVariantSlot] = useState<SlotKey["key"] | null>(null);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [theme, setTheme] = useState<Theme>(DEFAULT_THEME);
   const [showThemePicker, setShowThemePicker] = useState(false);
 
-  // Load theme from localStorage
   useEffect(() => {
     const saved = localStorage.getItem("pokeleague-theme");
     if (saved) {
@@ -87,30 +99,45 @@ export default function Playmat({ allDecks, initialSquad, locked: initialLocked 
 
   const handleSelectDeck = useCallback((deck: Deck) => {
     if (!openSlot || locked) return;
-    // Check if adding this deck would exceed budget (accounting for existing deck in slot)
     const currentSlotDeck = squad[openSlot];
     const currentSlotCost = currentSlotDeck?.cost ?? 0;
     const newCost = totalCost - currentSlotCost + deck.cost;
-    if (newCost > BUDGET) return; // over budget, silently reject
+    if (newCost > BUDGET) return;
 
     const newSquad = { ...squad };
-    // Remove deck from any other slot first
     (Object.keys(newSquad) as SlotKey["key"][]).forEach((k) => {
       if (newSquad[k]?.id === deck.id) newSquad[k] = null;
     });
     newSquad[openSlot] = deck;
     setSquad(newSquad);
+
+    // Clear variant when deck changes
+    setVariants((v) => ({ ...v, [openSlot]: null }));
     setOpenSlot(null);
-  }, [openSlot, squad, locked, totalCost]);
+
+    // If deck has variants, immediately open variant picker
+    const deckVariants = variantsByDeckId[deck.id] ?? [];
+    if (deckVariants.length > 0) {
+      setVariantSlot(openSlot);
+    }
+  }, [openSlot, squad, locked, totalCost, variantsByDeckId]);
+
+  const handleSelectVariant = useCallback((variantName: string | null) => {
+    if (!variantSlot) return;
+    setVariants((v) => ({ ...v, [variantSlot]: variantName }));
+    setVariantSlot(null);
+  }, [variantSlot]);
 
   const handleRemove = (key: SlotKey["key"]) => {
     if (locked) return;
     setSquad((s) => ({ ...s, [key]: null }));
+    setVariants((v) => ({ ...v, [key]: null }));
   };
 
   const handleClear = () => {
     if (locked) return;
     setSquad({ active: null, bench_1: null, bench_2: null, bench_3: null, bench_4: null, bench_5: null });
+    setVariants({ active: null, bench_1: null, bench_2: null, bench_3: null, bench_4: null, bench_5: null });
   };
 
   const handleSave = async () => {
@@ -122,6 +149,12 @@ export default function Playmat({ allDecks, initialSquad, locked: initialLocked 
       bench_3: squad.bench_3?.id ?? null,
       bench_4: squad.bench_4?.id ?? null,
       bench_5: squad.bench_5?.id ?? null,
+      active_variant: variants.active,
+      bench_1_variant: variants.bench_1,
+      bench_2_variant: variants.bench_2,
+      bench_3_variant: variants.bench_3,
+      bench_4_variant: variants.bench_4,
+      bench_5_variant: variants.bench_5,
     };
     await fetch("/api/squad", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
     setSaving(false);
@@ -137,15 +170,16 @@ export default function Playmat({ allDecks, initialSquad, locked: initialLocked 
 
   const usedIds = new Set(Object.values(squad).filter(Boolean).map((d) => d!.id));
 
+  const activeVariantSlotDeck = variantSlot ? squad[variantSlot] : null;
+  const activeVariants = activeVariantSlotDeck ? (variantsByDeckId[activeVariantSlotDeck.id] ?? []) : [];
+
   return (
     <div className={`relative min-h-screen rounded-2xl ${theme.bg} p-4`}>
-      {/* Subtle playmat grid overlay */}
       <div className={`pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-b ${theme.overlay} opacity-60`} />
       <div className="pointer-events-none absolute inset-0 rounded-2xl"
         style={{ backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px)", backgroundSize: "32px 32px" }} />
 
       <div className="relative z-10 flex flex-col gap-5">
-        {/* Header row: budget + theme picker */}
         <div className="flex items-center justify-between">
           <button
             onClick={() => setShowThemePicker((v) => !v)}
@@ -155,8 +189,6 @@ export default function Playmat({ allDecks, initialSquad, locked: initialLocked 
             <span className={`font-medium ${theme.accent}`}>{theme.name}</span>
             <span className="text-gray-500 text-xs">▾</span>
           </button>
-
-          {/* Budget display */}
           <div className="text-right">
             <p className={`text-xs font-semibold ${remaining < 10 ? "text-red-400" : theme.accent}`}>
               {remaining} / {BUDGET} pts remaining
@@ -170,7 +202,6 @@ export default function Playmat({ allDecks, initialSquad, locked: initialLocked 
           </div>
         </div>
 
-        {/* Theme picker */}
         {showThemePicker && (
           <div className="grid grid-cols-4 gap-2 rounded-xl border border-white/10 bg-black/40 p-3 backdrop-blur-sm">
             {THEMES.map((t) => (
@@ -184,41 +215,40 @@ export default function Playmat({ allDecks, initialSquad, locked: initialLocked 
           </div>
         )}
 
-        {/* Zone labels */}
         <div className="flex flex-col items-center gap-1">
           <div className={`text-xs font-semibold uppercase tracking-widest ${theme.accent}`}>
             ⭐ Active Zone — 1.5× points
           </div>
         </div>
 
-        {/* Active slot */}
         <div className="flex justify-center">
-          <DeckSlot slot={SLOTS[0]} deck={squad.active} locked={locked} theme={theme}
+          <DeckSlot slot={SLOTS[0]} deck={squad.active} variant={variants.active} locked={locked} theme={theme}
             onOpen={() => !locked && setOpenSlot("active")}
             onRemove={() => handleRemove("active")}
+            onVariant={() => !locked && squad.active && setVariantSlot("active")}
+            hasVariants={(variantsByDeckId[squad.active?.id ?? 0] ?? []).length > 0}
             remaining={remaining}
           />
         </div>
 
-        {/* Divider */}
         <div className="flex items-center gap-3">
           <div className="h-px flex-1 bg-white/10" />
           <span className="text-xs text-gray-600 uppercase tracking-widest">Bench</span>
           <div className="h-px flex-1 bg-white/10" />
         </div>
 
-        {/* Bench row */}
         <div className="grid grid-cols-5 gap-2">
           {SLOTS.slice(1).map((slot) => (
-            <DeckSlot key={slot.key} slot={slot} deck={squad[slot.key]} locked={locked} theme={theme}
+            <DeckSlot key={slot.key} slot={slot} deck={squad[slot.key]} variant={variants[slot.key]} locked={locked} theme={theme}
               onOpen={() => !locked && setOpenSlot(slot.key)}
               onRemove={() => handleRemove(slot.key)}
+              onVariant={() => !locked && squad[slot.key] && setVariantSlot(slot.key)}
+              hasVariants={(variantsByDeckId[squad[slot.key]?.id ?? 0] ?? []).length > 0}
               remaining={remaining}
             />
           ))}
         </div>
 
-        {/* Actions */}
         <div className="flex items-center justify-between gap-3 pt-2">
           <button onClick={handleClear} disabled={locked}
             className="rounded-lg border border-white/10 bg-black/20 px-4 py-2 text-sm text-gray-400 hover:text-white disabled:opacity-30 backdrop-blur-sm">
@@ -239,7 +269,6 @@ export default function Playmat({ allDecks, initialSquad, locked: initialLocked 
         </div>
       </div>
 
-      {/* Deck browser modal */}
       {openSlot && (
         <DeckBrowser
           decks={allDecks}
@@ -251,17 +280,31 @@ export default function Playmat({ allDecks, initialSquad, locked: initialLocked 
           theme={theme}
         />
       )}
+
+      {variantSlot && activeVariants.length > 0 && (
+        <VariantPicker
+          variants={activeVariants}
+          currentVariant={variants[variantSlot]}
+          onSelect={handleSelectVariant}
+          onClose={() => setVariantSlot(null)}
+          theme={theme}
+          deckName={squad[variantSlot]?.name ?? ""}
+        />
+      )}
     </div>
   );
 }
 
-function DeckSlot({ slot, deck, locked, theme, onOpen, onRemove, remaining }: {
+function DeckSlot({ slot, deck, variant, locked, theme, onOpen, onRemove, onVariant, hasVariants, remaining }: {
   slot: SlotKey;
   deck: Deck | null;
+  variant: string | null;
   locked: boolean;
   theme: Theme;
   onOpen: () => void;
   onRemove: () => void;
+  onVariant: () => void;
+  hasVariants: boolean;
   remaining: number;
 }) {
   const border = deck ? (tierBorders[deck.tier] || "border-gray-600") : `border-white/10`;
@@ -274,7 +317,6 @@ function DeckSlot({ slot, deck, locked, theme, onOpen, onRemove, remaining }: {
         ${deck ? "bg-black/30" : `${theme.cardBg}`}
         ${isActive ? "h-44 w-36" : "h-28 w-full"}
         ${!locked && !deck && canAdd ? "cursor-pointer hover:border-white/30 hover:scale-105" : ""}
-        ${!locked && deck ? "" : ""}
       `}
       onClick={deck ? undefined : onOpen}
       style={{ boxShadow: deck ? `0 0 12px 0 rgba(0,0,0,0.4)` : undefined }}
@@ -298,6 +340,23 @@ function DeckSlot({ slot, deck, locked, theme, onOpen, onRemove, remaining }: {
           </p>
           {isActive && (
             <span className="relative z-10 mt-0.5 rounded bg-yellow-400/20 px-1 py-0.5 text-[8px] text-yellow-400">1.5×</span>
+          )}
+          {/* Variant badge */}
+          {hasVariants && !locked && (
+            <button
+              onClick={(e) => { e.stopPropagation(); onVariant(); }}
+              className={`relative z-10 mt-0.5 rounded px-1 py-0.5 text-[8px] transition-colors
+                ${variant
+                  ? "bg-blue-500/30 text-blue-300 hover:bg-blue-500/50"
+                  : "bg-white/10 text-gray-400 hover:bg-white/20"}`}
+            >
+              {variant ? `✓ ${variant.split(" ").slice(-1)[0]}` : "+ variant"}
+            </button>
+          )}
+          {hasVariants && locked && variant && (
+            <span className="relative z-10 mt-0.5 rounded bg-blue-500/20 px-1 py-0.5 text-[8px] text-blue-300">
+              {variant.split(" ").slice(-1)[0]}
+            </span>
           )}
           {!locked && (
             <button onClick={(e) => { e.stopPropagation(); onRemove(); }}

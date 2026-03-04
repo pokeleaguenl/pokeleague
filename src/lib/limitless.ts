@@ -72,3 +72,35 @@ export function calculateTier(metaShare: number): string {
 }
 
 export { API_URL };
+
+export interface DeckVariant {
+  name: string;
+  limitlessValue: string;
+}
+
+/**
+ * Scrape variant options for a deck from its Limitless page.
+ */
+export async function fetchDeckVariants(limitlessId: number): Promise<DeckVariant[]> {
+  const res = await fetch(
+    `${BASE_URL}/decks/${limitlessId}?format=standard&time=3months`,
+    { next: { revalidate: 3600 } }
+  );
+  const html = await res.text();
+
+  const variants: DeckVariant[] = [];
+  const selectMatch = html.match(/<select id="variant-select"[^>]*>([\s\S]*?)<\/select>/);
+  if (!selectMatch) return variants;
+
+  const optionRegex = /<option value="([^"]*)"[^>]*>\s*([^<]+?)\s*<\/option>/g;
+  let match;
+  while ((match = optionRegex.exec(selectMatch[1])) !== null) {
+    const value = match[1].trim();
+    const name = match[2].trim();
+    if (value !== 'null') {
+      variants.push({ name, limitlessValue: value });
+    }
+  }
+
+  return variants;
+}

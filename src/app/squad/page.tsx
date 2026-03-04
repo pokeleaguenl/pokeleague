@@ -9,7 +9,7 @@ export default async function SquadPage() {
 
   await supabase.from("profiles").upsert({ id: user.id }, { onConflict: "id" });
 
-  const [{ data: decks }, { data: squadRaw }] = await Promise.all([
+  const [{ data: decks }, { data: squadRaw }, { data: allVariants }] = await Promise.all([
     supabase.from("decks").select("*").order("meta_share", { ascending: false }),
     supabase.from("squads")
       .select(`
@@ -23,6 +23,7 @@ export default async function SquadPage() {
       `)
       .eq("user_id", user.id)
       .maybeSingle(),
+    supabase.from("deck_variants").select("*"),
   ]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -36,15 +37,34 @@ export default async function SquadPage() {
     bench_5: sq ? (Array.isArray(sq.bench5) ? sq.bench5[0] ?? null : sq.bench5) : null,
   };
 
+  const initialVariants = sq ? {
+    active: sq.active_variant ?? null,
+    bench_1: sq.bench_1_variant ?? null,
+    bench_2: sq.bench_2_variant ?? null,
+    bench_3: sq.bench_3_variant ?? null,
+    bench_4: sq.bench_4_variant ?? null,
+    bench_5: sq.bench_5_variant ?? null,
+  } : {};
+
+  // Group variants by deck_id
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const variantsByDeckId: Record<number, any[]> = {};
+  for (const v of allVariants ?? []) {
+    if (!variantsByDeckId[v.deck_id]) variantsByDeckId[v.deck_id] = [];
+    variantsByDeckId[v.deck_id].push(v);
+  }
+
   return (
     <div className="mx-auto max-w-xl px-2 py-4">
       <div className="mb-4 px-2">
         <h1 className="text-2xl font-bold">My <span className="text-yellow-400">Squad</span></h1>
-        <p className="text-xs text-gray-400 mt-1">Pick 1 active (1.5×) + 5 bench decks within 100pts. Lock in before the tournament.</p>
+        <p className="text-xs text-gray-400 mt-1">Pick 1 active (1.5×) + 5 bench decks within 100pts. Pick a variant to earn bonus points.</p>
       </div>
       <Playmat
         allDecks={decks ?? []}
         initialSquad={initialSquad}
+        initialVariants={initialVariants}
+        variantsByDeckId={variantsByDeckId}
         locked={sq?.locked ?? false}
       />
     </div>

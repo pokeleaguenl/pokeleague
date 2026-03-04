@@ -30,7 +30,10 @@ export async function POST(req: Request) {
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json();
-  const { active_deck_id, bench_1, bench_2, bench_3, bench_4, bench_5 } = body;
+  const {
+    active_deck_id, bench_1, bench_2, bench_3, bench_4, bench_5,
+    active_variant, bench_1_variant, bench_2_variant, bench_3_variant, bench_4_variant, bench_5_variant,
+  } = body;
 
   const { data, error } = await supabase
     .from("squads")
@@ -42,6 +45,12 @@ export async function POST(req: Request) {
       bench_3: bench_3 ?? null,
       bench_4: bench_4 ?? null,
       bench_5: bench_5 ?? null,
+      active_variant: active_variant ?? null,
+      bench_1_variant: bench_1_variant ?? null,
+      bench_2_variant: bench_2_variant ?? null,
+      bench_3_variant: bench_3_variant ?? null,
+      bench_4_variant: bench_4_variant ?? null,
+      bench_5_variant: bench_5_variant ?? null,
       updated_at: new Date().toISOString(),
     }, { onConflict: "user_id" })
     .select()

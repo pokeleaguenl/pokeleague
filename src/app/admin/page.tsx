@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import SyncButton from "./sync-button";
 import EventsSyncButton from "./events-sync-button";
+import SyncVariantsButton from "./sync-variants-button";
 import DeckTable from "./deck-table";
 
 export default async function AdminPage() {
@@ -27,6 +28,7 @@ export default async function AdminPage() {
       <div className="mb-6 flex flex-wrap gap-3">
         <SyncButton />
         <EventsSyncButton />
+        <SyncVariantsButton />
         <Link href="/admin/tournaments"
           className="rounded-lg border border-gray-700 px-6 py-3 text-sm font-semibold text-gray-300 hover:border-gray-500 hover:text-white">
           🏆 Manage Tournaments
