@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import Image from "next/image";
+import Link from "next/link";
 
 interface Deck { id: number; name: string; tier: string; image_url: string | null; cost: number; }
 interface Profile { id: string; display_name: string | null; username: string | null; total_points: number; }
@@ -36,7 +37,6 @@ export default async function Leaderboard() {
   ]);
 
   const profileMap = new Map((profiles ?? []).map((p: Profile) => [p.id, p]));
-  // Supabase returns joined rows as arrays; normalize to single objects
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ranked = ((squads ?? []) as any[]).map((s) => ({
     ...s,
@@ -64,6 +64,7 @@ export default async function Leaderboard() {
             const name = profile?.display_name ?? profile?.username ?? "Anonymous";
             const bench = [squad.bench1, squad.bench2, squad.bench3, squad.bench4, squad.bench5];
             const medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : null;
+            const profileHref = profile?.username ? `/profile/${profile.username}` : null;
 
             return (
               <div key={squad.user_id} className="rounded-xl border border-gray-800 bg-gray-900/50 p-4">
@@ -73,23 +74,36 @@ export default async function Leaderboard() {
                       {medal ?? `#${i + 1}`}
                     </span>
                     <div>
-                      <p className="font-semibold">{name}</p>
+                      {profileHref ? (
+                        <Link href={profileHref} className="font-semibold hover:text-yellow-400 transition-colors">
+                          {name}
+                          <span className="ml-1.5 text-xs text-gray-600 font-normal">@{profile?.username}</span>
+                        </Link>
+                      ) : (
+                        <p className="font-semibold">{name}</p>
+                      )}
                       {squad.locked && <span className="text-xs text-green-400">🔒 Locked in</span>}
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="text-2xl font-bold text-yellow-400">{squad.total_points}</p>
-                    <p className="text-xs text-gray-500">points</p>
+                  <div className="flex items-center gap-3">
+                    <div className="text-right">
+                      <p className="text-2xl font-bold text-yellow-400">{squad.total_points}</p>
+                      <p className="text-xs text-gray-500">points</p>
+                    </div>
+                    {profileHref && (
+                      <Link href={profileHref}
+                        className="rounded-lg border border-gray-700 px-3 py-1.5 text-xs text-gray-400 hover:border-yellow-400/50 hover:text-yellow-400 transition-colors">
+                        View →
+                      </Link>
+                    )}
                   </div>
                 </div>
 
                 {/* Squad visual */}
                 <div className="mt-2">
-                  {/* Active deck */}
                   <div className="mb-2 flex justify-center">
                     <MiniDeckCard deck={squad.active_deck} label="Active" isActive />
                   </div>
-                  {/* Bench */}
                   <div className="grid grid-cols-5 gap-1">
                     {bench.map((deck, j) => (
                       <MiniDeckCard key={j} deck={deck} label={`B${j + 1}`} />
