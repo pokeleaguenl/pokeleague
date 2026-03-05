@@ -5,6 +5,7 @@ import SyncButton from "./sync-button";
 import EventsSyncButton from "./events-sync-button";
 import SyncVariantsButton from "./sync-variants-button";
 import Clean2023Button from "./clean-2023-button";
+import PopulateArchetypesButton from "./populate-archetypes-button";
 import DeckTable from "./deck-table";
 
 export default async function AdminPage() {
@@ -30,6 +31,7 @@ export default async function AdminPage() {
         <SyncButton />
         <EventsSyncButton />
         <SyncVariantsButton />
+        <PopulateArchetypesButton />
         <Clean2023Button />
         <Link href="/admin/tournaments"
           className="rounded-lg border border-gray-700 px-6 py-3 text-sm font-semibold text-gray-300 hover:border-gray-500 hover:text-white">
