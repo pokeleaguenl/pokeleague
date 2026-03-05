@@ -14,14 +14,17 @@ export async function processSnapshot(
   payload: SnapshotPayload
 ): Promise<{ archetypesScored: number; teamsScored: number }> {
 
-  // 1. Build archetype slug → base points map
-  const archetypePoints: Record<string, number> = {};
+  // 1. Build archetype slug → data map (points + placement)
+  const archetypeData: Record<string, { points: number; placement: number | null }> = {};
   for (const result of payload.archetypes) {
-    archetypePoints[result.archetype_slug] = calcArchetypeBasePoints(result);
+    archetypeData[result.archetype_slug] = {
+      points: calcArchetypeBasePoints(result),
+      placement: result.placement ?? null,
+    };
   }
 
   // 2. Resolve archetype slugs to IDs
-  const slugs = Object.keys(archetypePoints);
+  const slugs = Object.keys(archetypeData);
   const archetypeScores: Parameters<typeof upsertArchetypeScores>[1] = [];
 
   if (slugs.length > 0) {
@@ -31,11 +34,12 @@ export async function processSnapshot(
       .in("slug", slugs);
 
     for (const arch of archetypes ?? []) {
+      const data = archetypeData[arch.slug];
       archetypeScores.push({
         fantasy_event_id: fantasyEventId,
         archetype_id: arch.id,
-        points: archetypePoints[arch.slug] ?? 0,
-        placement: null,
+        points: data?.points ?? 0,
+        placement: data?.placement ?? null,
       });
     }
     await upsertArchetypeScores(supabase, archetypeScores);

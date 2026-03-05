@@ -59,18 +59,33 @@ export async function calculateDeckAnalytics(
 ): Promise<DeckAnalytics> {
   
   // Fetch all scores for this archetype
-  const { data: scores } = await supabase
+  const { data: scores, error: scoresError } = await supabase
     .from("fantasy_archetype_scores_live")
     .select("*, event:fantasy_events(id, name, event_date, status)")
     .eq("archetype_id", archetypeId)
-    .order("event!inner(event_date)", { ascending: false });
+    .order("computed_at", { ascending: false });
 
-  const tournamentResults = (scores || []).map(s => ({
-    eventName: s.event?.name || "Unknown Event",
-    eventDate: s.event?.event_date || "",
-    placement: s.placement || 0,
-    points: s.points || 0,
-  }));
+  if (scoresError) {
+    console.error("[deckAnalytics] Error fetching scores:", scoresError);
+  }
+
+  console.log(`[deckAnalytics] Found ${scores?.length || 0} scores for archetype ${archetypeId}`);
+  if (scores && scores.length > 0) {
+    console.log("[deckAnalytics] Sample score:", scores[0]);
+  }
+
+  const tournamentResults = (scores || []).map(s => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const event = (s as any).event;
+    const eventData = Array.isArray(event) ? event[0] : event;
+    
+    return {
+      eventName: eventData?.name || "Unknown Event",
+      eventDate: eventData?.event_date || "",
+      placement: (s as any).placement || 0,
+      points: (s as any).points || 0,
+    };
+  });
 
   // Total fantasy points
   const fantasyPoints = scores?.reduce((sum, s) => sum + (s.points || 0), 0) || 0;
@@ -93,7 +108,10 @@ export async function calculateDeckAnalytics(
   };
 
   scores?.forEach(s => {
-    const placement = s.placement || 999;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const placement = (s as any).placement;
+    if (!placement || placement === 0) return; // Skip if no placement data
+    
     if (placement <= 64) placementBreakdown.top64++;
     if (placement <= 32) placementBreakdown.top32++;
     if (placement <= 16) placementBreakdown.top16++;
@@ -101,6 +119,8 @@ export async function calculateDeckAnalytics(
     if (placement <= 4) placementBreakdown.finals++;
     if (placement === 1) placementBreakdown.wins++;
   });
+
+  console.log("[deckAnalytics] Placement breakdown:", placementBreakdown);
 
   // Conversion rates
   const top32Conversion = eventCount > 0 
