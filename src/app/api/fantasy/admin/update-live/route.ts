@@ -39,6 +39,25 @@ export async function POST(req: Request) {
   // 2. Trigger score computation from snapshot
   const result = await processSnapshot(supabase, fantasy_event_id, payload);
 
+  // 3. Track event ingestion (upsert to update last_seen_at)
+  const sourceEventId = payload.event_id || `fantasy_event_${fantasy_event_id}`;
+  await supabase.from("ingest_events_seen").upsert(
+    {
+      source: source || "manual",
+      source_event_id: sourceEventId,
+      last_seen_at: new Date().toISOString(),
+    },
+    { onConflict: "source,source_event_id" }
+  );
+
+  // 4. Track ingestion run
+  await supabase.from("ingest_runs").insert({
+    source: source || "manual",
+    event_count: 1,
+    status: "ok",
+    notes: `Snapshot for fantasy_event_id ${fantasy_event_id}`,
+  });
+
   return NextResponse.json({
     ok: true,
     message: `Snapshot stored. Scored ${result.archetypesScored} archetypes, ${result.teamsScored} teams.`,

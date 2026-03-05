@@ -48,5 +48,14 @@ export async function POST() {
 
   const synced = results.filter((r) => "ok" in r).length;
   const failed = results.filter((r) => "error" in r);
+
+  // Track ingestion
+  await supabase.from("ingest_runs").insert({
+    source: "limitless_variants",
+    event_count: synced,
+    status: failed.length > 0 ? "partial" : "ok",
+    notes: failed.length > 0 ? `${failed.length} variants failed to sync` : null,
+  });
+
   return NextResponse.json({ message: `Synced ${synced} variants`, synced, failed });
 }
