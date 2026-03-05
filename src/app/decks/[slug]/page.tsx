@@ -23,11 +23,12 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
 
   if (!archetype && !deck) notFound();
 
+  // Fetch event history from live scores (real-time) and final scores (completed events)
   const { data: scoreHistory } = archetype ? await supabase
-    .from("fantasy_archetype_scores_final")
+    .from("fantasy_archetype_scores_live")
     .select("*, event:fantasy_events(name, event_date)")
     .eq("archetype_id", archetype.id)
-    .order("id", { ascending: false })
+    .order("computed_at", { ascending: false })
     .limit(10) : { data: [] };
 
   const efficiency = deck
