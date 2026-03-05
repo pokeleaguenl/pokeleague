@@ -37,7 +37,15 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
 
   return (
     <div className="mx-auto max-w-xl px-4 py-10">
-      <Link href="/decks" className="mb-4 inline-block text-xs text-gray-500 hover:text-white">← All Decks</Link>
+      <div className="mb-4 flex items-center justify-between">
+        <Link href="/decks" className="inline-block text-xs text-gray-500 hover:text-white">← All Decks</Link>
+        <Link 
+          href={`/decks/${slug}/analytics`}
+          className="rounded-lg border border-yellow-400/30 bg-yellow-400/10 px-4 py-2 text-sm font-semibold text-yellow-400 hover:bg-yellow-400/20"
+        >
+          📊 Full Analytics
+        </Link>
+      </div>
 
       <div className="mb-6">
         <h1 className="text-3xl font-bold">{archetype?.name ?? deck?.name ?? slug}</h1>
