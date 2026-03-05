@@ -91,6 +91,22 @@ export async function POST() {
   // ============================================================
   log.push("\n=== Seeding Aliases ===");
 
+  // First, list all existing archetype slugs for debugging
+  const { data: allArchetypes } = await supabase
+    .from("fantasy_archetypes")
+    .select("slug, name")
+    .order("name");
+  
+  if (allArchetypes && allArchetypes.length > 0) {
+    log.push(`Found ${allArchetypes.length} existing archetypes:`);
+    allArchetypes.slice(0, 10).forEach(a => {
+      log.push(`  - ${a.slug} (${a.name})`);
+    });
+    if (allArchetypes.length > 10) {
+      log.push(`  ... and ${allArchetypes.length - 10} more`);
+    }
+  }
+
   const aliasMap: Record<string, string[]> = {
     "charizard-ex": ["charizard", "zard", "char"],
     "pidgeot-ex": ["pidgeot", "pidg"],
@@ -144,8 +160,15 @@ export async function POST() {
       .select();
 
     if (error) {
-      const errorMsg = `❌ Failed to upsert aliases for ${slug}: ${error.message} (code: ${error.code}, details: ${error.details || 'none'}, hint: ${error.hint || 'none'})`;
+      const errorDetails = {
+        message: error.message,
+        code: error.code,
+        details: error.details || 'none',
+        hint: error.hint || 'none',
+      };
+      const errorMsg = `❌ Failed to upsert aliases for ${slug}: ${JSON.stringify(errorDetails)}`;
       log.push(errorMsg);
+      log.push(`   Attempted records: ${JSON.stringify(aliasRecords)}`);
       console.error(`[seed-fantasy] Alias upsert error for ${slug}:`, {
         error,
         message: error.message,
