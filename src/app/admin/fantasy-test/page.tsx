@@ -6,43 +6,17 @@ import Link from "next/link";
 export default function FantasyTestPage() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<string | null>(null);
+  const [debugCounts, setDebugCounts] = useState<Record<string, number> | null>(null);
 
   const sampleSnapshot = {
     fantasy_event_id: 1,
-    payload: {
-      archetypes: [
-        {
-          archetype_slug: "charizard-ex",
-          archetype_name: "Charizard ex",
-          placement: 1,
-          made_day2: true,
-          top8: true,
-          won: true,
-          win_rate: 0.75,
-          had_win: true,
-        },
-        {
-          archetype_slug: "pikachu-ex",
-          archetype_name: "Pikachu ex",
-          placement: 3,
-          made_day2: true,
-          top8: true,
-          won: false,
-          win_rate: 0.68,
-          had_win: true,
-        },
-        {
-          archetype_slug: "lugia-vstar",
-          archetype_name: "Lugia VSTAR",
-          placement: 8,
-          made_day2: true,
-          top8: true,
-          won: false,
-          win_rate: 0.58,
-          had_win: true,
-        },
-      ],
-    },
+    standings: [
+      { player_name: "Player A", deck_name: "Charizard ex", placement: 1, wins: 9, losses: 0 },
+      { player_name: "Player B", deck_name: "Pikachu ex", placement: 2, wins: 8, losses: 1 },
+      { player_name: "Player C", deck_name: "Lugia VSTAR", placement: 3, wins: 7, losses: 2 },
+      { player_name: "Player D", deck_name: "Miraidon ex", placement: 4, wins: 7, losses: 2 },
+      { player_name: "Player E", deck_name: "Raging Bolt ex", placement: 5, wins: 6, losses: 3 },
+    ],
     source: "manual_test",
   };
 
@@ -70,6 +44,23 @@ export default function FantasyTestPage() {
       });
       const data = await res.json();
       setResult(res.ok ? `✅ ${data.message}` : `❌ ${data.error}`);
+    } catch (err) {
+      setResult(`❌ Error: ${String(err)}`);
+    }
+    setLoading(false);
+  }
+
+  async function checkCounts() {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/fantasy/admin/debug-pipeline");
+      const data = await res.json();
+      if (res.ok) {
+        setDebugCounts(data.counts);
+        setResult("✅ Pipeline counts loaded");
+      } else {
+        setResult(`❌ ${data.error}`);
+      }
     } catch (err) {
       setResult(`❌ Error: ${String(err)}`);
     }
@@ -144,9 +135,35 @@ export default function FantasyTestPage() {
         <section className="rounded-xl border border-gray-800 p-6">
           <h2 className="mb-3 text-lg font-semibold">Step 3: Verify Data</h2>
           <p className="mb-4 text-sm text-gray-400">
-            Run this SQL in Supabase to check table counts:
+            Check pipeline table counts:
           </p>
-          <pre className="overflow-x-auto rounded bg-gray-900 p-3 text-xs text-gray-300">
+          <button
+            onClick={checkCounts}
+            disabled={loading}
+            className="mb-4 rounded-lg bg-purple-600 px-6 py-3 text-sm font-semibold text-white hover:bg-purple-500 disabled:opacity-50"
+          >
+            {loading ? "Loading..." : "🔍 Check Counts"}
+          </button>
+
+          {debugCounts && (
+            <div className="rounded bg-gray-900 p-4">
+              <h3 className="mb-2 text-sm font-semibold text-green-400">Pipeline Counts</h3>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                {Object.entries(debugCounts).map(([table, count]) => (
+                  <div key={table} className="flex justify-between">
+                    <span className="text-gray-400">{table}:</span>
+                    <span className={count > 0 ? "text-green-400 font-bold" : "text-gray-500"}>{count}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <details className="mt-4">
+            <summary className="cursor-pointer text-xs text-gray-500 hover:text-white">
+              Or run SQL manually in Supabase
+            </summary>
+            <pre className="mt-2 overflow-x-auto rounded bg-gray-900 p-3 text-xs text-gray-300">
 {`SELECT 'archetypes' as table_name, COUNT(*) as count FROM fantasy_archetypes
 UNION ALL
 SELECT 'aliases', COUNT(*) FROM fantasy_archetype_aliases
@@ -158,7 +175,8 @@ UNION ALL
 SELECT 'scores_live', COUNT(*) FROM fantasy_archetype_scores_live
 UNION ALL
 SELECT 'team_scores_live', COUNT(*) FROM fantasy_team_scores_live;`}
-          </pre>
+            </pre>
+          </details>
         </section>
       </div>
     </div>

@@ -26,6 +26,14 @@ export interface SnapshotPayload {
   recorded_at?: string;
 }
 
+export interface StandingsEntry {
+  player_name: string;
+  deck_name: string;
+  placement: number;
+  wins?: number;
+  losses?: number;
+}
+
 export interface ArchetypeResult {
   archetype_slug: string;
   archetype_name: string;
