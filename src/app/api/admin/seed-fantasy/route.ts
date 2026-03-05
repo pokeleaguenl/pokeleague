@@ -1,10 +1,12 @@
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 
 /**
  * POST /api/admin/seed-fantasy
  * Seeds fantasy_archetypes, aliases, and fantasy_events from existing data
  * Idempotent - safe to run multiple times
+ * Uses admin client for RLS-protected writes
  */
 export async function POST() {
   const supabase = await createClient();
@@ -13,6 +15,27 @@ export async function POST() {
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+
+  // Create admin client for RLS-protected writes
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !serviceRoleKey) {
+    console.error("[seed-fantasy] Missing environment variables:", {
+      hasUrl: !!supabaseUrl,
+      hasServiceKey: !!serviceRoleKey,
+    });
+    return NextResponse.json({ 
+      error: "Server configuration error: Missing Supabase credentials",
+      details: {
+        hasUrl: !!supabaseUrl,
+        hasServiceKey: !!serviceRoleKey,
+      }
+    }, { status: 500 });
+  }
+
+  const adminClient = createAdminClient(supabaseUrl, serviceRoleKey);
+  console.log("[seed-fantasy] Admin client created with service role key");
 
   const log: string[] = [];
 
@@ -46,7 +69,7 @@ export async function POST() {
       continue;
     }
 
-    const { error } = await supabase
+    const { error } = await adminClient
       .from("fantasy_archetypes")
       .insert({
         slug,
@@ -55,7 +78,7 @@ export async function POST() {
       });
 
     if (error) {
-      log.push(`❌ Failed to create archetype: ${deck.name}`);
+      log.push(`❌ Failed to create archetype: ${deck.name} - ${error.message}`);
     } else {
       archetypesCreated++;
     }
@@ -67,6 +90,22 @@ export async function POST() {
   // PART 2: Seed common aliases for archetypes
   // ============================================================
   log.push("\n=== Seeding Aliases ===");
+
+  // First, list all existing archetype slugs for debugging
+  const { data: allArchetypes } = await supabase
+    .from("fantasy_archetypes")
+    .select("slug, name")
+    .order("name");
+  
+  if (allArchetypes && allArchetypes.length > 0) {
+    log.push(`Found ${allArchetypes.length} existing archetypes:`);
+    allArchetypes.slice(0, 10).forEach(a => {
+      log.push(`  - ${a.slug} (${a.name})`);
+    });
+    if (allArchetypes.length > 10) {
+      log.push(`  ... and ${allArchetypes.length - 10} more`);
+    }
+  }
 
   const aliasMap: Record<string, string[]> = {
     "charizard-ex": ["charizard", "zard", "char"],
@@ -84,45 +123,71 @@ export async function POST() {
   let aliasesSkipped = 0;
 
   for (const [slug, aliases] of Object.entries(aliasMap)) {
-    const { data: archetype } = await supabase
+    // Debug: Check archetype lookup
+    console.log(`[seed-fantasy] Looking up archetype: ${slug}`);
+    
+    const { data: archetype, error: lookupError } = await supabase
       .from("fantasy_archetypes")
       .select("id")
       .eq("slug", slug)
       .maybeSingle();
 
-    if (!archetype) {
-      log.push(`⚠️  Skipping aliases for unknown archetype: ${slug}`);
+    if (lookupError) {
+      log.push(`❌ Error looking up archetype ${slug}: ${lookupError.message}`);
+      console.error(`[seed-fantasy] Archetype lookup error for ${slug}:`, lookupError);
       continue;
     }
 
-    for (const alias of aliases) {
-      const { data: existing } = await supabase
-        .from("fantasy_archetype_aliases")
-        .select("id")
-        .eq("alias", alias)
-        .maybeSingle();
+    if (!archetype) {
+      log.push(`⚠️  Skipping aliases for unknown archetype: ${slug}`);
+      console.log(`[seed-fantasy] Archetype not found: ${slug}`);
+      continue;
+    }
 
-      if (existing) {
-        aliasesSkipped++;
-        continue;
-      }
+    console.log(`[seed-fantasy] Found archetype: ${slug} → id=${archetype.id}`);
 
-      const { error } = await supabase
-        .from("fantasy_archetype_aliases")
-        .insert({
-          alias,
-          archetype_id: archetype.id,
-        });
+    // Batch upsert all aliases for this archetype
+    const aliasRecords = aliases.map(alias => ({
+      alias,
+      archetype_id: archetype.id,
+    }));
 
-      if (error) {
-        log.push(`❌ Failed to create alias: ${alias} → ${slug}`);
-      } else {
-        aliasesCreated++;
+    console.log(`[seed-fantasy] Upserting ${aliasRecords.length} aliases for ${slug}:`, aliasRecords);
+
+    const { data: upserted, error } = await adminClient
+      .from("fantasy_archetype_aliases")
+      .upsert(aliasRecords, { onConflict: "alias" })
+      .select();
+
+    if (error) {
+      const errorDetails = {
+        message: error.message,
+        code: error.code,
+        details: error.details || 'none',
+        hint: error.hint || 'none',
+      };
+      const errorMsg = `❌ Failed to upsert aliases for ${slug}: ${JSON.stringify(errorDetails)}`;
+      log.push(errorMsg);
+      log.push(`   Attempted records: ${JSON.stringify(aliasRecords)}`);
+      console.error(`[seed-fantasy] Alias upsert error for ${slug}:`, {
+        error,
+        message: error.message,
+        code: error.code,
+        details: error.details,
+        hint: error.hint,
+        aliasRecords,
+      });
+    } else {
+      const count = upserted?.length || 0;
+      aliasesCreated += count;
+      console.log(`[seed-fantasy] Successfully upserted ${count} aliases for ${slug}`);
+      if (count > 0) {
+        log.push(`✅ Upserted ${count} aliases for ${slug}: ${aliases.join(", ")}`);
       }
     }
   }
 
-  log.push(`✅ Aliases: ${aliasesCreated} created, ${aliasesSkipped} skipped`);
+  log.push(`✅ Aliases: ${aliasesCreated} created/updated, ${aliasesSkipped} skipped`);
 
   // ============================================================
   // PART 3: Seed fantasy_events from tournaments
@@ -164,7 +229,7 @@ export async function POST() {
       status = "live";
     }
 
-    const { error } = await supabase
+    const { error } = await adminClient
       .from("fantasy_events")
       .insert({
         tournament_id: tournament.id,
@@ -174,7 +239,7 @@ export async function POST() {
       });
 
     if (error) {
-      log.push(`❌ Failed to create fantasy event: ${tournament.name}`);
+      log.push(`❌ Failed to create fantasy event: ${tournament.name} - ${error.message}`);
     } else {
       eventsCreated++;
     }
