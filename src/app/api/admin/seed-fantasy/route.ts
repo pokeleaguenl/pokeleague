@@ -1,0 +1,190 @@
+import { createClient } from "@/lib/supabase/server";
+import { NextResponse } from "next/server";
+
+/**
+ * POST /api/admin/seed-fantasy
+ * Seeds fantasy_archetypes, aliases, and fantasy_events from existing data
+ * Idempotent - safe to run multiple times
+ */
+export async function POST() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const log: string[] = [];
+
+  // ============================================================
+  // PART 1: Seed fantasy_archetypes from decks table
+  // ============================================================
+  log.push("=== Seeding Archetypes ===");
+  
+  const { data: decks, error: decksError } = await supabase
+    .from("decks")
+    .select("id, name, image_url");
+
+  if (decksError || !decks) {
+    return NextResponse.json({ error: "Failed to load decks" }, { status: 500 });
+  }
+
+  let archetypesCreated = 0;
+  let archetypesSkipped = 0;
+
+  for (const deck of decks) {
+    const slug = deck.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
+    const { data: existing } = await supabase
+      .from("fantasy_archetypes")
+      .select("id")
+      .eq("slug", slug)
+      .maybeSingle();
+
+    if (existing) {
+      archetypesSkipped++;
+      continue;
+    }
+
+    const { error } = await supabase
+      .from("fantasy_archetypes")
+      .insert({
+        slug,
+        name: deck.name,
+        image_url: deck.image_url,
+      });
+
+    if (error) {
+      log.push(`❌ Failed to create archetype: ${deck.name}`);
+    } else {
+      archetypesCreated++;
+    }
+  }
+
+  log.push(`✅ Archetypes: ${archetypesCreated} created, ${archetypesSkipped} skipped`);
+
+  // ============================================================
+  // PART 2: Seed common aliases for archetypes
+  // ============================================================
+  log.push("\n=== Seeding Aliases ===");
+
+  const aliasMap: Record<string, string[]> = {
+    "charizard-ex": ["charizard", "zard", "char"],
+    "pidgeot-ex": ["pidgeot", "pidg"],
+    "pikachu-ex": ["pikachu", "pika"],
+    "lugia-vstar": ["lugia"],
+    "miraidon-ex": ["miraidon"],
+    "raging-bolt-ex": ["raging-bolt", "bolt"],
+    "regidrago-vstar": ["regidrago", "drago"],
+    "roaring-moon-ex": ["roaring-moon", "moon"],
+    "snorlax-stall": ["snorlax", "stall"],
+  };
+
+  let aliasesCreated = 0;
+  let aliasesSkipped = 0;
+
+  for (const [slug, aliases] of Object.entries(aliasMap)) {
+    const { data: archetype } = await supabase
+      .from("fantasy_archetypes")
+      .select("id")
+      .eq("slug", slug)
+      .maybeSingle();
+
+    if (!archetype) {
+      log.push(`⚠️  Skipping aliases for unknown archetype: ${slug}`);
+      continue;
+    }
+
+    for (const alias of aliases) {
+      const { data: existing } = await supabase
+        .from("fantasy_archetype_aliases")
+        .select("id")
+        .eq("alias", alias)
+        .maybeSingle();
+
+      if (existing) {
+        aliasesSkipped++;
+        continue;
+      }
+
+      const { error } = await supabase
+        .from("fantasy_archetype_aliases")
+        .insert({
+          alias,
+          archetype_id: archetype.id,
+        });
+
+      if (error) {
+        log.push(`❌ Failed to create alias: ${alias} → ${slug}`);
+      } else {
+        aliasesCreated++;
+      }
+    }
+  }
+
+  log.push(`✅ Aliases: ${aliasesCreated} created, ${aliasesSkipped} skipped`);
+
+  // ============================================================
+  // PART 3: Seed fantasy_events from tournaments
+  // ============================================================
+  log.push("\n=== Seeding Fantasy Events ===");
+
+  const { data: tournaments, error: tournamentsError } = await supabase
+    .from("tournaments")
+    .select("id, name, event_date, status")
+    .gte("event_date", "2025-09-01") // Only recent tournaments
+    .order("event_date", { ascending: false });
+
+  if (tournamentsError || !tournaments) {
+    return NextResponse.json({ error: "Failed to load tournaments" }, { status: 500 });
+  }
+
+  let eventsCreated = 0;
+  let eventsSkipped = 0;
+
+  for (const tournament of tournaments) {
+    const { data: existing } = await supabase
+      .from("fantasy_events")
+      .select("id")
+      .eq("tournament_id", tournament.id)
+      .maybeSingle();
+
+    if (existing) {
+      eventsSkipped++;
+      continue;
+    }
+
+    const now = new Date().toISOString().split("T")[0];
+    const eventDate = tournament.event_date || now;
+    
+    let status: "upcoming" | "live" | "completed" = "upcoming";
+    if (eventDate < now) {
+      status = "completed";
+    } else if (eventDate === now) {
+      status = "live";
+    }
+
+    const { error } = await supabase
+      .from("fantasy_events")
+      .insert({
+        tournament_id: tournament.id,
+        name: tournament.name,
+        event_date: tournament.event_date,
+        status,
+      });
+
+    if (error) {
+      log.push(`❌ Failed to create fantasy event: ${tournament.name}`);
+    } else {
+      eventsCreated++;
+    }
+  }
+
+  log.push(`✅ Fantasy Events: ${eventsCreated} created, ${eventsSkipped} skipped`);
+
+  return NextResponse.json({
+    ok: true,
+    message: `Seed complete: ${archetypesCreated} archetypes, ${aliasesCreated} aliases, ${eventsCreated} events`,
+    log,
+  });
+}
