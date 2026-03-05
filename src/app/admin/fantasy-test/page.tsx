@@ -102,6 +102,19 @@ export default function FantasyTestPage() {
     setLoading(false);
   }
 
+  async function backfillPlacements() {
+    setLoading(true);
+    setResult(null);
+    try {
+      const res = await fetch("/api/admin/backfill-placements", { method: "POST" });
+      const data = await res.json();
+      setResult(res.ok ? `✅ ${data.message}\n\n${data.log?.join("\n") || ""}` : `❌ ${data.error}`);
+    } catch (err) {
+      setResult(`❌ Error: ${String(err)}`);
+    }
+    setLoading(false);
+  }
+
   async function ingestTournament() {
     setLoading(true);
     setResult(null);
@@ -189,13 +202,22 @@ export default function FantasyTestPage() {
           <p className="mb-4 text-sm text-gray-400">
             Creates fantasy_archetypes, aliases, and fantasy_events from existing decks/tournaments.
           </p>
-          <button
-            onClick={runSeed}
-            disabled={loading}
-            className="rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-500 disabled:opacity-50"
-          >
-            {loading ? "Seeding..." : "🌱 Run Seed"}
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={runSeed}
+              disabled={loading}
+              className="rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-500 disabled:opacity-50"
+            >
+              {loading ? "Seeding..." : "🌱 Run Seed"}
+            </button>
+            <button
+              onClick={backfillPlacements}
+              disabled={loading}
+              className="rounded-lg border border-orange-700 px-6 py-3 text-sm font-semibold text-orange-400 hover:border-orange-500 hover:text-orange-300 disabled:opacity-50"
+            >
+              {loading ? "Backfilling..." : "🔄 Backfill Placements"}
+            </button>
+          </div>
         </section>
 
         {/* Step 2A: Ingest Tournament (Automated) */}
