@@ -68,6 +68,23 @@ export default function FantasyTestPage() {
     setLoading(false);
   }
 
+  async function checkEnv() {
+    setLoading(true);
+    setResult(null);
+    try {
+      const res = await fetch("/api/admin/debug-env");
+      const data = await res.json();
+      setResult(
+        res.ok 
+          ? `Environment Check:\n\n${JSON.stringify(data, null, 2)}`
+          : `❌ ${data.error}`
+      );
+    } catch (err) {
+      setResult(`❌ Error: ${String(err)}`);
+    }
+    setLoading(false);
+  }
+
   async function testAliasInsert() {
     setLoading(true);
     setResult(null);
@@ -132,9 +149,26 @@ export default function FantasyTestPage() {
       </p>
 
       <div className="space-y-6">
-        {/* Step 0: Debug Alias Insert */}
+        {/* Step 0: Debug Environment */}
+        <section className="rounded-xl border border-purple-800 bg-purple-900/10 p-6">
+          <h2 className="mb-3 text-lg font-semibold text-purple-400">Step 0A: Debug Environment</h2>
+          <p className="mb-4 text-sm text-gray-400">
+            Checks what environment variables are actually available at runtime.
+            <br />
+            Use this to verify SUPABASE_SERVICE_ROLE_KEY is set correctly.
+          </p>
+          <button
+            onClick={checkEnv}
+            disabled={loading}
+            className="rounded-lg bg-purple-600 px-6 py-3 text-sm font-semibold text-white hover:bg-purple-500 disabled:opacity-50"
+          >
+            {loading ? "Checking..." : "🔍 Check Environment"}
+          </button>
+        </section>
+
+        {/* Step 0B: Debug Alias Insert */}
         <section className="rounded-xl border border-red-800 bg-red-900/10 p-6">
-          <h2 className="mb-3 text-lg font-semibold text-red-400">Step 0: Debug Alias Insert</h2>
+          <h2 className="mb-3 text-lg font-semibold text-red-400">Step 0B: Debug Alias Insert</h2>
           <p className="mb-4 text-sm text-gray-400">
             Tests alias insertion with admin client to identify RLS/Postgres errors.
             <br />
