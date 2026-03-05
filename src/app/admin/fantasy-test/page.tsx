@@ -7,6 +7,7 @@ export default function FantasyTestPage() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<string | null>(null);
   const [debugCounts, setDebugCounts] = useState<Record<string, number> | null>(null);
+  const [tournamentId, setTournamentId] = useState("1");
 
   const sampleSnapshot = {
     fantasy_event_id: 1,
@@ -67,6 +68,39 @@ export default function FantasyTestPage() {
     setLoading(false);
   }
 
+  async function ingestTournament() {
+    setLoading(true);
+    setResult(null);
+    try {
+      const sampleStandings = [
+        { player_name: "Player A", deck_name: "Charizard ex", placement: 1, wins: 9, losses: 0 },
+        { player_name: "Player B", deck_name: "Pikachu ex", placement: 2, wins: 8, losses: 1 },
+        { player_name: "Player C", deck_name: "Lugia VSTAR", placement: 3, wins: 7, losses: 2 },
+        { player_name: "Player D", deck_name: "Miraidon ex", placement: 4, wins: 7, losses: 2 },
+        { player_name: "Player E", deck_name: "Raging Bolt ex", placement: 5, wins: 6, losses: 3 },
+      ];
+
+      const res = await fetch("/api/fantasy/admin/ingest-event", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          tournament_id: parseInt(tournamentId),
+          standings: sampleStandings,
+          force: false,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setResult(`✅ ${data.message}\n\nLog:\n${data.log?.join("\n") || ""}`);
+      } else {
+        setResult(`❌ ${data.error}\n\n${data.log?.join("\n") || ""}`);
+      }
+    } catch (err) {
+      setResult(`❌ Error: ${String(err)}`);
+    }
+    setLoading(false);
+  }
+
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
       <Link href="/admin" className="mb-4 inline-block text-sm text-gray-500 hover:text-white">
@@ -96,13 +130,40 @@ export default function FantasyTestPage() {
           </button>
         </section>
 
-        {/* Step 2: Post Snapshot */}
-        <section className="rounded-xl border border-gray-800 p-6">
-          <h2 className="mb-3 text-lg font-semibold">Step 2: Post Test Snapshot</h2>
+        {/* Step 2A: Ingest Tournament (Automated) */}
+        <section className="rounded-xl border border-green-800 bg-green-900/10 p-6">
+          <h2 className="mb-3 text-lg font-semibold text-green-400">Step 2A: Ingest Tournament (Recommended)</h2>
           <p className="mb-4 text-sm text-gray-400">
-            Posts a sample standings snapshot for fantasy_event_id = 1.
+            Automated pipeline: creates fantasy_event, converts standings, computes analytics.
             <br />
-            Writes to: fantasy_standings_snapshots, fantasy_archetype_scores_live, fantasy_team_scores_live
+            Idempotent: skips if snapshot already exists (use force=true to override).
+          </p>
+          <div className="mb-4">
+            <label className="mb-2 block text-xs text-gray-400">Tournament ID:</label>
+            <input
+              type="number"
+              value={tournamentId}
+              onChange={(e) => setTournamentId(e.target.value)}
+              className="w-full rounded border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-white"
+              placeholder="Enter tournament ID"
+            />
+          </div>
+          <button
+            onClick={ingestTournament}
+            disabled={loading}
+            className="rounded-lg bg-green-600 px-6 py-3 text-sm font-semibold text-white hover:bg-green-500 disabled:opacity-50"
+          >
+            {loading ? "Ingesting..." : "🚀 Ingest Tournament"}
+          </button>
+        </section>
+
+        {/* Step 2B: Post Snapshot (Manual) */}
+        <section className="rounded-xl border border-gray-800 p-6">
+          <h2 className="mb-3 text-lg font-semibold">Step 2B: Post Test Snapshot (Manual)</h2>
+          <p className="mb-4 text-sm text-gray-400">
+            Posts a sample standings snapshot directly to fantasy_event_id = 1.
+            <br />
+            Use this if you already have a fantasy_event created.
           </p>
           <details className="mb-4">
             <summary className="cursor-pointer text-xs text-gray-500 hover:text-white">

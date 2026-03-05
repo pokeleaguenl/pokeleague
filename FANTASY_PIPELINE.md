@@ -63,28 +63,54 @@ Go to `/admin/fantasy-test`:
 Seeds fantasy_archetypes, aliases, and events from existing data.
 Idempotent - safe to run multiple times.
 
-#### `POST /api/fantasy/admin/update-live`
-Ingests a standings snapshot and triggers score computation.
+#### `POST /api/fantasy/admin/ingest-event` (Recommended)
+**Automated pipeline** for ingesting tournament results.
+
+**Body:**
+```json
+{
+  "tournament_id": 123,
+  "standings": [
+    { "player_name": "Player A", "deck_name": "Charizard ex", "placement": 1, "wins": 9, "losses": 0 },
+    { "player_name": "Player B", "deck_name": "Pikachu ex", "placement": 2, "wins": 8, "losses": 1 }
+  ],
+  "force": false  // optional, set true to create new snapshot version
+}
+```
+
+**What it does:**
+1. Creates/updates fantasy_events row for tournament_id
+2. Converts standings to SnapshotPayload (resolves deck names via aliases)
+3. Stores snapshot in fantasy_standings_snapshots
+4. Computes analytics (archetype + team scores)
+5. Tracks ingestion in audit tables
+
+**Idempotent:** Skips if snapshot already exists unless `force: true`
+
+**Response:**
+```json
+{
+  "ok": true,
+  "message": "Ingested tournament Name (5 standings → 5 archetypes)",
+  "fantasy_event_id": 1,
+  "snapshot_id": 42,
+  "archetypes_scored": 5,
+  "teams_scored": 10,
+  "unmatched_decks": [],
+  "log": ["...", "..."]
+}
+```
+
+#### `POST /api/fantasy/admin/update-live` (Manual)
+Directly ingests a standings snapshot (for manual workflows).
 
 **Body:**
 ```json
 {
   "fantasy_event_id": 1,
-  "payload": {
-    "archetypes": [
-      {
-        "archetype_slug": "charizard-ex",
-        "archetype_name": "Charizard ex",
-        "placement": 1,
-        "made_day2": true,
-        "top8": true,
-        "won": true,
-        "win_rate": 0.75,
-        "had_win": true
-      }
-    ]
-  },
-  "source": "rk9" // optional, defaults to "manual"
+  "standings": [
+    { "player_name": "Player A", "deck_name": "Charizard ex", "placement": 1 }
+  ]
 }
 ```
 
@@ -92,9 +118,29 @@ Ingests a standings snapshot and triggers score computation.
 ```json
 {
   "ok": true,
-  "message": "Snapshot stored. Scored 10 archetypes, 5 teams.",
-  "archetypesScored": 10,
-  "teamsScored": 5
+  "message": "Snapshot stored: 5 archetypes. Scored 5 archetypes, 10 teams.",
+  "archetypesScored": 5,
+  "teamsScored": 10,
+  "unmatchedDecks": []
+}
+```
+
+#### `GET /api/fantasy/admin/debug-pipeline`
+Returns table counts for debugging.
+
+**Response:**
+```json
+{
+  "ok": true,
+  "counts": {
+    "fantasy_archetypes": 25,
+    "fantasy_archetype_aliases": 45,
+    "fantasy_events": 18,
+    "fantasy_standings_snapshots": 3,
+    "fantasy_archetype_scores_live": 75,
+    "fantasy_team_scores_live": 12
+  },
+  "timestamp": "2026-03-05T13:00:00Z"
 }
 ```
 
@@ -164,7 +210,47 @@ DELETE FROM fantasy_team_scores_live;
 DELETE FROM fantasy_standings_snapshots WHERE source = 'manual_test';
 ```
 
+## How to Test
+
+### Quick Test (Automated Pipeline)
+
+1. **Go to `/admin/fantasy-test`**
+2. **Step 1:** Click "🌱 Run Seed" (populates archetypes, aliases, events)
+3. **Step 2A:** Enter a tournament_id (e.g., 1) and click "🚀 Ingest Tournament"
+   - Uses sample standings data
+   - Creates fantasy_event, snapshot, and scores
+4. **Step 3:** Click "🔍 Check Counts" to verify all tables populated
+
+### Expected Results
+
+After ingestion:
+- `fantasy_archetypes`: > 0 (from seed)
+- `fantasy_archetype_aliases`: > 0 (from seed)
+- `fantasy_events`: > 0 (from seed + ingest)
+- `fantasy_standings_snapshots`: > 0 (from ingest)
+- `fantasy_archetype_scores_live`: > 0 (from analytics)
+- `fantasy_team_scores_live`: > 0 (if users have squads)
+
+### Using Real Tournament Data
+
+To ingest a real tournament:
+
+```bash
+curl -X POST http://localhost:3000/api/fantasy/admin/ingest-event \
+  -H "Content-Type: application/json" \
+  -d '{
+    "tournament_id": 123,
+    "standings": [
+      { "player_name": "John Doe", "deck_name": "Charizard ex", "placement": 1, "wins": 9, "losses": 0 }
+    ]
+  }'
+```
+
 ## Troubleshooting
+
+**Alias insert fails with RLS error:**
+- Ensure `SUPABASE_SERVICE_ROLE_KEY` is set in `.env.local`
+- Check that seed endpoint uses admin client for writes
 
 **No archetypes found:**
 - Run `/api/admin/seed-fantasy`
@@ -174,9 +260,14 @@ DELETE FROM fantasy_standings_snapshots WHERE source = 'manual_test';
 - Run `/api/admin/seed-fantasy`
 
 **Snapshot posted but scores are 0:**
-- Check `archetype_slug` in payload matches slugs in `fantasy_archetypes`
+- Check deck names in standings match archetype names or aliases
 - Check users have squads configured
 - Verify scoring logic in `src/lib/fantasy/bracketScoring.ts`
+- Use debug endpoint to see unmatched decks
+
+**"Snapshot already exists" error:**
+- This is expected behavior (idempotent ingestion)
+- Use `force: true` in request body to create new snapshot version
 
 **TypeScript errors on SnapshotPayload:**
 - See `src/lib/fantasy/types.ts` for canonical type definitions
