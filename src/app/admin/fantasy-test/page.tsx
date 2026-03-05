@@ -68,6 +68,23 @@ export default function FantasyTestPage() {
     setLoading(false);
   }
 
+  async function testAliasInsert() {
+    setLoading(true);
+    setResult(null);
+    try {
+      const res = await fetch("/api/admin/test-alias-insert", { method: "POST" });
+      const data = await res.json();
+      setResult(
+        res.ok 
+          ? `✅ Test passed!\n\n${JSON.stringify(data.results, null, 2)}`
+          : `❌ Test failed: ${data.error}\n\n${JSON.stringify(data.results || data, null, 2)}`
+      );
+    } catch (err) {
+      setResult(`❌ Error: ${String(err)}`);
+    }
+    setLoading(false);
+  }
+
   async function ingestTournament() {
     setLoading(true);
     setResult(null);
@@ -115,6 +132,23 @@ export default function FantasyTestPage() {
       </p>
 
       <div className="space-y-6">
+        {/* Step 0: Debug Alias Insert */}
+        <section className="rounded-xl border border-red-800 bg-red-900/10 p-6">
+          <h2 className="mb-3 text-lg font-semibold text-red-400">Step 0: Debug Alias Insert</h2>
+          <p className="mb-4 text-sm text-gray-400">
+            Tests alias insertion with admin client to identify RLS/Postgres errors.
+            <br />
+            Checks: environment variables, archetype lookup, insert, and upsert operations.
+          </p>
+          <button
+            onClick={testAliasInsert}
+            disabled={loading}
+            className="rounded-lg bg-red-600 px-6 py-3 text-sm font-semibold text-white hover:bg-red-500 disabled:opacity-50"
+          >
+            {loading ? "Testing..." : "🔍 Test Alias Insert"}
+          </button>
+        </section>
+
         {/* Step 1: Seed */}
         <section className="rounded-xl border border-gray-800 p-6">
           <h2 className="mb-3 text-lg font-semibold">Step 1: Seed Data</h2>
