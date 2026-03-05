@@ -99,14 +99,21 @@ export async function POST(req: Request) {
 
     if (createError || !created) {
       return NextResponse.json({ 
-        error: `Failed to create fantasy_event: ${createError?.message}` 
+        error: `Failed to create fantasy_event: ${createError?.message || "no data returned"}` 
       }, { status: 500 });
     }
 
     fantasyEvent = created;
-    log.push(`✅ Created fantasy_event id=${fantasyEvent.id} for tournament_id=${tournament_id}`);
+    log.push(`✅ Created fantasy_event id=${created.id} for tournament_id=${tournament_id}`);
   } else {
     log.push(`✅ Fantasy_event id=${fantasyEvent.id} exists for tournament_id=${tournament_id}`);
+  }
+
+  // Safety check (TypeScript guard)
+  if (!fantasyEvent) {
+    return NextResponse.json({ 
+      error: "Internal error: fantasy_event is null after creation/lookup" 
+    }, { status: 500 });
   }
 
   // ============================================================
