@@ -40,7 +40,7 @@ export async function POST(req: Request) {
   const result = await processSnapshot(supabase, fantasy_event_id, payload);
 
   // 3. Track event ingestion (upsert to update last_seen_at)
-  const sourceEventId = payload.event_id || `fantasy_event_${fantasy_event_id}`;
+  const sourceEventId = `fantasy_event_${fantasy_event_id}`;
   await supabase.from("ingest_events_seen").upsert(
     {
       source: source || "manual",
