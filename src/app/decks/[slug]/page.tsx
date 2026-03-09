@@ -1,6 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
+import { calculateRK9Analytics } from "@/lib/fantasy/rk9Analytics";
 import { calculateDeckAnalytics } from "@/lib/fantasy/deckAnalytics";
 
 export default async function DeckAnalyticsPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -9,28 +11,30 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/login");
 
-  // Find archetype
+  // Find deck by archetype_id matching slug
   const { data: archetype } = await supabase
     .from("fantasy_archetypes")
-    .select("*")
+    .select("id, name, slug, image_url")
     .eq("slug", slug)
     .maybeSingle();
 
-  // Find deck data
+  if (!archetype) notFound();
+
+  // Find deck for this archetype
   const { data: deck } = await supabase
     .from("decks")
     .select("*")
-    .ilike("name", `%${slug.replace(/-/g, " ")}%`)
+    .eq("archetype_id", archetype.id)
     .maybeSingle();
 
-  if (!archetype && !deck) notFound();
+  const deckName = deck?.name || archetype.name;
+  const imageUrl = deck?.image_url || archetype.image_url;
 
-  // Calculate analytics
-  const analytics = archetype
-    ? await calculateDeckAnalytics(supabase, archetype.id, deck || undefined)
-    : null;
-
-  const deckName = archetype?.name || deck?.name || slug;
+  // Calculate analytics from both systems
+  const analytics = await calculateDeckAnalytics(supabase, archetype.id, deck || undefined);
+  const rk9Analytics = deck
+    ? await calculateRK9Analytics(supabase, deck.name)
+    : await calculateRK9Analytics(supabase, archetype.name);
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-10">
@@ -40,7 +44,25 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
 
       {/* Header */}
       <div className="mb-8 rounded-2xl border border-yellow-400/20 bg-gradient-to-br from-yellow-900/20 to-purple-900/20 p-6">
-        <h1 className="mb-4 text-3xl font-bold">{deckName}</h1>
+        <div className="flex items-center gap-4 mb-4">
+          {imageUrl && (
+            <Image 
+              src={imageUrl} 
+              alt={deckName} 
+              width={80} 
+              height={80} 
+              className="rounded-lg object-contain bg-white/5 p-2"
+            />
+          )}
+          <div className="flex-1">
+            <h1 className="text-3xl font-bold">{deckName}</h1>
+            {deck && (
+              <p className="text-sm text-gray-400 mt-1">
+                Tier {deck.tier} • {deck.cost}pts
+              </p>
+            )}
+          </div>
+        </div>
         
         {/* Top Stats Banner */}
         {analytics && (
@@ -185,6 +207,68 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
                 <span className="text-xl font-bold text-yellow-400">{analytics.placementBreakdown.wins}</span>
               </div>
             </div>
+          </section>
+        )}
+
+        {/* RK9 Tournament Data */}
+        {rk9Analytics && (
+          <section className="rounded-xl border border-purple-400/30 bg-gradient-to-br from-purple-900/10 to-blue-900/10 p-6">
+            <h2 className="mb-4 text-lg font-semibold">RK9 Tournament Stats</h2>
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 mb-6">
+              <div>
+                <p className="text-xs text-gray-400">Meta Share</p>
+                <p className="text-2xl font-bold text-purple-400">{rk9Analytics.metaShare}%</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-400">Total Players</p>
+                <p className="text-2xl font-bold">{rk9Analytics.totalPlayers}</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-400">Best Rank</p>
+                <p className="text-2xl font-bold text-yellow-400">#{rk9Analytics.bestRank}</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-400">Avg Rank</p>
+                <p className="text-2xl font-bold">#{rk9Analytics.avgRank}</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 mb-6">
+              <div className="text-center">
+                <p className="text-xs text-gray-400">Top 8</p>
+                <p className="text-xl font-bold">{rk9Analytics.top8Conversion}%</p>
+                <p className="text-xs text-gray-500">({rk9Analytics.placementBreakdown.top8})</p>
+              </div>
+              <div className="text-center">
+                <p className="text-xs text-gray-400">Top 16</p>
+                <p className="text-xl font-bold">{rk9Analytics.top16Conversion}%</p>
+                <p className="text-xs text-gray-500">({rk9Analytics.placementBreakdown.top16})</p>
+              </div>
+              <div className="text-center">
+                <p className="text-xs text-gray-400">Top 32</p>
+                <p className="text-xl font-bold">{rk9Analytics.top32Conversion}%</p>
+                <p className="text-xs text-gray-500">({rk9Analytics.placementBreakdown.top32})</p>
+              </div>
+              <div className="text-center">
+                <p className="text-xs text-gray-400">Top 64</p>
+                <p className="text-xl font-bold">{rk9Analytics.top64Conversion}%</p>
+                <p className="text-xs text-gray-500">({rk9Analytics.placementBreakdown.top64})</p>
+              </div>
+            </div>
+
+            {rk9Analytics.topFinishers.length > 0 && (
+              <div>
+                <h3 className="text-sm font-semibold mb-2 text-gray-300">Top Finishers</h3>
+                <div className="space-y-1">
+                  {rk9Analytics.topFinishers.map((finisher, idx) => (
+                    <div key={idx} className="flex justify-between text-sm">
+                      <span className="text-gray-400">#{finisher.rank} {finisher.playerName}</span>
+                      <span className="text-gray-500">{finisher.country}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </section>
         )}
 
