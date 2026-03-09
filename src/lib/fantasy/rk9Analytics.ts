@@ -1,6 +1,10 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 export interface RK9Analytics {
+  // Metadata
+  variantName: string; // The actual archetype name used (may differ from requested if fallback to variant)
+  isVariant: boolean;  // True if this is a variant fallback, not exact match
+  
   // Top Stats
   totalPlayers: number;
   metaShare: number;
@@ -39,6 +43,7 @@ export interface RK9Analytics {
 
 /**
  * Calculate deck analytics from rk9_standings data
+ * If no exact match found, looks for the most popular variant
  */
 export async function calculateRK9Analytics(
   supabase: SupabaseClient,
@@ -47,10 +52,10 @@ export async function calculateRK9Analytics(
   round: number = 18
 ): Promise<RK9Analytics | null> {
   
-  // Fetch all standings for this archetype
-  const { data: standings, error: standingsError } = await supabase
+  // Try exact match first
+  let { data: standings, error: standingsError } = await supabase
     .from("rk9_standings")
-    .select("player_name, rank, country, card_list, decklist_url")
+    .select("player_name, rank, country, card_list, decklist_url, archetype")
     .eq("tournament_id", tournamentId)
     .eq("round", round)
     .eq("archetype", archetypeName)
@@ -61,10 +66,58 @@ export async function calculateRK9Analytics(
     return null;
   }
 
+  // If no exact match, try to find variants
   if (!standings || standings.length === 0) {
-    console.log(`[rk9Analytics] No standings found for ${archetypeName}`);
+    console.log(`[rk9Analytics] No exact match for ${archetypeName}, searching for variants...`);
+    
+    // Find all variants that start with this archetype name
+    const { data: variants } = await supabase
+      .from("rk9_standings")
+      .select("archetype")
+      .ilike("archetype", `${archetypeName}%`)
+      .eq("tournament_id", tournamentId)
+      .eq("round", round);
+
+    if (!variants || variants.length === 0) {
+      console.log(`[rk9Analytics] No variants found for ${archetypeName}`);
+      return null;
+    }
+
+    // Count players for each variant to find most popular
+    const variantCounts = new Map<string, number>();
+    for (const v of variants) {
+      variantCounts.set(v.archetype, (variantCounts.get(v.archetype) || 0) + 1);
+    }
+
+    // Get most popular variant
+    const mostPopularVariant = Array.from(variantCounts.entries())
+      .sort((a, b) => b[1] - a[1])[0];
+
+    if (!mostPopularVariant) {
+      return null;
+    }
+
+    console.log(`[rk9Analytics] Using most popular variant: ${mostPopularVariant[0]} (${mostPopularVariant[1]} players)`);
+
+    // Fetch standings for the most popular variant
+    const { data: variantStandings } = await supabase
+      .from("rk9_standings")
+      .select("player_name, rank, country, card_list, decklist_url, archetype")
+      .eq("tournament_id", tournamentId)
+      .eq("round", round)
+      .eq("archetype", mostPopularVariant[0])
+      .order("rank", { ascending: true });
+
+    standings = variantStandings;
+  }
+
+  if (!standings || standings.length === 0) {
     return null;
   }
+
+  // Determine if we're using a variant and what the actual name is
+  const actualArchetypeName = standings[0]?.archetype || archetypeName;
+  const isVariant = actualArchetypeName !== archetypeName;
 
   // Get total player count for meta share calculation
   const { count: totalPlayerCount } = await supabase
@@ -115,6 +168,8 @@ export async function calculateRK9Analytics(
   }));
 
   return {
+    variantName: actualArchetypeName,
+    isVariant,
     totalPlayers,
     metaShare,
     bestRank,

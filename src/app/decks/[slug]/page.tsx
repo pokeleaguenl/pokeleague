@@ -220,7 +220,14 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
         {/* RK9 Tournament Data */}
         {rk9Analytics && (
           <section className="rounded-xl border border-purple-400/30 bg-gradient-to-br from-purple-900/10 to-blue-900/10 p-6">
-            <h2 className="mb-4 text-lg font-semibold">RK9 Tournament Stats</h2>
+            <div className="mb-4">
+              <h2 className="text-lg font-semibold">RK9 Tournament Stats</h2>
+              {rk9Analytics.isVariant && (
+                <p className="text-xs text-purple-300/80 mt-1">
+                  Showing data for most popular variant: <span className="font-semibold">{rk9Analytics.variantName}</span>
+                </p>
+              )}
+            </div>
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 mb-6">
               <div>
                 <p className="text-xs text-gray-400">Meta Share</p>
