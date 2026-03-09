@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { calculateRK9Analytics } from "@/lib/fantasy/rk9Analytics";
 import { calculateDeckAnalytics } from "@/lib/fantasy/deckAnalytics";
+import { getArchetypeImage } from "@/lib/fantasy/archetypeHelpers";
 
 export default async function DeckAnalyticsPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -28,7 +29,13 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
     .maybeSingle();
 
   const deckName = deck?.name || archetype.name;
-  const imageUrl = deck?.image_url || archetype.image_url;
+  
+  // Get image with fallback to base archetype
+  const imageUrl = await getArchetypeImage(
+    supabase,
+    deckName,
+    deck?.image_url || archetype.image_url
+  );
 
   // Calculate analytics from both systems
   const analytics = await calculateDeckAnalytics(supabase, archetype.id, deck || undefined);
