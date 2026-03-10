@@ -10,6 +10,7 @@ export default async function DecksPage() {
   const { data: decks } = await supabase
     .from("decks")
     .select("*")
+    .not("image_url", "is", null)
     .order("meta_share", { ascending: false });
 
   return (
@@ -25,12 +26,17 @@ export default async function DecksPage() {
           return (
             <Link key={deck.id} href={`/decks/${slug}`}
               className="flex items-center justify-between rounded-xl border border-gray-800 p-4 hover:border-yellow-400/40 transition-colors">
-              <div>
-                <p className="font-semibold">{deck.name}</p>
-                <div className="flex items-center gap-2 mt-0.5">
-                  <span className="text-xs text-gray-500">Tier {deck.tier}</span>
-                  <span className="text-xs text-gray-500">·</span>
-                  <span className="text-xs text-gray-500">{deck.meta_share?.toFixed(1)}% meta</span>
+              <div className="flex items-center gap-3">
+                {deck.image_url && (
+                  <img src={deck.image_url} alt={deck.name} className="h-10 w-10 object-contain rounded" />
+                )}
+                <div>
+                  <p className="font-semibold">{deck.name}</p>
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <span className="text-xs text-gray-500">Tier {deck.tier}</span>
+                    <span className="text-xs text-gray-500">·</span>
+                    <span className="text-xs text-gray-500">{deck.meta_share?.toFixed(1)}% meta</span>
+                  </div>
                 </div>
               </div>
               <span className="font-bold text-yellow-400 text-sm">{deck.cost}pts</span>
