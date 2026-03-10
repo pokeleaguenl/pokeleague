@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { calculateDeckAnalytics } from "@/lib/fantasy/deckAnalytics";
 
 export default async function DeckAnalyticsPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -31,6 +32,8 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
     : null;
 
   const deckName = archetype?.name || deck?.name || slug;
+  const image1 = archetype?.image_url || deck?.image_url || null;
+  const image2 = archetype?.image_url_2 || deck?.image_url_2 || null;
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-10">
@@ -40,8 +43,42 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
 
       {/* Header */}
       <div className="mb-8 rounded-2xl border border-yellow-400/20 bg-gradient-to-br from-yellow-900/20 to-purple-900/20 p-6">
-        <h1 className="mb-4 text-3xl font-bold">{deckName}</h1>
-        
+        <div className="flex items-center gap-4 mb-4">
+          {/* Dual image display */}
+          <div className="flex items-center flex-shrink-0">
+            {image1 && (
+              <div className="rounded-lg bg-white/5 p-2">
+                <Image
+                  src={image1}
+                  alt={deckName}
+                  width={72}
+                  height={72}
+                  className="object-contain"
+                />
+              </div>
+            )}
+            {image2 && (
+              <div className="rounded-lg bg-white/5 p-2 -ml-3">
+                <Image
+                  src={image2}
+                  alt={deckName}
+                  width={72}
+                  height={72}
+                  className="object-contain"
+                />
+              </div>
+            )}
+          </div>
+          <div className="flex-1">
+            <h1 className="text-3xl font-bold">{deckName}</h1>
+            {deck && (
+              <p className="text-sm text-gray-400 mt-1">
+                Tier {deck.tier} • {deck.cost}pts
+              </p>
+            )}
+          </div>
+        </div>
+
         {/* Top Stats Banner */}
         {analytics && (
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
@@ -116,9 +153,9 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
                   </div>
                   <div className="text-right">
                     <p className="text-lg font-bold text-yellow-400">
-                      {result.placement === 1 ? "1st" : 
-                       result.placement === 2 ? "2nd" : 
-                       result.placement === 3 ? "3rd" : 
+                      {result.placement === 1 ? "1st" :
+                       result.placement === 2 ? "2nd" :
+                       result.placement === 3 ? "3rd" :
                        `${result.placement}th`}
                     </p>
                     <p className="text-xs text-gray-500">{result.points}pts</p>
@@ -148,9 +185,7 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
                 <p className="text-4xl font-bold text-yellow-400">{analytics.metaEfficiency.score}</p>
                 <p className="text-xs text-gray-400">Meta Efficiency</p>
               </div>
-              <p className="text-xs text-gray-300">
-                {analytics.metaEfficiency.description}
-              </p>
+              <p className="text-xs text-gray-300">{analytics.metaEfficiency.description}</p>
             </div>
           </section>
         )}
