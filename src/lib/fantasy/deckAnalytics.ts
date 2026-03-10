@@ -82,24 +82,36 @@ export async function calculateDeckAnalytics(
     console.log("[deckAnalytics] Sample score:", scores[0]);
   }
 
-  const tournamentResults = (scores || []).map(s => {
+  // Deduplicate by event - keep best placement (highest points) per event
+  const eventMap = new Map<number, { eventName: string; eventDate: string; placement: number; points: number }>();
+  for (const s of (scores || [])) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const event = (s as any).event;
     const eventData = Array.isArray(event) ? event[0] : event;
-    
-    return {
-      eventName: eventData?.name || "Unknown Event",
-      eventDate: eventData?.event_date || "",
-      placement: (s as any).placement || 0,
-      points: (s as any).points || 0,
-    };
-  });
+    const eventId = eventData?.id;
+    if (!eventId) continue;
+
+    const existing = eventMap.get(eventId);
+    const points = (s as any).points || 0;
+    const placement = (s as any).placement || 0;
+
+    if (!existing || points > existing.points) {
+      eventMap.set(eventId, {
+        eventName: eventData?.name || "Unknown Event",
+        eventDate: eventData?.event_date || "",
+        placement,
+        points,
+      });
+    }
+  }
+  const tournamentResults = Array.from(eventMap.values())
+    .sort((a, b) => b.points - a.points);
 
   // Total fantasy points
   const fantasyPoints = scores?.reduce((sum, s) => sum + (s.points || 0), 0) || 0;
 
   // Points per event
-  const eventCount = scores?.length || 0;
+  const eventCount = eventMap.size || 0;
   const pointsPerEvent = eventCount > 0 ? Math.round(fantasyPoints / eventCount) : 0;
 
   // Recent form (last 3 events)
