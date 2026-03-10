@@ -58,11 +58,19 @@ export async function calculateDeckAnalytics(
   deckData?: { meta_share?: number; cost?: number }
 ): Promise<DeckAnalytics> {
   
-  // Fetch all scores for this archetype
+  // Fetch variant archetype IDs that roll up to this canonical
+  const { data: variants } = await supabase
+    .from("fantasy_archetypes")
+    .select("id")
+    .eq("canonical_id", archetypeId);
+
+  const allArchetypeIds = [archetypeId, ...(variants?.map(v => v.id) || [])];
+
+  // Fetch all scores for this archetype AND its variants
   const { data: scores, error: scoresError } = await supabase
     .from("fantasy_archetype_scores_live")
     .select("*, event:fantasy_events(id, name, event_date, status)")
-    .eq("archetype_id", archetypeId)
+    .in("archetype_id", allArchetypeIds)
     .order("computed_at", { ascending: false });
 
   if (scoresError) {
