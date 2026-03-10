@@ -4,7 +4,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { calculateRK9Analytics } from "@/lib/fantasy/rk9Analytics";
 import { calculateDeckAnalytics } from "@/lib/fantasy/deckAnalytics";
-import { getArchetypeImage } from "@/lib/fantasy/archetypeHelpers";
 
 export default async function DeckAnalyticsPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -12,16 +11,16 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/login");
 
-  // Find deck by archetype_id matching slug
+  // Find archetype by slug
   const { data: archetype } = await supabase
     .from("fantasy_archetypes")
-    .select("id, name, slug, image_url")
+    .select("*")
     .eq("slug", slug)
     .maybeSingle();
 
   if (!archetype) notFound();
 
-  // Find deck for this archetype
+  // Find deck for this archetype via archetype_id
   const { data: deck } = await supabase
     .from("decks")
     .select("*")
@@ -29,13 +28,8 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
     .maybeSingle();
 
   const deckName = deck?.name || archetype.name;
-  
-  // Get image with fallback to base archetype
-  const imageUrl = await getArchetypeImage(
-    supabase,
-    deckName,
-    deck?.image_url || archetype.image_url
-  );
+  const image1 = archetype.image_url || deck?.image_url || null;
+  const image2 = archetype.image_url_2 || deck?.image_url_2 || null;
 
   // Calculate analytics from both systems
   const analytics = await calculateDeckAnalytics(supabase, archetype.id, deck || undefined);
@@ -52,15 +46,19 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
       {/* Header */}
       <div className="mb-8 rounded-2xl border border-yellow-400/20 bg-gradient-to-br from-yellow-900/20 to-purple-900/20 p-6">
         <div className="flex items-center gap-4 mb-4">
-          {imageUrl && (
-            <Image 
-              src={imageUrl} 
-              alt={deckName} 
-              width={80} 
-              height={80} 
-              className="rounded-lg object-contain bg-white/5 p-2"
-            />
-          )}
+          {/* Dual image display */}
+          <div className="flex items-center flex-shrink-0">
+            {image1 && (
+              <div className="rounded-lg bg-white/5 p-2">
+                <Image src={image1} alt={deckName} width={72} height={72} className="object-contain" />
+              </div>
+            )}
+            {image2 && (
+              <div className="rounded-lg bg-white/5 p-2 -ml-3">
+                <Image src={image2} alt={deckName} width={72} height={72} className="object-contain" />
+              </div>
+            )}
+          </div>
           <div className="flex-1">
             <h1 className="text-3xl font-bold">{deckName}</h1>
             {deck && (
@@ -70,7 +68,7 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
             )}
           </div>
         </div>
-        
+
         {/* Top Stats Banner */}
         {analytics && (
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
@@ -145,9 +143,9 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
                   </div>
                   <div className="text-right">
                     <p className="text-lg font-bold text-yellow-400">
-                      {result.placement === 1 ? "1st" : 
-                       result.placement === 2 ? "2nd" : 
-                       result.placement === 3 ? "3rd" : 
+                      {result.placement === 1 ? "1st" :
+                       result.placement === 2 ? "2nd" :
+                       result.placement === 3 ? "3rd" :
                        `${result.placement}th`}
                     </p>
                     <p className="text-xs text-gray-500">{result.points}pts</p>
@@ -177,9 +175,7 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
                 <p className="text-4xl font-bold text-yellow-400">{analytics.metaEfficiency.score}</p>
                 <p className="text-xs text-gray-400">Meta Efficiency</p>
               </div>
-              <p className="text-xs text-gray-300">
-                {analytics.metaEfficiency.description}
-              </p>
+              <p className="text-xs text-gray-300">{analytics.metaEfficiency.description}</p>
             </div>
           </section>
         )}
@@ -217,7 +213,7 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
           </section>
         )}
 
-        {/* RK9 Tournament Data */}
+        {/* RK9 Tournament Stats */}
         {rk9Analytics && (
           <section className="rounded-xl border border-purple-400/30 bg-gradient-to-br from-purple-900/10 to-blue-900/10 p-6">
             <div className="mb-4">
@@ -246,7 +242,6 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
                 <p className="text-2xl font-bold">#{rk9Analytics.avgRank}</p>
               </div>
             </div>
-
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 mb-6">
               <div className="text-center">
                 <p className="text-xs text-gray-400">Top 8</p>
@@ -269,7 +264,6 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
                 <p className="text-xs text-gray-500">({rk9Analytics.placementBreakdown.top64})</p>
               </div>
             </div>
-
             {rk9Analytics.topFinishers.length > 0 && (
               <div>
                 <h3 className="text-sm font-semibold mb-2 text-gray-300">Top Finishers</h3>
