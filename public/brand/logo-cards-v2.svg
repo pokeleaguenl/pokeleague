@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <defs>
+    <linearGradient id="v2gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <filter id="v2s"><feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-opacity="0.6"/></filter>
+  </defs>
+  <!-- Far left card -->
+  <rect x="18" y="30" width="36" height="52" rx="5"
+    fill="#0c1829" stroke="#1e3a5f" stroke-width="1.2"
+    transform="rotate(-30 36 56)" filter="url(#v2s)"/>
+  <!-- Left card -->
+  <rect x="22" y="24" width="38" height="56" rx="6"
+    fill="#0f1f35" stroke="#2a4a7a" stroke-width="1.5"
+    transform="rotate(-15 41 52)" filter="url(#v2s)"/>
+  <!-- Centre card — gold -->
+  <rect x="31" y="16" width="38" height="58" rx="7"
+    fill="#111827" stroke="#FBBF24" stroke-width="2.5" filter="url(#v2s)"/>
+  <rect x="31" y="16" width="38" height="22" rx="7" fill="url(#v2gold)"/>
+  <rect x="31" y="28" width="38" height="10" fill="url(#v2gold)"/>
+  <!-- Star on gold section -->
+  <polygon points="50,20 51.8,25.5 57.5,25.5 53,28.8 54.8,34.3 50,31 45.2,34.3 47,28.8 42.5,25.5 48.2,25.5"
+    fill="#92400E" opacity="0.5"/>
+  <!-- Pokeball -->
+  <circle cx="50" cy="57" r="11" fill="#0a0f1a" stroke="#FBBF24" stroke-width="2.5"/>
+  <path d="M39 57 A11 11 0 0 1 61 57 Z" fill="#FBBF24"/>
+  <rect x="39" y="54.5" width="22" height="5" fill="#0a0f1a"/>
+  <circle cx="50" cy="57" r="4.5" fill="#0a0f1a" stroke="#FBBF24" stroke-width="2.5"/>
+  <circle cx="50" cy="57" r="1.8" fill="#FBBF24"/>
+  <!-- Right card -->
+  <rect x="40" y="24" width="38" height="56" rx="6"
+    fill="#0f1f35" stroke="#2a4a7a" stroke-width="1.5"
+    transform="rotate(15 59 52)" filter="url(#v2s)"/>
+  <!-- Far right card -->
+  <rect x="46" y="30" width="36" height="52" rx="5"
+    fill="#0c1829" stroke="#1e3a5f" stroke-width="1.2"
+    transform="rotate(30 64 56)" filter="url(#v2s)"/>
+</svg>

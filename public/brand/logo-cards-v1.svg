@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <defs>
+    <linearGradient id="v1g1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FCD34D"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+    <linearGradient id="v1g2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <filter id="v1shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+  <!-- Back card left -->
+  <rect x="14" y="22" width="50" height="66" rx="7"
+    fill="#1a2744" stroke="#3b4f7a" stroke-width="1.5"
+    transform="rotate(-18 39 55)" filter="url(#v1shadow)"/>
+  <rect x="14" y="22" width="50" height="20" rx="7"
+    fill="#2a3f6e" transform="rotate(-18 39 55)"/>
+  <!-- Back card right -->
+  <rect x="36" y="22" width="50" height="66" rx="7"
+    fill="#1a2744" stroke="#3b4f7a" stroke-width="1.5"
+    transform="rotate(18 61 55)" filter="url(#v1shadow)"/>
+  <rect x="36" y="22" width="50" height="20" rx="7"
+    fill="#2a3f6e" transform="rotate(18 61 55)"/>
+  <!-- Main card centre -->
+  <rect x="25" y="14" width="50" height="68" rx="8"
+    fill="url(#v1g2)" stroke="#FBBF24" stroke-width="2.5" filter="url(#v1shadow)"/>
+  <!-- Gold top band -->
+  <rect x="25" y="14" width="50" height="28" rx="8" fill="url(#v1g1)"/>
+  <rect x="25" y="30" width="50" height="12" fill="url(#v1g1)"/>
+  <!-- Pokeball on centre card -->
+  <circle cx="50" cy="56" r="13" fill="#0f172a" stroke="#FBBF24" stroke-width="3"/>
+  <path d="M37 56 A13 13 0 0 1 63 56 Z" fill="#FBBF24"/>
+  <rect x="37" y="53" width="26" height="6" fill="#0f172a"/>
+  <circle cx="50" cy="56" r="5" fill="#0f172a" stroke="#FBBF24" stroke-width="3"/>
+  <circle cx="50" cy="56" r="2" fill="#FBBF24"/>
+</svg>
