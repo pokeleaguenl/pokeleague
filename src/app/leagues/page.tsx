@@ -1,70 +1,44 @@
-"use client";
-// Note: client component needed for copy-to-clipboard functionality
-
-import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 import LeagueManager from "./league-manager";
+import CopyCode from "./copy-code";
 
-interface League {
-  id: number;
-  name: string;
-  code: string;
-  owner_id: string | null;
-  is_public: boolean;
-  is_global: boolean;
-}
+export default async function LeaguesPage() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect("/auth/login");
 
-function CopyCode({ code }: { code: string }) {
-  const [copied, setCopied] = useState(false);
-  const copy = () => {
-    navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-  return (
-    <button onClick={(e) => { e.preventDefault(); copy(); }}
-      className={`flex items-center gap-2 rounded-lg border px-3 py-1.5 text-sm font-mono transition-colors ${
-        copied ? "border-green-500 bg-green-500/10 text-green-400" : "border-gray-600 bg-gray-900 text-yellow-400 hover:border-yellow-400/50"
-      }`}>
-      <span className="tracking-widest">{code}</span>
-      <span className="text-xs">{copied ? "✓ Copied!" : "📋"}</span>
-    </button>
-  );
-}
+  // Get all leagues the user is a member of
+  const { data: memberships } = await supabase
+    .from("league_members")
+    .select("league_id")
+    .eq("user_id", user.id);
 
-export default function LeaguesPage() {
-  const [leagues, setLeagues] = useState<League[]>([]);
-  const [userId, setUserId] = useState<string | null>(null);
+  const leagueIds = (memberships ?? []).map((m) => m.league_id);
 
-  useEffect(() => {
-    fetch("/api/leagues").then(r => r.json()).then((data) => {
-      if (Array.isArray(data)) setLeagues(data);
-    });
-    // Get current user id for owner check
-    fetch("/api/auth/me").then(r => r.json()).then(d => {
-      if (d?.id) setUserId(d.id);
-    }).catch(() => {});
-  }, []);
+  const { data: leagues } = leagueIds.length > 0
+    ? await supabase.from("leagues").select("*").in("id", leagueIds)
+    : { data: [] };
 
-  // Separate global from custom leagues
-  const globalLeague = leagues.find(l => l.is_global);
-  const myLeagues = leagues.filter(l => !l.is_global);
+  const globalLeague = (leagues ?? []).find((l) => l.is_global);
+  const myLeagues = (leagues ?? []).filter((l) => !l.is_global);
 
   return (
     <div className="mx-auto max-w-xl px-4 py-10">
-      <h1 className="mb-2 text-3xl font-bold">
+      <h1 className="mb-1 text-3xl font-bold">
         My <span className="text-yellow-400">Leagues</span>
       </h1>
-      <p className="mb-8 text-sm text-gray-400">Create a league or join one with a code.</p>
+      <p className="mb-8 text-sm text-gray-400">Create a private league or join one with a code.</p>
 
-      {/* Global League card */}
+      {/* Global League */}
       {globalLeague && (
         <Link href="/leagues/global"
-          className="mb-8 flex items-center justify-between rounded-xl border border-yellow-400/30 bg-yellow-400/5 p-4 hover:border-yellow-400/60 transition-colors block">
+          className="mb-6 flex items-center justify-between rounded-xl border border-yellow-400/30 bg-yellow-400/5 p-4 hover:border-yellow-400/60 transition-colors block">
           <div>
             <div className="flex items-center gap-2 mb-0.5">
               <p className="font-bold">🌍 Global League</p>
-              <span className="rounded bg-yellow-400/20 px-1.5 py-0.5 text-[10px] text-yellow-400 font-semibold">EVERYONE</span>
+              <span className="rounded-full bg-yellow-400/20 border border-yellow-400/30 px-2 py-0.5 text-[10px] font-bold text-yellow-400">EVERYONE</span>
             </div>
             <p className="text-xs text-gray-400">All trainers, one leaderboard</p>
           </div>
@@ -72,37 +46,40 @@ export default function LeaguesPage() {
         </Link>
       )}
 
+      {/* Create / Join */}
       <LeagueManager />
 
+      {/* My leagues */}
       {myLeagues.length > 0 && (
-        <div className="mt-10">
-          <h2 className="mb-4 text-lg font-semibold">Your Leagues</h2>
+        <div className="mt-8">
+          <h2 className="mb-4 text-xs font-bold uppercase tracking-widest text-gray-500">Your Leagues</h2>
           <div className="space-y-3">
             {myLeagues.map((league) => {
-              const isOwner = userId && league.owner_id === userId;
+              const isOwner = league.owner_id === user.id;
               return (
                 <Link key={league.id} href={`/leagues/${league.code}`}
-                  className="flex items-center justify-between rounded-xl border border-gray-800 p-4 hover:border-yellow-400/50 transition-colors">
+                  className="flex items-center justify-between rounded-xl border border-gray-800 p-4 hover:border-yellow-400/40 transition-colors">
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
+                    <div className="flex items-center gap-2 mb-1.5">
                       <p className="font-semibold truncate">{league.name}</p>
-                      <span className="shrink-0 text-xs">
-                        {league.is_public ? "🌐" : "🔒"}
-                      </span>
+                      <span className="text-xs shrink-0">{league.is_public ? "🌐" : "🔒"}</span>
+                      {isOwner && <span className="text-[10px] rounded bg-yellow-400/10 border border-yellow-400/20 px-1.5 py-0.5 text-yellow-400 shrink-0">Owner</span>}
                     </div>
-                    {isOwner ? (
-                      <CopyCode code={league.code} />
-                    ) : (
-                      <p className="text-xs text-gray-500">
-                        Code: <span className="font-mono text-yellow-400">{league.code}</span>
-                      </p>
-                    )}
+                    <CopyCode code={league.code} />
                   </div>
-                  <span className="ml-3 shrink-0 text-gray-500">→</span>
+                  <span className="ml-3 shrink-0 text-gray-600">→</span>
                 </Link>
               );
             })}
           </div>
+        </div>
+      )}
+
+      {myLeagues.length === 0 && (
+        <div className="mt-8 rounded-xl border border-dashed border-gray-800 p-8 text-center text-gray-500">
+          <p className="text-2xl mb-2">🏅</p>
+          <p className="font-medium text-gray-400">No leagues yet</p>
+          <p className="text-sm mt-1">Create one above or join with a code</p>
         </div>
       )}
     </div>

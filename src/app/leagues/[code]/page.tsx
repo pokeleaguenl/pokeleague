@@ -1,10 +1,12 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect, notFound } from "next/navigation";
 import Image from "next/image";
+import LeagueActions from "./league-actions";
 
 interface Deck { id: number; name: string; tier: string; image_url: string | null; }
-const tierColors: Record<string, string> = {
-  S: "border-yellow-400", A: "border-purple-500", B: "border-blue-500", C: "border-green-600", D: "border-gray-600",
+const tierBorder: Record<string, string> = {
+  S: "border-yellow-400/70", A: "border-purple-500/70",
+  B: "border-blue-500/70", C: "border-green-600/70", D: "border-gray-600/50",
 };
 
 export default async function LeaguePage({ params }: { params: Promise<{ code: string }> }) {
@@ -13,15 +15,14 @@ export default async function LeaguePage({ params }: { params: Promise<{ code: s
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/login");
 
-  const { data: league } = await supabase.from("leagues").select("*").eq("code", code.toUpperCase()).single();
+  const { data: league } = await supabase
+    .from("leagues").select("*").eq("code", code.toUpperCase()).single();
   if (!league) notFound();
 
-  // Check membership
   const { data: membership } = await supabase.from("league_members")
     .select("user_id").eq("league_id", league.id).eq("user_id", user.id).maybeSingle();
-  if (!membership) redirect("/leagues");
+  if (!membership && !league.is_global) redirect("/leagues");
 
-  // Get all members
   const { data: members } = await supabase.from("league_members")
     .select("user_id").eq("league_id", league.id);
   const memberIds = (members ?? []).map((m) => m.user_id);
@@ -40,76 +41,120 @@ export default async function LeaguePage({ params }: { params: Promise<{ code: s
   ]);
 
   const profileMap = new Map((profiles ?? []).map((p) => [p.id, p]));
-  // Normalize Supabase joined arrays
+  const squadMap = new Map((squads ?? []).map((s) => [s.user_id, s]));
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const normalizedSquads = ((squads ?? []) as any[]).map((s) => ({
-    ...s,
-    active_deck: Array.isArray(s.active_deck) ? s.active_deck[0] ?? null : s.active_deck,
-    bench1: Array.isArray(s.bench1) ? s.bench1[0] ?? null : s.bench1,
-    bench2: Array.isArray(s.bench2) ? s.bench2[0] ?? null : s.bench2,
-    bench3: Array.isArray(s.bench3) ? s.bench3[0] ?? null : s.bench3,
-    bench4: Array.isArray(s.bench4) ? s.bench4[0] ?? null : s.bench4,
-    bench5: Array.isArray(s.bench5) ? s.bench5[0] ?? null : s.bench5,
-  }));
+  const norm = (v: unknown) => (Array.isArray(v) ? (v as any[])[0] ?? null : v ?? null);
+
+  const isOwner = league.owner_id === user.id;
+
+  // Sort: members with squads by points, then members without squads
+  const sortedMembers = [...memberIds].sort((a, b) => {
+    const sa = squadMap.get(a);
+    const sb = squadMap.get(b);
+    return (sb?.total_points ?? -1) - (sa?.total_points ?? -1);
+  });
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10">
-      <div className="mb-2 flex items-center gap-3">
-        <h1 className="text-3xl font-bold">{league.name}</h1>
-        <span className="rounded bg-gray-800 px-2 py-0.5 font-mono text-sm text-yellow-400">{league.code}</span>
-      </div>
-      <p className="mb-8 text-sm text-gray-400">{memberIds.length} member{memberIds.length !== 1 ? "s" : ""}</p>
-
-      {(!squads || squads.length === 0) ? (
-        <p className="text-gray-500">No squads yet. Members need to set up their squad first.</p>
-      ) : (
-        <div className="space-y-4">
-          {normalizedSquads.map((squad, i) => {
-            const profile = profileMap.get(squad.user_id) as { display_name?: string; username?: string } | undefined;
-            const name = profile?.display_name ?? profile?.username ?? "Anonymous";
-            const bench = [squad.bench1, squad.bench2, squad.bench3, squad.bench4, squad.bench5] as (Deck | null)[];
-            const medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : `#${i + 1}`;
-
-            return (
-              <div key={squad.user_id} className={`rounded-xl border p-4 ${squad.user_id === user.id ? "border-yellow-400/40 bg-yellow-400/5" : "border-gray-800"}`}>
-                <div className="mb-3 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="text-lg font-bold text-gray-400">{medal}</span>
-                    <div>
-                      <p className="font-semibold">{name}{squad.user_id === user.id ? " (you)" : ""}</p>
-                      {(squad as { locked: boolean }).locked && <span className="text-xs text-green-400">🔒 Locked in</span>}
-                    </div>
-                  </div>
-                  <p className="text-xl font-bold text-yellow-400">{squad.total_points}pts</p>
-                </div>
-                <div className="mb-1 flex justify-center">
-                  <MiniCard deck={squad.active_deck as Deck | null} isActive />
-                </div>
-                <div className="grid grid-cols-5 gap-1">
-                  {bench.map((d, j) => <MiniCard key={j} deck={d} />)}
-                </div>
-              </div>
-            );
-          })}
+      {/* Header */}
+      <div className="mb-6">
+        <div className="flex items-start justify-between">
+          <div>
+            <div className="flex items-center gap-3 mb-1">
+              <h1 className="text-3xl font-bold">{league.name}</h1>
+              {league.is_global && <span className="rounded-full bg-yellow-400/20 border border-yellow-400/30 px-2 py-0.5 text-[10px] font-bold text-yellow-400">GLOBAL</span>}
+              {!league.is_global && <span className="rounded font-mono text-sm text-yellow-400 bg-gray-900 border border-gray-700 px-2 py-0.5">{league.code}</span>}
+            </div>
+            <p className="text-sm text-gray-400">{memberIds.length} member{memberIds.length !== 1 ? "s" : ""}</p>
+          </div>
         </div>
+      </div>
+
+      {/* Owner actions / Invite */}
+      {!league.is_global && (
+        <LeagueActions
+          code={league.code}
+          isOwner={isOwner}
+          leagueId={league.id}
+          userId={user.id}
+        />
       )}
+
+      {/* Leaderboard */}
+      <div className="space-y-3 mt-6">
+        {sortedMembers.map((memberId, i) => {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const squad = squadMap.get(memberId) as any;
+          const profile = profileMap.get(memberId) as { display_name?: string; username?: string } | undefined;
+          const name = profile?.display_name ?? profile?.username ?? "Anonymous";
+          const isMe = memberId === user.id;
+          const medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : `#${i + 1}`;
+
+          const bench = squad ? [
+            norm(squad.bench1), norm(squad.bench2), norm(squad.bench3),
+            norm(squad.bench4), norm(squad.bench5)
+          ] as (Deck | null)[] : [];
+
+          return (
+            <div key={memberId}
+              className={`rounded-xl border p-4 transition-colors ${isMe ? "border-yellow-400/40 bg-yellow-400/5" : "border-gray-800 bg-gray-900/20"}`}>
+              <div className="mb-3 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <span className="text-lg w-8 text-center">{medal}</span>
+                  <div>
+                    <p className="font-semibold">{name}{isMe ? " (you)" : ""}</p>
+                    <p className="text-xs text-gray-500">
+                      {squad?.locked ? "🔒 Locked in" : squad?.active_deck ? "⚡ In progress" : "No squad yet"}
+                    </p>
+                  </div>
+                </div>
+                <p className={`text-xl font-bold ${squad?.total_points > 0 ? "text-yellow-400" : "text-gray-600"}`}>
+                  {squad?.total_points ?? 0}pts
+                </p>
+              </div>
+
+              {squad ? (
+                <div className="space-y-2">
+                  {/* Active */}
+                  <div className="flex justify-center">
+                    <MiniCard deck={norm(squad.active_deck)} isActive />
+                  </div>
+                  {/* Bench */}
+                  <div className="grid grid-cols-5 gap-1.5">
+                    {bench.map((d, j) => <MiniCard key={j} deck={d} />)}
+                  </div>
+                </div>
+              ) : (
+                <div className="rounded-lg border border-dashed border-gray-800 py-4 text-center text-xs text-gray-600">
+                  No squad built yet
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
 
 function MiniCard({ deck, isActive }: { deck: Deck | null; isActive?: boolean }) {
-  const border = deck ? (tierColors[deck.tier] || "border-gray-700") : "border-gray-800";
+  const border = deck ? (tierBorder[deck.tier] || "border-gray-700") : "border-gray-800";
   return (
-    <div className={`flex flex-col items-center justify-center rounded-lg border ${border} bg-gray-900 p-1 ${isActive ? "w-24" : ""}`}>
+    <div className={`flex flex-col items-center justify-center rounded-lg border ${border} bg-black/20 p-1.5 ${isActive ? "w-24 mx-auto" : ""}`}>
       {deck ? (
         <>
-          {deck.image_url && <Image src={deck.image_url} alt={deck.name} width={isActive ? 36 : 24} height={isActive ? 36 : 24} className="object-contain" />}
-          <p className="mt-0.5 text-center text-[9px] leading-tight line-clamp-2">{deck.name}</p>
-          {isActive && <p className="text-[9px] text-yellow-400">Active</p>}
+          {deck.image_url && (
+            <Image src={deck.image_url} alt={deck.name}
+              width={isActive ? 36 : 24} height={isActive ? 36 : 24}
+              className="object-contain" />
+          )}
+          <p className="mt-0.5 text-center text-[8px] leading-tight line-clamp-2 text-gray-300">{deck.name}</p>
+          {isActive && <p className="text-[8px] text-yellow-400 font-semibold">Active ⭐</p>}
         </>
       ) : (
-        <div className="h-7 w-full flex items-center justify-center">
-          <span className="text-[9px] text-gray-700">—</span>
+        <div className="flex h-8 w-full items-center justify-center">
+          <span className="text-gray-700 text-xs">—</span>
         </div>
       )}
     </div>
