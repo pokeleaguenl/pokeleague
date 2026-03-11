@@ -23,6 +23,10 @@ export default function TournamentManager({ tournaments: initial, decks }: Props
   const [hadWin, setHadWin] = useState(false);
   const [logging, setLogging] = useState(false);
   const [logMessage, setLogMessage] = useState<string | null>(null);
+  const [autoScoring, setAutoScoring] = useState(false);
+  const [autoScoreMsg, setAutoScoreMsg] = useState<string | null>(null);
+  const [fantasyScoring, setFantasyScoring] = useState(false);
+  const [fantasyMsg, setFantasyMsg] = useState<string | null>(null);
 
   async function createTournament() {
     if (!name || !date) return;
@@ -52,6 +56,32 @@ export default function TournamentManager({ tournaments: initial, decks }: Props
     const data = await res.json();
     setLogMessage(res.ok ? `✅ Logged! Base points: ${data.base_points}` : `❌ ${data.error}`);
     setLogging(false);
+  }
+
+  async function runAutoScore() {
+    if (!selectedT) return;
+    setAutoScoring(true); setAutoScoreMsg(null);
+    const res = await fetch(`/api/tournaments/${selectedT}/auto-score`, { method: "POST" });
+    const data = await res.json();
+    if (res.ok) {
+      setAutoScoreMsg(`✅ Auto-scored ${data.scored} decks. ${data.unmatched} unmatched.`);
+    } else {
+      setAutoScoreMsg(`❌ ${data.error}`);
+    }
+    setAutoScoring(false);
+  }
+
+  async function runFantasyScoring() {
+    if (!selectedT) return;
+    setFantasyScoring(true); setFantasyMsg(null);
+    const res = await fetch(`/api/tournaments/${selectedT}/score-fantasy`, { method: "POST" });
+    const data = await res.json();
+    if (res.ok) {
+      setFantasyMsg(`✅ Scored ${data.scored}/${data.total_squads} squads.`);
+    } else {
+      setFantasyMsg(`❌ ${data.error}`);
+    }
+    setFantasyScoring(false);
   }
 
   return (
@@ -104,6 +134,31 @@ export default function TournamentManager({ tournaments: initial, decks }: Props
           </button>
           {logMessage && <p className="text-sm text-gray-400">{logMessage}</p>}
         </div>
+      </section>
+
+      {/* Auto-score from RK9 */}
+      <section className="rounded-xl border border-blue-900/40 bg-blue-900/10 p-4 space-y-3">
+        <div>
+          <h2 className="text-sm font-semibold text-blue-300">🤖 Auto-Score from RK9 Data</h2>
+          <p className="text-xs text-gray-500 mt-0.5">Reads RK9 standings, maps archetypes to decks, logs results automatically.</p>
+        </div>
+        <select value={selectedT ?? ""} onChange={(e) => setSelectedT(parseInt(e.target.value))}
+          className="w-full rounded-lg border border-gray-700 bg-gray-900 px-4 py-2 text-sm focus:border-yellow-400 focus:outline-none">
+          <option value="">Select tournament</option>
+          {tournaments.map((t) => <option key={t.id} value={t.id}>{t.name} ({t.event_date})</option>)}
+        </select>
+        <div className="flex gap-3">
+          <button onClick={runAutoScore} disabled={autoScoring || !selectedT}
+            className="flex-1 rounded-lg bg-blue-600 py-2 text-sm font-semibold text-white hover:bg-blue-500 disabled:opacity-50">
+            {autoScoring ? "Scoring..." : "1. Auto-Score Decks"}
+          </button>
+          <button onClick={runFantasyScoring} disabled={fantasyScoring || !selectedT}
+            className="flex-1 rounded-lg bg-yellow-400 py-2 text-sm font-semibold text-gray-900 hover:bg-yellow-300 disabled:opacity-50">
+            {fantasyScoring ? "Scoring..." : "2. Score Fantasy Points"}
+          </button>
+        </div>
+        {autoScoreMsg && <p className="text-sm text-gray-300">{autoScoreMsg}</p>}
+        {fantasyMsg && <p className="text-sm text-gray-300">{fantasyMsg}</p>}
       </section>
 
       {/* Tournament list */}
