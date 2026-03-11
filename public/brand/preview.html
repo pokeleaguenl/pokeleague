@@ -7,19 +7,16 @@
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:#060912;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#fff;padding:40px}
   h1{color:#FBBF24;font-size:26px;margin-bottom:4px}
-  .sub{color:#6b7280;font-size:13px;margin-bottom:6px}
-  .hint{color:#374151;font-size:11px;margin-bottom:36px}
+  .sub{color:#6b7280;font-size:13px;margin-bottom:36px}
   .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:960px;margin-bottom:48px}
-  .card{background:#0d1220;border:2px solid #1f2937;border-radius:14px;padding:20px 14px 14px;text-align:center;cursor:pointer;transition:all 0.15s}
-  .card:hover{border-color:#4b5563;transform:translateY(-2px)}
-  .card.selected{border-color:#FBBF24!important;background:#1a1f2e;box-shadow:0 0 20px rgba(251,191,36,0.15)}
-  .img-wrap{display:flex;justify-content:center;align-items:center;height:90px;margin-bottom:4px}
-  .card h2{font-size:11px;color:#9ca3af;margin:10px 0 4px;text-transform:uppercase;letter-spacing:0.08em}
-  .card p{color:#4b5563;font-size:10px;margin-bottom:12px;line-height:1.4}
+  .card{background:#0d1220;border:2px solid #1f2937;border-radius:14px;padding:20px 14px 14px;text-align:center;transition:all 0.15s;cursor:pointer}
+  .card:hover{border-color:#FBBF24;transform:translateY(-2px)}
+  .img-wrap{display:flex;justify-content:center;align-items:center;height:100px;margin-bottom:4px}
+  .card h2{font-size:11px;color:#9ca3af;margin:10px 0 12px;text-transform:uppercase;letter-spacing:0.08em}
   .sizes{display:flex;align-items:flex-end;justify-content:center;gap:14px}
   .sizes div{text-align:center;display:flex;flex-direction:column;align-items:center}
   .sizes span{color:#2d3748;font-size:9px;display:block;margin-top:3px}
-  h2.section{color:#6b7280;font-size:11px;text-transform:uppercase;letter-spacing:0.1em;margin:0 0 14px}
+  .section{color:#6b7280;font-size:11px;text-transform:uppercase;letter-spacing:0.1em;margin:0 0 14px}
   .navs{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;max-width:700px}
   .nav-demo{background:#0d1220;border:1px solid #1f2937;border-radius:10px;padding:10px 16px;display:flex;align-items:center;gap:10px}
   .nav-demo span{color:#FBBF24;font-weight:700;font-size:15px;flex:1}
@@ -28,1865 +25,329 @@
 </head>
 <body>
 <h1>PokéLeague — Logo Concepts</h1>
-<p class="sub">20 concepts across different styles</p>
-<p class="hint">Click a card to highlight favourites · scroll down to see in nav</p>
+<p class="sub">All 20 concepts — F (Cards) is the favourite so far</p>
 <div class="grid">
-  <div class="card" onclick="this.classList.toggle('selected')">
-    <div class="img-wrap"><svg width="90" height="90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <clipPath id="hex">
-      <polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5"/>
-    </clipPath>
-    <linearGradient id="topGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FBBF24"/>
-      <stop offset="100%" stop-color="#F59E0B"/>
-    </linearGradient>
-  </defs>
-  <!-- Hexagon background -->
-  <polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5" fill="#111827"/>
-  <!-- Top half yellow -->
-  <rect x="0" y="0" fill="url(#topGrad)" clip-path="url(#hex)"/>
-  <!-- Dividing line -->
-  <line x1="7" y1="50" x2="93" y2="50" stroke="#111827" stroke-width="7"/>
-  <!-- Center circle -->
-  <circle cx="50" cy="50" r="11" fill="#111827" stroke="#FBBF24" stroke-width="5"/>
-  <circle cx="50" cy="50" r="4" fill="#FBBF24"/>
-  <!-- Hexagon border -->
-  <polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5" 
-    fill="none" stroke="#FBBF24" stroke-width="3" stroke-linejoin="round"/>
-</svg></div>
-    <h2>A — Hexagon</h2><p>Six-sided badge</p>
+  <div class="card">
+    <div class="img-wrap">
+      <img src="logo-hex.svg" width="100" height="100">
+    </div>
+    <h2>A — Hexagon</h2>
     <div class="sizes">
-      <div><svg width="36" height="36" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <clipPath id="hex">
-      <polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5"/>
-    </clipPath>
-    <linearGradient id="topGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FBBF24"/>
-      <stop offset="100%" stop-color="#F59E0B"/>
-    </linearGradient>
-  </defs>
-  <!-- Hexagon background -->
-  <polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5" fill="#111827"/>
-  <!-- Top half yellow -->
-  <rect x="0" y="0" fill="url(#topGrad)" clip-path="url(#hex)"/>
-  <!-- Dividing line -->
-  <line x1="7" y1="50" x2="93" y2="50" stroke="#111827" stroke-width="7"/>
-  <!-- Center circle -->
-  <circle cx="50" cy="50" r="11" fill="#111827" stroke="#FBBF24" stroke-width="5"/>
-  <circle cx="50" cy="50" r="4" fill="#FBBF24"/>
-  <!-- Hexagon border -->
-  <polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5" 
-    fill="none" stroke="#FBBF24" stroke-width="3" stroke-linejoin="round"/>
-</svg><span>36</span></div>
-      <div><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <clipPath id="hex">
-      <polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5"/>
-    </clipPath>
-    <linearGradient id="topGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FBBF24"/>
-      <stop offset="100%" stop-color="#F59E0B"/>
-    </linearGradient>
-  </defs>
-  <!-- Hexagon background -->
-  <polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5" fill="#111827"/>
-  <!-- Top half yellow -->
-  <rect x="0" y="0" fill="url(#topGrad)" clip-path="url(#hex)"/>
-  <!-- Dividing line -->
-  <line x1="7" y1="50" x2="93" y2="50" stroke="#111827" stroke-width="7"/>
-  <!-- Center circle -->
-  <circle cx="50" cy="50" r="11" fill="#111827" stroke="#FBBF24" stroke-width="5"/>
-  <circle cx="50" cy="50" r="4" fill="#FBBF24"/>
-  <!-- Hexagon border -->
-  <polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5" 
-    fill="none" stroke="#FBBF24" stroke-width="3" stroke-linejoin="round"/>
-</svg><span>24</span></div>
-      <div><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <clipPath id="hex">
-      <polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5"/>
-    </clipPath>
-    <linearGradient id="topGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FBBF24"/>
-      <stop offset="100%" stop-color="#F59E0B"/>
-    </linearGradient>
-  </defs>
-  <!-- Hexagon background -->
-  <polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5" fill="#111827"/>
-  <!-- Top half yellow -->
-  <rect x="0" y="0" fill="url(#topGrad)" clip-path="url(#hex)"/>
-  <!-- Dividing line -->
-  <line x1="7" y1="50" x2="93" y2="50" stroke="#111827" stroke-width="7"/>
-  <!-- Center circle -->
-  <circle cx="50" cy="50" r="11" fill="#111827" stroke="#FBBF24" stroke-width="5"/>
-  <circle cx="50" cy="50" r="4" fill="#FBBF24"/>
-  <!-- Hexagon border -->
-  <polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5" 
-    fill="none" stroke="#FBBF24" stroke-width="3" stroke-linejoin="round"/>
-</svg><span>16</span></div>
+      <div><img src="logo-hex.svg" width="48" height="48"><span>48</span></div>
+      <div><img src="logo-hex.svg" width="28" height="28"><span>28</span></div>
+      <div><img src="logo-hex.svg" width="16" height="16"><span>16</span></div>
     </div>
   </div>
-  <div class="card" onclick="this.classList.toggle('selected')">
-    <div class="img-wrap"><svg width="90" height="90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="diamondGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#111827"/>
-    </linearGradient>
-  </defs>
-  <!-- Diamond shape -->
-  <polygon points="50,4 96,50 50,96 4,50" fill="url(#diamondGrad)" 
-    stroke="#FBBF24" stroke-width="3" stroke-linejoin="round"/>
-  <!-- Inner diamond top half yellow -->
-  <polygon points="50,14 86,50 50,50 14,50" fill="#FBBF24" opacity="0.9"/>
-  <!-- Dividing line -->
-  <line x1="14" y1="50" x2="86" y2="50" stroke="#111827" stroke-width="5"/>
-  <!-- Center ring -->
-  <circle cx="50" cy="50" r="10" fill="#111827" stroke="#FBBF24" stroke-width="4"/>
-  <circle cx="50" cy="50" r="3.5" fill="#FBBF24"/>
-</svg></div>
-    <h2>B — Diamond</h2><p>Card-suit diamond</p>
+  <div class="card">
+    <div class="img-wrap">
+      <img src="logo-diamond.svg" width="100" height="100">
+    </div>
+    <h2>B — Diamond</h2>
     <div class="sizes">
-      <div><svg width="36" height="36" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="diamondGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#111827"/>
-    </linearGradient>
-  </defs>
-  <!-- Diamond shape -->
-  <polygon points="50,4 96,50 50,96 4,50" fill="url(#diamondGrad)" 
-    stroke="#FBBF24" stroke-width="3" stroke-linejoin="round"/>
-  <!-- Inner diamond top half yellow -->
-  <polygon points="50,14 86,50 50,50 14,50" fill="#FBBF24" opacity="0.9"/>
-  <!-- Dividing line -->
-  <line x1="14" y1="50" x2="86" y2="50" stroke="#111827" stroke-width="5"/>
-  <!-- Center ring -->
-  <circle cx="50" cy="50" r="10" fill="#111827" stroke="#FBBF24" stroke-width="4"/>
-  <circle cx="50" cy="50" r="3.5" fill="#FBBF24"/>
-</svg><span>36</span></div>
-      <div><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="diamondGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#111827"/>
-    </linearGradient>
-  </defs>
-  <!-- Diamond shape -->
-  <polygon points="50,4 96,50 50,96 4,50" fill="url(#diamondGrad)" 
-    stroke="#FBBF24" stroke-width="3" stroke-linejoin="round"/>
-  <!-- Inner diamond top half yellow -->
-  <polygon points="50,14 86,50 50,50 14,50" fill="#FBBF24" opacity="0.9"/>
-  <!-- Dividing line -->
-  <line x1="14" y1="50" x2="86" y2="50" stroke="#111827" stroke-width="5"/>
-  <!-- Center ring -->
-  <circle cx="50" cy="50" r="10" fill="#111827" stroke="#FBBF24" stroke-width="4"/>
-  <circle cx="50" cy="50" r="3.5" fill="#FBBF24"/>
-</svg><span>24</span></div>
-      <div><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="diamondGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#111827"/>
-    </linearGradient>
-  </defs>
-  <!-- Diamond shape -->
-  <polygon points="50,4 96,50 50,96 4,50" fill="url(#diamondGrad)" 
-    stroke="#FBBF24" stroke-width="3" stroke-linejoin="round"/>
-  <!-- Inner diamond top half yellow -->
-  <polygon points="50,14 86,50 50,50 14,50" fill="#FBBF24" opacity="0.9"/>
-  <!-- Dividing line -->
-  <line x1="14" y1="50" x2="86" y2="50" stroke="#111827" stroke-width="5"/>
-  <!-- Center ring -->
-  <circle cx="50" cy="50" r="10" fill="#111827" stroke="#FBBF24" stroke-width="4"/>
-  <circle cx="50" cy="50" r="3.5" fill="#FBBF24"/>
-</svg><span>16</span></div>
+      <div><img src="logo-diamond.svg" width="48" height="48"><span>48</span></div>
+      <div><img src="logo-diamond.svg" width="28" height="28"><span>28</span></div>
+      <div><img src="logo-diamond.svg" width="16" height="16"><span>16</span></div>
     </div>
   </div>
-  <div class="card" onclick="this.classList.toggle('selected')">
-    <div class="img-wrap"><svg width="90" height="90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#0F172A"/>
-    </linearGradient>
-    <clipPath id="circ"><circle cx="50" cy="50" r="44"/></clipPath>
-  </defs>
-  <!-- Outer ring -->
-  <circle cx="50" cy="50" r="47" fill="#FBBF24"/>
-  <circle cx="50" cy="50" r="44" fill="url(#bgGrad)"/>
-  <!-- Top half yellow fill -->
-  <rect x="6" y="6" fill="#FBBF24" clip-path="url(#circ)"/>
-  <!-- Horizontal divider -->
-  <rect x="6" y="47" fill="#111827"/>
-  <!-- Center circle -->
-  <circle cx="50" cy="50" r="13" fill="#111827" stroke="#FBBF24" stroke-width="5"/>
-  <circle cx="50" cy="50" r="5" fill="#FBBF24"/>
-  <!-- Star points top - subtle -->
-  <polygon points="50,10 52.5,18 60,18 54,23 56.5,31 50,26 43.5,31 46,23 40,18 47.5,18"
-    fill="#111827" opacity="0.4"/>
-</svg></div>
-    <h2>C — Circle</h2><p>Classic badge</p>
+  <div class="card">
+    <div class="img-wrap">
+      <img src="logo-circle.svg" width="100" height="100">
+    </div>
+    <h2>C — Circle</h2>
     <div class="sizes">
-      <div><svg width="36" height="36" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#0F172A"/>
-    </linearGradient>
-    <clipPath id="circ"><circle cx="50" cy="50" r="44"/></clipPath>
-  </defs>
-  <!-- Outer ring -->
-  <circle cx="50" cy="50" r="47" fill="#FBBF24"/>
-  <circle cx="50" cy="50" r="44" fill="url(#bgGrad)"/>
-  <!-- Top half yellow fill -->
-  <rect x="6" y="6" fill="#FBBF24" clip-path="url(#circ)"/>
-  <!-- Horizontal divider -->
-  <rect x="6" y="47" fill="#111827"/>
-  <!-- Center circle -->
-  <circle cx="50" cy="50" r="13" fill="#111827" stroke="#FBBF24" stroke-width="5"/>
-  <circle cx="50" cy="50" r="5" fill="#FBBF24"/>
-  <!-- Star points top - subtle -->
-  <polygon points="50,10 52.5,18 60,18 54,23 56.5,31 50,26 43.5,31 46,23 40,18 47.5,18"
-    fill="#111827" opacity="0.4"/>
-</svg><span>36</span></div>
-      <div><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#0F172A"/>
-    </linearGradient>
-    <clipPath id="circ"><circle cx="50" cy="50" r="44"/></clipPath>
-  </defs>
-  <!-- Outer ring -->
-  <circle cx="50" cy="50" r="47" fill="#FBBF24"/>
-  <circle cx="50" cy="50" r="44" fill="url(#bgGrad)"/>
-  <!-- Top half yellow fill -->
-  <rect x="6" y="6" fill="#FBBF24" clip-path="url(#circ)"/>
-  <!-- Horizontal divider -->
-  <rect x="6" y="47" fill="#111827"/>
-  <!-- Center circle -->
-  <circle cx="50" cy="50" r="13" fill="#111827" stroke="#FBBF24" stroke-width="5"/>
-  <circle cx="50" cy="50" r="5" fill="#FBBF24"/>
-  <!-- Star points top - subtle -->
-  <polygon points="50,10 52.5,18 60,18 54,23 56.5,31 50,26 43.5,31 46,23 40,18 47.5,18"
-    fill="#111827" opacity="0.4"/>
-</svg><span>24</span></div>
-      <div><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#0F172A"/>
-    </linearGradient>
-    <clipPath id="circ"><circle cx="50" cy="50" r="44"/></clipPath>
-  </defs>
-  <!-- Outer ring -->
-  <circle cx="50" cy="50" r="47" fill="#FBBF24"/>
-  <circle cx="50" cy="50" r="44" fill="url(#bgGrad)"/>
-  <!-- Top half yellow fill -->
-  <rect x="6" y="6" fill="#FBBF24" clip-path="url(#circ)"/>
-  <!-- Horizontal divider -->
-  <rect x="6" y="47" fill="#111827"/>
-  <!-- Center circle -->
-  <circle cx="50" cy="50" r="13" fill="#111827" stroke="#FBBF24" stroke-width="5"/>
-  <circle cx="50" cy="50" r="5" fill="#FBBF24"/>
-  <!-- Star points top - subtle -->
-  <polygon points="50,10 52.5,18 60,18 54,23 56.5,31 50,26 43.5,31 46,23 40,18 47.5,18"
-    fill="#111827" opacity="0.4"/>
-</svg><span>16</span></div>
+      <div><img src="logo-circle.svg" width="48" height="48"><span>48</span></div>
+      <div><img src="logo-circle.svg" width="28" height="28"><span>28</span></div>
+      <div><img src="logo-circle.svg" width="16" height="16"><span>16</span></div>
     </div>
   </div>
-  <div class="card" onclick="this.classList.toggle('selected')">
-    <div class="img-wrap"><svg width="90" height="90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="sg4" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#0F172A"/>
-    </linearGradient>
-    <clipPath id="shield4">
-      <path d="M50 4 L90 18 L90 55 Q90 80 50 96 Q10 80 10 55 L10 18 Z"/>
-    </clipPath>
-  </defs>
-  <!-- Shield background -->
-  <path d="M50 4 L90 18 L90 55 Q90 80 50 96 Q10 80 10 55 L10 18 Z" fill="url(#sg4)" stroke="#FBBF24" stroke-width="3"/>
-  <!-- Top yellow half -->
-  <rect x="0" y="0" fill="#FBBF24" clip-path="url(#shield4)"/>
-  <!-- Divider -->
-  <rect x="10" y="47" fill="#0F172A"/>
-  <!-- Center circle -->
-  <circle cx="50" cy="50" r="12" fill="#0F172A" stroke="#FBBF24" stroke-width="4.5"/>
-  <circle cx="50" cy="50" r="4.5" fill="#FBBF24"/>
-</svg></div>
-    <h2>D — Shield</h2><p>Fantasy crest</p>
+  <div class="card">
+    <div class="img-wrap">
+      <img src="logo-shield.svg" width="100" height="100">
+    </div>
+    <h2>D — Shield</h2>
     <div class="sizes">
-      <div><svg width="36" height="36" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="sg4" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#0F172A"/>
-    </linearGradient>
-    <clipPath id="shield4">
-      <path d="M50 4 L90 18 L90 55 Q90 80 50 96 Q10 80 10 55 L10 18 Z"/>
-    </clipPath>
-  </defs>
-  <!-- Shield background -->
-  <path d="M50 4 L90 18 L90 55 Q90 80 50 96 Q10 80 10 55 L10 18 Z" fill="url(#sg4)" stroke="#FBBF24" stroke-width="3"/>
-  <!-- Top yellow half -->
-  <rect x="0" y="0" fill="#FBBF24" clip-path="url(#shield4)"/>
-  <!-- Divider -->
-  <rect x="10" y="47" fill="#0F172A"/>
-  <!-- Center circle -->
-  <circle cx="50" cy="50" r="12" fill="#0F172A" stroke="#FBBF24" stroke-width="4.5"/>
-  <circle cx="50" cy="50" r="4.5" fill="#FBBF24"/>
-</svg><span>36</span></div>
-      <div><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="sg4" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#0F172A"/>
-    </linearGradient>
-    <clipPath id="shield4">
-      <path d="M50 4 L90 18 L90 55 Q90 80 50 96 Q10 80 10 55 L10 18 Z"/>
-    </clipPath>
-  </defs>
-  <!-- Shield background -->
-  <path d="M50 4 L90 18 L90 55 Q90 80 50 96 Q10 80 10 55 L10 18 Z" fill="url(#sg4)" stroke="#FBBF24" stroke-width="3"/>
-  <!-- Top yellow half -->
-  <rect x="0" y="0" fill="#FBBF24" clip-path="url(#shield4)"/>
-  <!-- Divider -->
-  <rect x="10" y="47" fill="#0F172A"/>
-  <!-- Center circle -->
-  <circle cx="50" cy="50" r="12" fill="#0F172A" stroke="#FBBF24" stroke-width="4.5"/>
-  <circle cx="50" cy="50" r="4.5" fill="#FBBF24"/>
-</svg><span>24</span></div>
-      <div><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="sg4" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#0F172A"/>
-    </linearGradient>
-    <clipPath id="shield4">
-      <path d="M50 4 L90 18 L90 55 Q90 80 50 96 Q10 80 10 55 L10 18 Z"/>
-    </clipPath>
-  </defs>
-  <!-- Shield background -->
-  <path d="M50 4 L90 18 L90 55 Q90 80 50 96 Q10 80 10 55 L10 18 Z" fill="url(#sg4)" stroke="#FBBF24" stroke-width="3"/>
-  <!-- Top yellow half -->
-  <rect x="0" y="0" fill="#FBBF24" clip-path="url(#shield4)"/>
-  <!-- Divider -->
-  <rect x="10" y="47" fill="#0F172A"/>
-  <!-- Center circle -->
-  <circle cx="50" cy="50" r="12" fill="#0F172A" stroke="#FBBF24" stroke-width="4.5"/>
-  <circle cx="50" cy="50" r="4.5" fill="#FBBF24"/>
-</svg><span>16</span></div>
+      <div><img src="logo-shield.svg" width="48" height="48"><span>48</span></div>
+      <div><img src="logo-shield.svg" width="28" height="28"><span>28</span></div>
+      <div><img src="logo-shield.svg" width="16" height="16"><span>16</span></div>
     </div>
   </div>
-  <div class="card" onclick="this.classList.toggle('selected')">
-    <div class="img-wrap"><svg width="90" height="90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <clipPath id="oct5">
-      <polygon points="30,4 70,4 96,30 96,70 70,96 30,96 4,70 4,30"/>
-    </clipPath>
-    <linearGradient id="g5top" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FCD34D"/>
-      <stop offset="100%" stop-color="#F59E0B"/>
-    </linearGradient>
-  </defs>
-  <!-- Octagon bg -->
-  <polygon points="30,4 70,4 96,30 96,70 70,96 30,96 4,70 4,30" fill="#111827"/>
-  <!-- Top half -->
-  <rect x="0" y="0" fill="url(#g5top)" clip-path="url(#oct5)"/>
-  <!-- Border -->
-  <polygon points="30,4 70,4 96,30 96,70 70,96 30,96 4,70 4,30" 
-    fill="none" stroke="#FBBF24" stroke-width="3"/>
-  <!-- Divider -->
-  <line x1="4" y1="50" x2="96" y2="50" stroke="#111827" stroke-width="6"/>
-  <!-- Center -->
-  <circle cx="50" cy="50" r="12" fill="#111827" stroke="#FBBF24" stroke-width="5"/>
-  <circle cx="50" cy="50" r="4" fill="#FBBF24"/>
-</svg></div>
-    <h2>E — Octagon</h2><p>Bold cut corners</p>
+  <div class="card">
+    <div class="img-wrap">
+      <img src="logo-octagon.svg" width="100" height="100">
+    </div>
+    <h2>E — Octagon</h2>
     <div class="sizes">
-      <div><svg width="36" height="36" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <clipPath id="oct5">
-      <polygon points="30,4 70,4 96,30 96,70 70,96 30,96 4,70 4,30"/>
-    </clipPath>
-    <linearGradient id="g5top" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FCD34D"/>
-      <stop offset="100%" stop-color="#F59E0B"/>
-    </linearGradient>
-  </defs>
-  <!-- Octagon bg -->
-  <polygon points="30,4 70,4 96,30 96,70 70,96 30,96 4,70 4,30" fill="#111827"/>
-  <!-- Top half -->
-  <rect x="0" y="0" fill="url(#g5top)" clip-path="url(#oct5)"/>
-  <!-- Border -->
-  <polygon points="30,4 70,4 96,30 96,70 70,96 30,96 4,70 4,30" 
-    fill="none" stroke="#FBBF24" stroke-width="3"/>
-  <!-- Divider -->
-  <line x1="4" y1="50" x2="96" y2="50" stroke="#111827" stroke-width="6"/>
-  <!-- Center -->
-  <circle cx="50" cy="50" r="12" fill="#111827" stroke="#FBBF24" stroke-width="5"/>
-  <circle cx="50" cy="50" r="4" fill="#FBBF24"/>
-</svg><span>36</span></div>
-      <div><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <clipPath id="oct5">
-      <polygon points="30,4 70,4 96,30 96,70 70,96 30,96 4,70 4,30"/>
-    </clipPath>
-    <linearGradient id="g5top" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FCD34D"/>
-      <stop offset="100%" stop-color="#F59E0B"/>
-    </linearGradient>
-  </defs>
-  <!-- Octagon bg -->
-  <polygon points="30,4 70,4 96,30 96,70 70,96 30,96 4,70 4,30" fill="#111827"/>
-  <!-- Top half -->
-  <rect x="0" y="0" fill="url(#g5top)" clip-path="url(#oct5)"/>
-  <!-- Border -->
-  <polygon points="30,4 70,4 96,30 96,70 70,96 30,96 4,70 4,30" 
-    fill="none" stroke="#FBBF24" stroke-width="3"/>
-  <!-- Divider -->
-  <line x1="4" y1="50" x2="96" y2="50" stroke="#111827" stroke-width="6"/>
-  <!-- Center -->
-  <circle cx="50" cy="50" r="12" fill="#111827" stroke="#FBBF24" stroke-width="5"/>
-  <circle cx="50" cy="50" r="4" fill="#FBBF24"/>
-</svg><span>24</span></div>
-      <div><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <clipPath id="oct5">
-      <polygon points="30,4 70,4 96,30 96,70 70,96 30,96 4,70 4,30"/>
-    </clipPath>
-    <linearGradient id="g5top" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FCD34D"/>
-      <stop offset="100%" stop-color="#F59E0B"/>
-    </linearGradient>
-  </defs>
-  <!-- Octagon bg -->
-  <polygon points="30,4 70,4 96,30 96,70 70,96 30,96 4,70 4,30" fill="#111827"/>
-  <!-- Top half -->
-  <rect x="0" y="0" fill="url(#g5top)" clip-path="url(#oct5)"/>
-  <!-- Border -->
-  <polygon points="30,4 70,4 96,30 96,70 70,96 30,96 4,70 4,30" 
-    fill="none" stroke="#FBBF24" stroke-width="3"/>
-  <!-- Divider -->
-  <line x1="4" y1="50" x2="96" y2="50" stroke="#111827" stroke-width="6"/>
-  <!-- Center -->
-  <circle cx="50" cy="50" r="12" fill="#111827" stroke="#FBBF24" stroke-width="5"/>
-  <circle cx="50" cy="50" r="4" fill="#FBBF24"/>
-</svg><span>16</span></div>
+      <div><img src="logo-octagon.svg" width="48" height="48"><span>48</span></div>
+      <div><img src="logo-octagon.svg" width="28" height="28"><span>28</span></div>
+      <div><img src="logo-octagon.svg" width="16" height="16"><span>16</span></div>
     </div>
   </div>
-  <div class="card" onclick="this.classList.toggle('selected')">
-    <div class="img-wrap"><svg width="90" height="90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <!-- Card shadow 3 -->
-  <rect x="20" y="22" rx="6" fill="#0F172A" stroke="#374151" stroke-width="1.5" transform="rotate(-12 50 56)"/>
-  <!-- Card shadow 2 -->
-  <rect x="20" y="22" rx="6" fill="#111827" stroke="#4B5563" stroke-width="1.5" transform="rotate(6 50 56)"/>
-  <!-- Main card -->
-  <rect x="22" y="18" rx="7" fill="#1F2937" stroke="#FBBF24" stroke-width="2.5"/>
-  <!-- Card top yellow band -->
-  <rect x="22" y="18" rx="7" fill="#FBBF24"/>
-  <rect x="22" y="36" fill="#FBBF24"/>
-  <!-- Center circle on card -->
-  <circle cx="50" cy="54" r="11" fill="#1F2937" stroke="#FBBF24" stroke-width="3.5"/>
-  <circle cx="50" cy="54" r="4" fill="#FBBF24"/>
-  <!-- Star on yellow section -->
-  <polygon points="50,24 52,30 58,30 53,34 55,40 50,36 45,40 47,34 42,30 48,30" fill="#92400E" opacity="0.4"/>
-</svg></div>
-    <h2>F — Cards</h2><p>Stacked card fan</p>
+  <div class="card">
+    <div class="img-wrap">
+      <img src="logo-cards.svg" width="100" height="100">
+    </div>
+    <h2>F — Cards ⭐</h2>
     <div class="sizes">
-      <div><svg width="36" height="36" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <!-- Card shadow 3 -->
-  <rect x="20" y="22" rx="6" fill="#0F172A" stroke="#374151" stroke-width="1.5" transform="rotate(-12 50 56)"/>
-  <!-- Card shadow 2 -->
-  <rect x="20" y="22" rx="6" fill="#111827" stroke="#4B5563" stroke-width="1.5" transform="rotate(6 50 56)"/>
-  <!-- Main card -->
-  <rect x="22" y="18" rx="7" fill="#1F2937" stroke="#FBBF24" stroke-width="2.5"/>
-  <!-- Card top yellow band -->
-  <rect x="22" y="18" rx="7" fill="#FBBF24"/>
-  <rect x="22" y="36" fill="#FBBF24"/>
-  <!-- Center circle on card -->
-  <circle cx="50" cy="54" r="11" fill="#1F2937" stroke="#FBBF24" stroke-width="3.5"/>
-  <circle cx="50" cy="54" r="4" fill="#FBBF24"/>
-  <!-- Star on yellow section -->
-  <polygon points="50,24 52,30 58,30 53,34 55,40 50,36 45,40 47,34 42,30 48,30" fill="#92400E" opacity="0.4"/>
-</svg><span>36</span></div>
-      <div><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <!-- Card shadow 3 -->
-  <rect x="20" y="22" rx="6" fill="#0F172A" stroke="#374151" stroke-width="1.5" transform="rotate(-12 50 56)"/>
-  <!-- Card shadow 2 -->
-  <rect x="20" y="22" rx="6" fill="#111827" stroke="#4B5563" stroke-width="1.5" transform="rotate(6 50 56)"/>
-  <!-- Main card -->
-  <rect x="22" y="18" rx="7" fill="#1F2937" stroke="#FBBF24" stroke-width="2.5"/>
-  <!-- Card top yellow band -->
-  <rect x="22" y="18" rx="7" fill="#FBBF24"/>
-  <rect x="22" y="36" fill="#FBBF24"/>
-  <!-- Center circle on card -->
-  <circle cx="50" cy="54" r="11" fill="#1F2937" stroke="#FBBF24" stroke-width="3.5"/>
-  <circle cx="50" cy="54" r="4" fill="#FBBF24"/>
-  <!-- Star on yellow section -->
-  <polygon points="50,24 52,30 58,30 53,34 55,40 50,36 45,40 47,34 42,30 48,30" fill="#92400E" opacity="0.4"/>
-</svg><span>24</span></div>
-      <div><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <!-- Card shadow 3 -->
-  <rect x="20" y="22" rx="6" fill="#0F172A" stroke="#374151" stroke-width="1.5" transform="rotate(-12 50 56)"/>
-  <!-- Card shadow 2 -->
-  <rect x="20" y="22" rx="6" fill="#111827" stroke="#4B5563" stroke-width="1.5" transform="rotate(6 50 56)"/>
-  <!-- Main card -->
-  <rect x="22" y="18" rx="7" fill="#1F2937" stroke="#FBBF24" stroke-width="2.5"/>
-  <!-- Card top yellow band -->
-  <rect x="22" y="18" rx="7" fill="#FBBF24"/>
-  <rect x="22" y="36" fill="#FBBF24"/>
-  <!-- Center circle on card -->
-  <circle cx="50" cy="54" r="11" fill="#1F2937" stroke="#FBBF24" stroke-width="3.5"/>
-  <circle cx="50" cy="54" r="4" fill="#FBBF24"/>
-  <!-- Star on yellow section -->
-  <polygon points="50,24 52,30 58,30 53,34 55,40 50,36 45,40 47,34 42,30 48,30" fill="#92400E" opacity="0.4"/>
-</svg><span>16</span></div>
+      <div><img src="logo-cards.svg" width="48" height="48"><span>48</span></div>
+      <div><img src="logo-cards.svg" width="28" height="28"><span>28</span></div>
+      <div><img src="logo-cards.svg" width="16" height="16"><span>16</span></div>
     </div>
   </div>
-  <div class="card" onclick="this.classList.toggle('selected')">
-    <div class="img-wrap"><svg width="90" height="90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <clipPath id="c7"><circle cx="50" cy="50" r="42"/></clipPath>
-    <linearGradient id="g7" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FCD34D"/>
-      <stop offset="100%" stop-color="#FBBF24"/>
-    </linearGradient>
-  </defs>
-  <!-- Outer glow ring -->
-  <circle cx="50" cy="50" r="48" fill="#FBBF24" opacity="0.15"/>
-  <!-- Main circle -->
-  <circle cx="50" cy="50" r="42" fill="#111827" stroke="#FBBF24" stroke-width="3.5"/>
-  <!-- Top arc yellow -->
-  <path d="M8 50 A42 42 0 0 1 92 50 Z" fill="url(#g7)"/>
-  <!-- Divider line -->
-  <rect x="8" y="47" fill="#111827"/>
-  <!-- Outer ring notches -->
-  <circle cx="50" cy="8" r="3" fill="#FBBF24"/>
-  <circle cx="50" cy="92" r="3" fill="#374151"/>
-  <!-- Center -->
-  <circle cx="50" cy="50" r="13" fill="#111827" stroke="#FBBF24" stroke-width="4.5"/>
-  <circle cx="50" cy="50" r="5" fill="#FBBF24"/>
-</svg></div>
-    <h2>G — Minimal</h2><p>Cleanest Poké Ball</p>
+  <div class="card">
+    <div class="img-wrap">
+      <img src="logo-minimal.svg" width="100" height="100">
+    </div>
+    <h2>G — Minimal</h2>
     <div class="sizes">
-      <div><svg width="36" height="36" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <clipPath id="c7"><circle cx="50" cy="50" r="42"/></clipPath>
-    <linearGradient id="g7" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FCD34D"/>
-      <stop offset="100%" stop-color="#FBBF24"/>
-    </linearGradient>
-  </defs>
-  <!-- Outer glow ring -->
-  <circle cx="50" cy="50" r="48" fill="#FBBF24" opacity="0.15"/>
-  <!-- Main circle -->
-  <circle cx="50" cy="50" r="42" fill="#111827" stroke="#FBBF24" stroke-width="3.5"/>
-  <!-- Top arc yellow -->
-  <path d="M8 50 A42 42 0 0 1 92 50 Z" fill="url(#g7)"/>
-  <!-- Divider line -->
-  <rect x="8" y="47" fill="#111827"/>
-  <!-- Outer ring notches -->
-  <circle cx="50" cy="8" r="3" fill="#FBBF24"/>
-  <circle cx="50" cy="92" r="3" fill="#374151"/>
-  <!-- Center -->
-  <circle cx="50" cy="50" r="13" fill="#111827" stroke="#FBBF24" stroke-width="4.5"/>
-  <circle cx="50" cy="50" r="5" fill="#FBBF24"/>
-</svg><span>36</span></div>
-      <div><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <clipPath id="c7"><circle cx="50" cy="50" r="42"/></clipPath>
-    <linearGradient id="g7" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FCD34D"/>
-      <stop offset="100%" stop-color="#FBBF24"/>
-    </linearGradient>
-  </defs>
-  <!-- Outer glow ring -->
-  <circle cx="50" cy="50" r="48" fill="#FBBF24" opacity="0.15"/>
-  <!-- Main circle -->
-  <circle cx="50" cy="50" r="42" fill="#111827" stroke="#FBBF24" stroke-width="3.5"/>
-  <!-- Top arc yellow -->
-  <path d="M8 50 A42 42 0 0 1 92 50 Z" fill="url(#g7)"/>
-  <!-- Divider line -->
-  <rect x="8" y="47" fill="#111827"/>
-  <!-- Outer ring notches -->
-  <circle cx="50" cy="8" r="3" fill="#FBBF24"/>
-  <circle cx="50" cy="92" r="3" fill="#374151"/>
-  <!-- Center -->
-  <circle cx="50" cy="50" r="13" fill="#111827" stroke="#FBBF24" stroke-width="4.5"/>
-  <circle cx="50" cy="50" r="5" fill="#FBBF24"/>
-</svg><span>24</span></div>
-      <div><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <clipPath id="c7"><circle cx="50" cy="50" r="42"/></clipPath>
-    <linearGradient id="g7" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FCD34D"/>
-      <stop offset="100%" stop-color="#FBBF24"/>
-    </linearGradient>
-  </defs>
-  <!-- Outer glow ring -->
-  <circle cx="50" cy="50" r="48" fill="#FBBF24" opacity="0.15"/>
-  <!-- Main circle -->
-  <circle cx="50" cy="50" r="42" fill="#111827" stroke="#FBBF24" stroke-width="3.5"/>
-  <!-- Top arc yellow -->
-  <path d="M8 50 A42 42 0 0 1 92 50 Z" fill="url(#g7)"/>
-  <!-- Divider line -->
-  <rect x="8" y="47" fill="#111827"/>
-  <!-- Outer ring notches -->
-  <circle cx="50" cy="8" r="3" fill="#FBBF24"/>
-  <circle cx="50" cy="92" r="3" fill="#374151"/>
-  <!-- Center -->
-  <circle cx="50" cy="50" r="13" fill="#111827" stroke="#FBBF24" stroke-width="4.5"/>
-  <circle cx="50" cy="50" r="5" fill="#FBBF24"/>
-</svg><span>16</span></div>
+      <div><img src="logo-minimal.svg" width="48" height="48"><span>48</span></div>
+      <div><img src="logo-minimal.svg" width="28" height="28"><span>28</span></div>
+      <div><img src="logo-minimal.svg" width="16" height="16"><span>16</span></div>
     </div>
   </div>
-  <div class="card" onclick="this.classList.toggle('selected')">
-    <div class="img-wrap"><svg width="90" height="90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="g8bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#111827"/>
-    </linearGradient>
-    <linearGradient id="g8y" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FCD34D"/>
-      <stop offset="100%" stop-color="#F59E0B"/>
-    </linearGradient>
-    <clipPath id="trophy">
-      <path d="M28 8 H72 V52 Q72 76 50 84 Q28 76 28 52 Z"/>
-    </clipPath>
-  </defs>
-  <!-- Trophy cup shape -->
-  <path d="M28 8 H72 V52 Q72 76 50 84 Q28 76 28 52 Z" fill="url(#g8bg)" stroke="#FBBF24" stroke-width="3"/>
-  <!-- Trophy handles -->
-  <path d="M28 20 Q12 20 12 36 Q12 48 28 48" stroke="#FBBF24" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-  <path d="M72 20 Q88 20 88 36 Q88 48 72 48" stroke="#FBBF24" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-  <!-- Trophy stem -->
-  <rect x="42" y="83" rx="2" fill="#FBBF24"/>
-  <rect x="36" y="89" rx="2.5" fill="#FBBF24"/>
-  <!-- Top half yellow fill -->
-  <rect x="0" y="0" fill="url(#g8y)" clip-path="url(#trophy)"/>
-  <!-- Divider -->
-  <rect x="28" y="43" fill="#111827"/>
-  <!-- Center ball -->
-  <circle cx="50" cy="46" r="11" fill="#111827" stroke="#FBBF24" stroke-width="4"/>
-  <circle cx="50" cy="46" r="4" fill="#FBBF24"/>
-</svg></div>
-    <h2>H — Trophy</h2><p>Trophy hybrid</p>
+  <div class="card">
+    <div class="img-wrap">
+      <img src="logo-trophy.svg" width="100" height="100">
+    </div>
+    <h2>H — Trophy</h2>
     <div class="sizes">
-      <div><svg width="36" height="36" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="g8bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#111827"/>
-    </linearGradient>
-    <linearGradient id="g8y" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FCD34D"/>
-      <stop offset="100%" stop-color="#F59E0B"/>
-    </linearGradient>
-    <clipPath id="trophy">
-      <path d="M28 8 H72 V52 Q72 76 50 84 Q28 76 28 52 Z"/>
-    </clipPath>
-  </defs>
-  <!-- Trophy cup shape -->
-  <path d="M28 8 H72 V52 Q72 76 50 84 Q28 76 28 52 Z" fill="url(#g8bg)" stroke="#FBBF24" stroke-width="3"/>
-  <!-- Trophy handles -->
-  <path d="M28 20 Q12 20 12 36 Q12 48 28 48" stroke="#FBBF24" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-  <path d="M72 20 Q88 20 88 36 Q88 48 72 48" stroke="#FBBF24" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-  <!-- Trophy stem -->
-  <rect x="42" y="83" rx="2" fill="#FBBF24"/>
-  <rect x="36" y="89" rx="2.5" fill="#FBBF24"/>
-  <!-- Top half yellow fill -->
-  <rect x="0" y="0" fill="url(#g8y)" clip-path="url(#trophy)"/>
-  <!-- Divider -->
-  <rect x="28" y="43" fill="#111827"/>
-  <!-- Center ball -->
-  <circle cx="50" cy="46" r="11" fill="#111827" stroke="#FBBF24" stroke-width="4"/>
-  <circle cx="50" cy="46" r="4" fill="#FBBF24"/>
-</svg><span>36</span></div>
-      <div><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="g8bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#111827"/>
-    </linearGradient>
-    <linearGradient id="g8y" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FCD34D"/>
-      <stop offset="100%" stop-color="#F59E0B"/>
-    </linearGradient>
-    <clipPath id="trophy">
-      <path d="M28 8 H72 V52 Q72 76 50 84 Q28 76 28 52 Z"/>
-    </clipPath>
-  </defs>
-  <!-- Trophy cup shape -->
-  <path d="M28 8 H72 V52 Q72 76 50 84 Q28 76 28 52 Z" fill="url(#g8bg)" stroke="#FBBF24" stroke-width="3"/>
-  <!-- Trophy handles -->
-  <path d="M28 20 Q12 20 12 36 Q12 48 28 48" stroke="#FBBF24" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-  <path d="M72 20 Q88 20 88 36 Q88 48 72 48" stroke="#FBBF24" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-  <!-- Trophy stem -->
-  <rect x="42" y="83" rx="2" fill="#FBBF24"/>
-  <rect x="36" y="89" rx="2.5" fill="#FBBF24"/>
-  <!-- Top half yellow fill -->
-  <rect x="0" y="0" fill="url(#g8y)" clip-path="url(#trophy)"/>
-  <!-- Divider -->
-  <rect x="28" y="43" fill="#111827"/>
-  <!-- Center ball -->
-  <circle cx="50" cy="46" r="11" fill="#111827" stroke="#FBBF24" stroke-width="4"/>
-  <circle cx="50" cy="46" r="4" fill="#FBBF24"/>
-</svg><span>24</span></div>
-      <div><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="g8bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#111827"/>
-    </linearGradient>
-    <linearGradient id="g8y" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FCD34D"/>
-      <stop offset="100%" stop-color="#F59E0B"/>
-    </linearGradient>
-    <clipPath id="trophy">
-      <path d="M28 8 H72 V52 Q72 76 50 84 Q28 76 28 52 Z"/>
-    </clipPath>
-  </defs>
-  <!-- Trophy cup shape -->
-  <path d="M28 8 H72 V52 Q72 76 50 84 Q28 76 28 52 Z" fill="url(#g8bg)" stroke="#FBBF24" stroke-width="3"/>
-  <!-- Trophy handles -->
-  <path d="M28 20 Q12 20 12 36 Q12 48 28 48" stroke="#FBBF24" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-  <path d="M72 20 Q88 20 88 36 Q88 48 72 48" stroke="#FBBF24" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-  <!-- Trophy stem -->
-  <rect x="42" y="83" rx="2" fill="#FBBF24"/>
-  <rect x="36" y="89" rx="2.5" fill="#FBBF24"/>
-  <!-- Top half yellow fill -->
-  <rect x="0" y="0" fill="url(#g8y)" clip-path="url(#trophy)"/>
-  <!-- Divider -->
-  <rect x="28" y="43" fill="#111827"/>
-  <!-- Center ball -->
-  <circle cx="50" cy="46" r="11" fill="#111827" stroke="#FBBF24" stroke-width="4"/>
-  <circle cx="50" cy="46" r="4" fill="#FBBF24"/>
-</svg><span>16</span></div>
+      <div><img src="logo-trophy.svg" width="48" height="48"><span>48</span></div>
+      <div><img src="logo-trophy.svg" width="28" height="28"><span>28</span></div>
+      <div><img src="logo-trophy.svg" width="16" height="16"><span>16</span></div>
     </div>
   </div>
-  <div class="card" onclick="this.classList.toggle('selected')">
-    <div class="img-wrap"><svg width="90" height="90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="g9" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#0F172A"/>
-    </linearGradient>
-  </defs>
-  <!-- Background circle -->
-  <circle cx="50" cy="50" r="47" fill="url(#g9)" stroke="#FBBF24" stroke-width="3"/>
-  <!-- Subtle inner ring -->
-  <circle cx="50" cy="50" r="40" fill="none" stroke="#FBBF24" stroke-width="0.75" opacity="0.3"/>
-  <!-- P letterform -->
-  <rect x="22" y="28" rx="2" fill="#FBBF24"/>
-  <path d="M28 28 Q48 28 48 39 Q48 50 28 50" stroke="#FBBF24" stroke-width="6" fill="none" stroke-linecap="round"/>
-  <!-- L letterform -->
-  <rect x="54" y="28" rx="2" fill="white" opacity="0.9"/>
-  <rect x="54" y="66" rx="2" fill="white" opacity="0.9"/>
-  <!-- Bottom accent line -->
-  <line x1="20" y1="82" x2="80" y2="82" stroke="#FBBF24" stroke-width="1.5" opacity="0.4"/>
-</svg></div>
-    <h2>I — Monogram</h2><p>PL lettermark</p>
+  <div class="card">
+    <div class="img-wrap">
+      <img src="logo-monogram.svg" width="100" height="100">
+    </div>
+    <h2>I — Monogram</h2>
     <div class="sizes">
-      <div><svg width="36" height="36" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="g9" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#0F172A"/>
-    </linearGradient>
-  </defs>
-  <!-- Background circle -->
-  <circle cx="50" cy="50" r="47" fill="url(#g9)" stroke="#FBBF24" stroke-width="3"/>
-  <!-- Subtle inner ring -->
-  <circle cx="50" cy="50" r="40" fill="none" stroke="#FBBF24" stroke-width="0.75" opacity="0.3"/>
-  <!-- P letterform -->
-  <rect x="22" y="28" rx="2" fill="#FBBF24"/>
-  <path d="M28 28 Q48 28 48 39 Q48 50 28 50" stroke="#FBBF24" stroke-width="6" fill="none" stroke-linecap="round"/>
-  <!-- L letterform -->
-  <rect x="54" y="28" rx="2" fill="white" opacity="0.9"/>
-  <rect x="54" y="66" rx="2" fill="white" opacity="0.9"/>
-  <!-- Bottom accent line -->
-  <line x1="20" y1="82" x2="80" y2="82" stroke="#FBBF24" stroke-width="1.5" opacity="0.4"/>
-</svg><span>36</span></div>
-      <div><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="g9" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#0F172A"/>
-    </linearGradient>
-  </defs>
-  <!-- Background circle -->
-  <circle cx="50" cy="50" r="47" fill="url(#g9)" stroke="#FBBF24" stroke-width="3"/>
-  <!-- Subtle inner ring -->
-  <circle cx="50" cy="50" r="40" fill="none" stroke="#FBBF24" stroke-width="0.75" opacity="0.3"/>
-  <!-- P letterform -->
-  <rect x="22" y="28" rx="2" fill="#FBBF24"/>
-  <path d="M28 28 Q48 28 48 39 Q48 50 28 50" stroke="#FBBF24" stroke-width="6" fill="none" stroke-linecap="round"/>
-  <!-- L letterform -->
-  <rect x="54" y="28" rx="2" fill="white" opacity="0.9"/>
-  <rect x="54" y="66" rx="2" fill="white" opacity="0.9"/>
-  <!-- Bottom accent line -->
-  <line x1="20" y1="82" x2="80" y2="82" stroke="#FBBF24" stroke-width="1.5" opacity="0.4"/>
-</svg><span>24</span></div>
-      <div><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="g9" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#0F172A"/>
-    </linearGradient>
-  </defs>
-  <!-- Background circle -->
-  <circle cx="50" cy="50" r="47" fill="url(#g9)" stroke="#FBBF24" stroke-width="3"/>
-  <!-- Subtle inner ring -->
-  <circle cx="50" cy="50" r="40" fill="none" stroke="#FBBF24" stroke-width="0.75" opacity="0.3"/>
-  <!-- P letterform -->
-  <rect x="22" y="28" rx="2" fill="#FBBF24"/>
-  <path d="M28 28 Q48 28 48 39 Q48 50 28 50" stroke="#FBBF24" stroke-width="6" fill="none" stroke-linecap="round"/>
-  <!-- L letterform -->
-  <rect x="54" y="28" rx="2" fill="white" opacity="0.9"/>
-  <rect x="54" y="66" rx="2" fill="white" opacity="0.9"/>
-  <!-- Bottom accent line -->
-  <line x1="20" y1="82" x2="80" y2="82" stroke="#FBBF24" stroke-width="1.5" opacity="0.4"/>
-</svg><span>16</span></div>
+      <div><img src="logo-monogram.svg" width="48" height="48"><span>48</span></div>
+      <div><img src="logo-monogram.svg" width="28" height="28"><span>28</span></div>
+      <div><img src="logo-monogram.svg" width="16" height="16"><span>16</span></div>
     </div>
   </div>
-  <div class="card" onclick="this.classList.toggle('selected')">
-    <div class="img-wrap"><svg width="90" height="90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="cg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a2234"/><stop offset="100%" stop-color="#0d1117"/></linearGradient>
-    <linearGradient id="cg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#D97706"/></linearGradient>
-    <clipPath id="cc1"><circle cx="50" cy="62" r="32"/></clipPath>
-  </defs>
-  <path d="M18 40 L26 24 L50 36 L74 24 L82 40 L74 44 L26 44 Z" fill="url(#cg2)"/>
-  <circle cx="18" cy="40" r="4" fill="#FCD34D"/>
-  <circle cx="50" cy="22" r="4.5" fill="#FCD34D"/>
-  <circle cx="82" cy="40" r="4" fill="#FCD34D"/>
-  <circle cx="50" cy="62" r="32" fill="url(#cg1)" stroke="#FBBF24" stroke-width="2.5"/>
-  <path d="M18 62 A32 32 0 0 1 82 62 Z" fill="url(#cg2)"/>
-  <rect x="18" y="59" fill="#0d1117"/>
-  <circle cx="50" cy="62" r="11" fill="#0d1117" stroke="#FBBF24" stroke-width="4"/>
-  <circle cx="50" cy="62" r="4" fill="#FCD34D"/>
-</svg></div>
-    <h2>J — Crowned</h2><p>Regal crown</p>
+  <div class="card">
+    <div class="img-wrap">
+      <img src="logo-crowned.svg" width="100" height="100">
+    </div>
+    <h2>J — Crowned</h2>
     <div class="sizes">
-      <div><svg width="36" height="36" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="cg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a2234"/><stop offset="100%" stop-color="#0d1117"/></linearGradient>
-    <linearGradient id="cg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#D97706"/></linearGradient>
-    <clipPath id="cc1"><circle cx="50" cy="62" r="32"/></clipPath>
-  </defs>
-  <path d="M18 40 L26 24 L50 36 L74 24 L82 40 L74 44 L26 44 Z" fill="url(#cg2)"/>
-  <circle cx="18" cy="40" r="4" fill="#FCD34D"/>
-  <circle cx="50" cy="22" r="4.5" fill="#FCD34D"/>
-  <circle cx="82" cy="40" r="4" fill="#FCD34D"/>
-  <circle cx="50" cy="62" r="32" fill="url(#cg1)" stroke="#FBBF24" stroke-width="2.5"/>
-  <path d="M18 62 A32 32 0 0 1 82 62 Z" fill="url(#cg2)"/>
-  <rect x="18" y="59" fill="#0d1117"/>
-  <circle cx="50" cy="62" r="11" fill="#0d1117" stroke="#FBBF24" stroke-width="4"/>
-  <circle cx="50" cy="62" r="4" fill="#FCD34D"/>
-</svg><span>36</span></div>
-      <div><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="cg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a2234"/><stop offset="100%" stop-color="#0d1117"/></linearGradient>
-    <linearGradient id="cg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#D97706"/></linearGradient>
-    <clipPath id="cc1"><circle cx="50" cy="62" r="32"/></clipPath>
-  </defs>
-  <path d="M18 40 L26 24 L50 36 L74 24 L82 40 L74 44 L26 44 Z" fill="url(#cg2)"/>
-  <circle cx="18" cy="40" r="4" fill="#FCD34D"/>
-  <circle cx="50" cy="22" r="4.5" fill="#FCD34D"/>
-  <circle cx="82" cy="40" r="4" fill="#FCD34D"/>
-  <circle cx="50" cy="62" r="32" fill="url(#cg1)" stroke="#FBBF24" stroke-width="2.5"/>
-  <path d="M18 62 A32 32 0 0 1 82 62 Z" fill="url(#cg2)"/>
-  <rect x="18" y="59" fill="#0d1117"/>
-  <circle cx="50" cy="62" r="11" fill="#0d1117" stroke="#FBBF24" stroke-width="4"/>
-  <circle cx="50" cy="62" r="4" fill="#FCD34D"/>
-</svg><span>24</span></div>
-      <div><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="cg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a2234"/><stop offset="100%" stop-color="#0d1117"/></linearGradient>
-    <linearGradient id="cg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#D97706"/></linearGradient>
-    <clipPath id="cc1"><circle cx="50" cy="62" r="32"/></clipPath>
-  </defs>
-  <path d="M18 40 L26 24 L50 36 L74 24 L82 40 L74 44 L26 44 Z" fill="url(#cg2)"/>
-  <circle cx="18" cy="40" r="4" fill="#FCD34D"/>
-  <circle cx="50" cy="22" r="4.5" fill="#FCD34D"/>
-  <circle cx="82" cy="40" r="4" fill="#FCD34D"/>
-  <circle cx="50" cy="62" r="32" fill="url(#cg1)" stroke="#FBBF24" stroke-width="2.5"/>
-  <path d="M18 62 A32 32 0 0 1 82 62 Z" fill="url(#cg2)"/>
-  <rect x="18" y="59" fill="#0d1117"/>
-  <circle cx="50" cy="62" r="11" fill="#0d1117" stroke="#FBBF24" stroke-width="4"/>
-  <circle cx="50" cy="62" r="4" fill="#FCD34D"/>
-</svg><span>16</span></div>
+      <div><img src="logo-crowned.svg" width="48" height="48"><span>48</span></div>
+      <div><img src="logo-crowned.svg" width="28" height="28"><span>28</span></div>
+      <div><img src="logo-crowned.svg" width="16" height="16"><span>16</span></div>
     </div>
   </div>
-  <div class="card" onclick="this.classList.toggle('selected')">
-    <div class="img-wrap"><svg width="90" height="90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
-    <linearGradient id="lg2" x1="0" y1="1" x2="0" y2="0"><stop offset="0%" stop-color="#F59E0B"/><stop offset="100%" stop-color="#FDE68A"/></linearGradient>
-  </defs>
-  <circle cx="50" cy="50" r="46" fill="url(#lg1)" stroke="#FBBF24" stroke-width="2.5"/>
-  <circle cx="50" cy="50" r="39" fill="none" stroke="#FBBF24" stroke-width="0.75" opacity="0.2"/>
-  <path d="M56 12 L34 50 L48 50 L44 88 L66 46 L52 46 Z" fill="url(#lg2)"/>
-</svg></div>
-    <h2>K — Lightning</h2><p>Energy bolt</p>
+  <div class="card">
+    <div class="img-wrap">
+      <img src="logo-lightning.svg" width="100" height="100">
+    </div>
+    <h2>K — Lightning</h2>
     <div class="sizes">
-      <div><svg width="36" height="36" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
-    <linearGradient id="lg2" x1="0" y1="1" x2="0" y2="0"><stop offset="0%" stop-color="#F59E0B"/><stop offset="100%" stop-color="#FDE68A"/></linearGradient>
-  </defs>
-  <circle cx="50" cy="50" r="46" fill="url(#lg1)" stroke="#FBBF24" stroke-width="2.5"/>
-  <circle cx="50" cy="50" r="39" fill="none" stroke="#FBBF24" stroke-width="0.75" opacity="0.2"/>
-  <path d="M56 12 L34 50 L48 50 L44 88 L66 46 L52 46 Z" fill="url(#lg2)"/>
-</svg><span>36</span></div>
-      <div><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
-    <linearGradient id="lg2" x1="0" y1="1" x2="0" y2="0"><stop offset="0%" stop-color="#F59E0B"/><stop offset="100%" stop-color="#FDE68A"/></linearGradient>
-  </defs>
-  <circle cx="50" cy="50" r="46" fill="url(#lg1)" stroke="#FBBF24" stroke-width="2.5"/>
-  <circle cx="50" cy="50" r="39" fill="none" stroke="#FBBF24" stroke-width="0.75" opacity="0.2"/>
-  <path d="M56 12 L34 50 L48 50 L44 88 L66 46 L52 46 Z" fill="url(#lg2)"/>
-</svg><span>24</span></div>
-      <div><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
-    <linearGradient id="lg2" x1="0" y1="1" x2="0" y2="0"><stop offset="0%" stop-color="#F59E0B"/><stop offset="100%" stop-color="#FDE68A"/></linearGradient>
-  </defs>
-  <circle cx="50" cy="50" r="46" fill="url(#lg1)" stroke="#FBBF24" stroke-width="2.5"/>
-  <circle cx="50" cy="50" r="39" fill="none" stroke="#FBBF24" stroke-width="0.75" opacity="0.2"/>
-  <path d="M56 12 L34 50 L48 50 L44 88 L66 46 L52 46 Z" fill="url(#lg2)"/>
-</svg><span>16</span></div>
+      <div><img src="logo-lightning.svg" width="48" height="48"><span>48</span></div>
+      <div><img src="logo-lightning.svg" width="28" height="28"><span>28</span></div>
+      <div><img src="logo-lightning.svg" width="16" height="16"><span>16</span></div>
     </div>
   </div>
-  <div class="card" onclick="this.classList.toggle('selected')">
-    <div class="img-wrap"><svg width="90" height="90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="sb1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient>
-  </defs>
-  <g stroke="#FBBF24" stroke-width="2" opacity="0.2">
-    <line x1="50" y1="2" x2="50" y2="16"/><line x1="50" y1="84" x2="50" y2="98"/>
-    <line x1="2" y1="50" x2="16" y2="50"/><line x1="84" y1="50" x2="98" y2="50"/>
-    <line x1="14" y1="14" x2="24" y2="24"/><line x1="76" y1="76" x2="86" y2="86"/>
-    <line x1="86" y1="14" x2="76" y2="24"/><line x1="14" y1="86" x2="24" y2="76"/>
-  </g>
-  <rect x="18" y="12" rx="10" fill="#0f172a" stroke="#FBBF24" stroke-width="2.5"/>
-  <rect x="18" y="12" rx="10" fill="url(#sb1)"/>
-  <rect x="18" y="36" fill="url(#sb1)"/>
-  <circle cx="50" cy="50" r="13" fill="#0f172a" stroke="#FBBF24" stroke-width="4"/>
-  <path d="M37 50 A13 13 0 0 1 63 50 Z" fill="#FBBF24"/>
-  <rect x="37" y="47" fill="#0f172a"/>
-  <circle cx="50" cy="50" r="5" fill="#0f172a" stroke="#FBBF24" stroke-width="3"/>
-  <circle cx="50" cy="50" r="2" fill="#FBBF24"/>
-</svg></div>
-    <h2>L — Starburst</h2><p>Card with rays</p>
+  <div class="card">
+    <div class="img-wrap">
+      <img src="logo-starburst.svg" width="100" height="100">
+    </div>
+    <h2>L — Starburst</h2>
     <div class="sizes">
-      <div><svg width="36" height="36" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="sb1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient>
-  </defs>
-  <g stroke="#FBBF24" stroke-width="2" opacity="0.2">
-    <line x1="50" y1="2" x2="50" y2="16"/><line x1="50" y1="84" x2="50" y2="98"/>
-    <line x1="2" y1="50" x2="16" y2="50"/><line x1="84" y1="50" x2="98" y2="50"/>
-    <line x1="14" y1="14" x2="24" y2="24"/><line x1="76" y1="76" x2="86" y2="86"/>
-    <line x1="86" y1="14" x2="76" y2="24"/><line x1="14" y1="86" x2="24" y2="76"/>
-  </g>
-  <rect x="18" y="12" rx="10" fill="#0f172a" stroke="#FBBF24" stroke-width="2.5"/>
-  <rect x="18" y="12" rx="10" fill="url(#sb1)"/>
-  <rect x="18" y="36" fill="url(#sb1)"/>
-  <circle cx="50" cy="50" r="13" fill="#0f172a" stroke="#FBBF24" stroke-width="4"/>
-  <path d="M37 50 A13 13 0 0 1 63 50 Z" fill="#FBBF24"/>
-  <rect x="37" y="47" fill="#0f172a"/>
-  <circle cx="50" cy="50" r="5" fill="#0f172a" stroke="#FBBF24" stroke-width="3"/>
-  <circle cx="50" cy="50" r="2" fill="#FBBF24"/>
-</svg><span>36</span></div>
-      <div><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="sb1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient>
-  </defs>
-  <g stroke="#FBBF24" stroke-width="2" opacity="0.2">
-    <line x1="50" y1="2" x2="50" y2="16"/><line x1="50" y1="84" x2="50" y2="98"/>
-    <line x1="2" y1="50" x2="16" y2="50"/><line x1="84" y1="50" x2="98" y2="50"/>
-    <line x1="14" y1="14" x2="24" y2="24"/><line x1="76" y1="76" x2="86" y2="86"/>
-    <line x1="86" y1="14" x2="76" y2="24"/><line x1="14" y1="86" x2="24" y2="76"/>
-  </g>
-  <rect x="18" y="12" rx="10" fill="#0f172a" stroke="#FBBF24" stroke-width="2.5"/>
-  <rect x="18" y="12" rx="10" fill="url(#sb1)"/>
-  <rect x="18" y="36" fill="url(#sb1)"/>
-  <circle cx="50" cy="50" r="13" fill="#0f172a" stroke="#FBBF24" stroke-width="4"/>
-  <path d="M37 50 A13 13 0 0 1 63 50 Z" fill="#FBBF24"/>
-  <rect x="37" y="47" fill="#0f172a"/>
-  <circle cx="50" cy="50" r="5" fill="#0f172a" stroke="#FBBF24" stroke-width="3"/>
-  <circle cx="50" cy="50" r="2" fill="#FBBF24"/>
-</svg><span>24</span></div>
-      <div><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="sb1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient>
-  </defs>
-  <g stroke="#FBBF24" stroke-width="2" opacity="0.2">
-    <line x1="50" y1="2" x2="50" y2="16"/><line x1="50" y1="84" x2="50" y2="98"/>
-    <line x1="2" y1="50" x2="16" y2="50"/><line x1="84" y1="50" x2="98" y2="50"/>
-    <line x1="14" y1="14" x2="24" y2="24"/><line x1="76" y1="76" x2="86" y2="86"/>
-    <line x1="86" y1="14" x2="76" y2="24"/><line x1="14" y1="86" x2="24" y2="76"/>
-  </g>
-  <rect x="18" y="12" rx="10" fill="#0f172a" stroke="#FBBF24" stroke-width="2.5"/>
-  <rect x="18" y="12" rx="10" fill="url(#sb1)"/>
-  <rect x="18" y="36" fill="url(#sb1)"/>
-  <circle cx="50" cy="50" r="13" fill="#0f172a" stroke="#FBBF24" stroke-width="4"/>
-  <path d="M37 50 A13 13 0 0 1 63 50 Z" fill="#FBBF24"/>
-  <rect x="37" y="47" fill="#0f172a"/>
-  <circle cx="50" cy="50" r="5" fill="#0f172a" stroke="#FBBF24" stroke-width="3"/>
-  <circle cx="50" cy="50" r="2" fill="#FBBF24"/>
-</svg><span>16</span></div>
+      <div><img src="logo-starburst.svg" width="48" height="48"><span>48</span></div>
+      <div><img src="logo-starburst.svg" width="28" height="28"><span>28</span></div>
+      <div><img src="logo-starburst.svg" width="16" height="16"><span>16</span></div>
     </div>
   </div>
-  <div class="card" onclick="this.classList.toggle('selected')">
-    <div class="img-wrap"><svg width="90" height="90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="wg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
-    <linearGradient id="wg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#D97706"/></linearGradient>
-  </defs>
-  <path d="M26 52 Q6 38 10 16 Q18 28 24 40 Q16 24 22 12 Q28 26 30 42 Q24 28 28 16 Q34 32 30 48 Z" fill="#FBBF24" opacity="0.75"/>
-  <path d="M74 52 Q94 38 90 16 Q82 28 76 40 Q84 24 78 12 Q72 26 70 42 Q76 28 72 16 Q66 32 70 48 Z" fill="#FBBF24" opacity="0.75"/>
-  <circle cx="50" cy="54" r="28" fill="url(#wg1)" stroke="#FBBF24" stroke-width="2.5"/>
-  <path d="M22 54 A28 28 0 0 1 78 54 Z" fill="url(#wg2)"/>
-  <rect x="22" y="51" fill="#0f172a"/>
-  <circle cx="50" cy="54" r="10" fill="#0f172a" stroke="#FBBF24" stroke-width="3.5"/>
-  <circle cx="50" cy="54" r="3.5" fill="#FCD34D"/>
-</svg></div>
-    <h2>M — Wings</h2><p>Winged legendary</p>
+  <div class="card">
+    <div class="img-wrap">
+      <img src="logo-wings.svg" width="100" height="100">
+    </div>
+    <h2>M — Wings</h2>
     <div class="sizes">
-      <div><svg width="36" height="36" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="wg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
-    <linearGradient id="wg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#D97706"/></linearGradient>
-  </defs>
-  <path d="M26 52 Q6 38 10 16 Q18 28 24 40 Q16 24 22 12 Q28 26 30 42 Q24 28 28 16 Q34 32 30 48 Z" fill="#FBBF24" opacity="0.75"/>
-  <path d="M74 52 Q94 38 90 16 Q82 28 76 40 Q84 24 78 12 Q72 26 70 42 Q76 28 72 16 Q66 32 70 48 Z" fill="#FBBF24" opacity="0.75"/>
-  <circle cx="50" cy="54" r="28" fill="url(#wg1)" stroke="#FBBF24" stroke-width="2.5"/>
-  <path d="M22 54 A28 28 0 0 1 78 54 Z" fill="url(#wg2)"/>
-  <rect x="22" y="51" fill="#0f172a"/>
-  <circle cx="50" cy="54" r="10" fill="#0f172a" stroke="#FBBF24" stroke-width="3.5"/>
-  <circle cx="50" cy="54" r="3.5" fill="#FCD34D"/>
-</svg><span>36</span></div>
-      <div><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="wg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
-    <linearGradient id="wg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#D97706"/></linearGradient>
-  </defs>
-  <path d="M26 52 Q6 38 10 16 Q18 28 24 40 Q16 24 22 12 Q28 26 30 42 Q24 28 28 16 Q34 32 30 48 Z" fill="#FBBF24" opacity="0.75"/>
-  <path d="M74 52 Q94 38 90 16 Q82 28 76 40 Q84 24 78 12 Q72 26 70 42 Q76 28 72 16 Q66 32 70 48 Z" fill="#FBBF24" opacity="0.75"/>
-  <circle cx="50" cy="54" r="28" fill="url(#wg1)" stroke="#FBBF24" stroke-width="2.5"/>
-  <path d="M22 54 A28 28 0 0 1 78 54 Z" fill="url(#wg2)"/>
-  <rect x="22" y="51" fill="#0f172a"/>
-  <circle cx="50" cy="54" r="10" fill="#0f172a" stroke="#FBBF24" stroke-width="3.5"/>
-  <circle cx="50" cy="54" r="3.5" fill="#FCD34D"/>
-</svg><span>24</span></div>
-      <div><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="wg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
-    <linearGradient id="wg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#D97706"/></linearGradient>
-  </defs>
-  <path d="M26 52 Q6 38 10 16 Q18 28 24 40 Q16 24 22 12 Q28 26 30 42 Q24 28 28 16 Q34 32 30 48 Z" fill="#FBBF24" opacity="0.75"/>
-  <path d="M74 52 Q94 38 90 16 Q82 28 76 40 Q84 24 78 12 Q72 26 70 42 Q76 28 72 16 Q66 32 70 48 Z" fill="#FBBF24" opacity="0.75"/>
-  <circle cx="50" cy="54" r="28" fill="url(#wg1)" stroke="#FBBF24" stroke-width="2.5"/>
-  <path d="M22 54 A28 28 0 0 1 78 54 Z" fill="url(#wg2)"/>
-  <rect x="22" y="51" fill="#0f172a"/>
-  <circle cx="50" cy="54" r="10" fill="#0f172a" stroke="#FBBF24" stroke-width="3.5"/>
-  <circle cx="50" cy="54" r="3.5" fill="#FCD34D"/>
-</svg><span>16</span></div>
+      <div><img src="logo-wings.svg" width="48" height="48"><span>48</span></div>
+      <div><img src="logo-wings.svg" width="28" height="28"><span>28</span></div>
+      <div><img src="logo-wings.svg" width="16" height="16"><span>16</span></div>
     </div>
   </div>
-  <div class="card" onclick="this.classList.toggle('selected')">
-    <div class="img-wrap"><svg width="90" height="90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <filter id="glow"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-  </defs>
-  <circle cx="50" cy="50" r="46" fill="#040810"/>
-  <circle cx="50" cy="50" r="42" fill="none" stroke="#FBBF24" stroke-width="1.5" opacity="0.3"/>
-  <path d="M10 50 A40 40 0 0 1 90 50" stroke="#FBBF24" stroke-width="3" fill="none" filter="url(#glow)"/>
-  <path d="M10 50 A40 40 0 0 0 90 50" stroke="#374151" stroke-width="2" fill="none"/>
-  <line x1="10" y1="50" x2="90" y2="50" stroke="#FBBF24" stroke-width="2.5" filter="url(#glow)"/>
-  <circle cx="50" cy="50" r="12" fill="#040810" stroke="#FBBF24" stroke-width="2.5" filter="url(#glow)"/>
-  <circle cx="50" cy="50" r="4.5" fill="#FBBF24" filter="url(#glow)"/>
-  <circle cx="50" cy="10" r="3" fill="#FBBF24" filter="url(#glow)"/>
-  <circle cx="10" cy="50" r="2" fill="#FBBF24" opacity="0.4"/>
-  <circle cx="90" cy="50" r="2" fill="#FBBF24" opacity="0.4"/>
-</svg></div>
-    <h2>N — Neon</h2><p>Glowing cyberpunk</p>
+  <div class="card">
+    <div class="img-wrap">
+      <img src="logo-neon.svg" width="100" height="100">
+    </div>
+    <h2>N — Neon</h2>
     <div class="sizes">
-      <div><svg width="36" height="36" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <filter id="glow"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-  </defs>
-  <circle cx="50" cy="50" r="46" fill="#040810"/>
-  <circle cx="50" cy="50" r="42" fill="none" stroke="#FBBF24" stroke-width="1.5" opacity="0.3"/>
-  <path d="M10 50 A40 40 0 0 1 90 50" stroke="#FBBF24" stroke-width="3" fill="none" filter="url(#glow)"/>
-  <path d="M10 50 A40 40 0 0 0 90 50" stroke="#374151" stroke-width="2" fill="none"/>
-  <line x1="10" y1="50" x2="90" y2="50" stroke="#FBBF24" stroke-width="2.5" filter="url(#glow)"/>
-  <circle cx="50" cy="50" r="12" fill="#040810" stroke="#FBBF24" stroke-width="2.5" filter="url(#glow)"/>
-  <circle cx="50" cy="50" r="4.5" fill="#FBBF24" filter="url(#glow)"/>
-  <circle cx="50" cy="10" r="3" fill="#FBBF24" filter="url(#glow)"/>
-  <circle cx="10" cy="50" r="2" fill="#FBBF24" opacity="0.4"/>
-  <circle cx="90" cy="50" r="2" fill="#FBBF24" opacity="0.4"/>
-</svg><span>36</span></div>
-      <div><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <filter id="glow"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-  </defs>
-  <circle cx="50" cy="50" r="46" fill="#040810"/>
-  <circle cx="50" cy="50" r="42" fill="none" stroke="#FBBF24" stroke-width="1.5" opacity="0.3"/>
-  <path d="M10 50 A40 40 0 0 1 90 50" stroke="#FBBF24" stroke-width="3" fill="none" filter="url(#glow)"/>
-  <path d="M10 50 A40 40 0 0 0 90 50" stroke="#374151" stroke-width="2" fill="none"/>
-  <line x1="10" y1="50" x2="90" y2="50" stroke="#FBBF24" stroke-width="2.5" filter="url(#glow)"/>
-  <circle cx="50" cy="50" r="12" fill="#040810" stroke="#FBBF24" stroke-width="2.5" filter="url(#glow)"/>
-  <circle cx="50" cy="50" r="4.5" fill="#FBBF24" filter="url(#glow)"/>
-  <circle cx="50" cy="10" r="3" fill="#FBBF24" filter="url(#glow)"/>
-  <circle cx="10" cy="50" r="2" fill="#FBBF24" opacity="0.4"/>
-  <circle cx="90" cy="50" r="2" fill="#FBBF24" opacity="0.4"/>
-</svg><span>24</span></div>
-      <div><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <filter id="glow"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-  </defs>
-  <circle cx="50" cy="50" r="46" fill="#040810"/>
-  <circle cx="50" cy="50" r="42" fill="none" stroke="#FBBF24" stroke-width="1.5" opacity="0.3"/>
-  <path d="M10 50 A40 40 0 0 1 90 50" stroke="#FBBF24" stroke-width="3" fill="none" filter="url(#glow)"/>
-  <path d="M10 50 A40 40 0 0 0 90 50" stroke="#374151" stroke-width="2" fill="none"/>
-  <line x1="10" y1="50" x2="90" y2="50" stroke="#FBBF24" stroke-width="2.5" filter="url(#glow)"/>
-  <circle cx="50" cy="50" r="12" fill="#040810" stroke="#FBBF24" stroke-width="2.5" filter="url(#glow)"/>
-  <circle cx="50" cy="50" r="4.5" fill="#FBBF24" filter="url(#glow)"/>
-  <circle cx="50" cy="10" r="3" fill="#FBBF24" filter="url(#glow)"/>
-  <circle cx="10" cy="50" r="2" fill="#FBBF24" opacity="0.4"/>
-  <circle cx="90" cy="50" r="2" fill="#FBBF24" opacity="0.4"/>
-</svg><span>16</span></div>
+      <div><img src="logo-neon.svg" width="48" height="48"><span>48</span></div>
+      <div><img src="logo-neon.svg" width="28" height="28"><span>28</span></div>
+      <div><img src="logo-neon.svg" width="16" height="16"><span>16</span></div>
     </div>
   </div>
-  <div class="card" onclick="this.classList.toggle('selected')">
-    <div class="img-wrap"><svg width="90" height="90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="cmpg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
-  </defs>
-  <circle cx="50" cy="50" r="46" fill="url(#cmpg)" stroke="#374151" stroke-width="1.5"/>
-  <circle cx="50" cy="50" r="38" fill="none" stroke="#1f2937" stroke-width="1"/>
-  <polygon points="50,10 54,44 50,50 46,44" fill="#FBBF24"/>
-  <polygon points="50,90 54,56 50,50 46,56" fill="#4b5563"/>
-  <polygon points="10,50 44,46 50,50 44,54" fill="#FBBF24" opacity="0.7"/>
-  <polygon points="90,50 56,46 50,50 56,54" fill="#FBBF24" opacity="0.7"/>
-  <circle cx="50" cy="50" r="9" fill="#0f172a" stroke="#FBBF24" stroke-width="3"/>
-  <circle cx="50" cy="50" r="3" fill="#FBBF24"/>
-</svg></div>
-    <h2>O — Compass</h2><p>Navigation rose</p>
+  <div class="card">
+    <div class="img-wrap">
+      <img src="logo-compass.svg" width="100" height="100">
+    </div>
+    <h2>O — Compass</h2>
     <div class="sizes">
-      <div><svg width="36" height="36" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="cmpg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
-  </defs>
-  <circle cx="50" cy="50" r="46" fill="url(#cmpg)" stroke="#374151" stroke-width="1.5"/>
-  <circle cx="50" cy="50" r="38" fill="none" stroke="#1f2937" stroke-width="1"/>
-  <polygon points="50,10 54,44 50,50 46,44" fill="#FBBF24"/>
-  <polygon points="50,90 54,56 50,50 46,56" fill="#4b5563"/>
-  <polygon points="10,50 44,46 50,50 44,54" fill="#FBBF24" opacity="0.7"/>
-  <polygon points="90,50 56,46 50,50 56,54" fill="#FBBF24" opacity="0.7"/>
-  <circle cx="50" cy="50" r="9" fill="#0f172a" stroke="#FBBF24" stroke-width="3"/>
-  <circle cx="50" cy="50" r="3" fill="#FBBF24"/>
-</svg><span>36</span></div>
-      <div><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="cmpg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
-  </defs>
-  <circle cx="50" cy="50" r="46" fill="url(#cmpg)" stroke="#374151" stroke-width="1.5"/>
-  <circle cx="50" cy="50" r="38" fill="none" stroke="#1f2937" stroke-width="1"/>
-  <polygon points="50,10 54,44 50,50 46,44" fill="#FBBF24"/>
-  <polygon points="50,90 54,56 50,50 46,56" fill="#4b5563"/>
-  <polygon points="10,50 44,46 50,50 44,54" fill="#FBBF24" opacity="0.7"/>
-  <polygon points="90,50 56,46 50,50 56,54" fill="#FBBF24" opacity="0.7"/>
-  <circle cx="50" cy="50" r="9" fill="#0f172a" stroke="#FBBF24" stroke-width="3"/>
-  <circle cx="50" cy="50" r="3" fill="#FBBF24"/>
-</svg><span>24</span></div>
-      <div><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="cmpg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
-  </defs>
-  <circle cx="50" cy="50" r="46" fill="url(#cmpg)" stroke="#374151" stroke-width="1.5"/>
-  <circle cx="50" cy="50" r="38" fill="none" stroke="#1f2937" stroke-width="1"/>
-  <polygon points="50,10 54,44 50,50 46,44" fill="#FBBF24"/>
-  <polygon points="50,90 54,56 50,50 46,56" fill="#4b5563"/>
-  <polygon points="10,50 44,46 50,50 44,54" fill="#FBBF24" opacity="0.7"/>
-  <polygon points="90,50 56,46 50,50 56,54" fill="#FBBF24" opacity="0.7"/>
-  <circle cx="50" cy="50" r="9" fill="#0f172a" stroke="#FBBF24" stroke-width="3"/>
-  <circle cx="50" cy="50" r="3" fill="#FBBF24"/>
-</svg><span>16</span></div>
+      <div><img src="logo-compass.svg" width="48" height="48"><span>48</span></div>
+      <div><img src="logo-compass.svg" width="28" height="28"><span>28</span></div>
+      <div><img src="logo-compass.svg" width="16" height="16"><span>16</span></div>
     </div>
   </div>
-  <div class="card" onclick="this.classList.toggle('selected')">
-    <div class="img-wrap"><svg width="90" height="90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <circle cx="50" cy="50" r="47" fill="#0a0e18" stroke="#FBBF24" stroke-width="2"/>
-  <circle cx="50" cy="50" r="40" fill="none" stroke="#FBBF24" stroke-width="0.75" opacity="0.4"/>
-  <ellipse cx="50" cy="28" rx="7" ry="11" fill="#FBBF24"/>
-  <circle cx="50" cy="36" r="4" fill="#0a0e18"/>
-  <ellipse cx="50" cy="28" rx="7" ry="11" fill="#FBBF24" transform="rotate(120 50 50)"/>
-  <circle cx="50" cy="36" r="4" fill="#0a0e18" transform="rotate(120 50 50)"/>
-  <ellipse cx="50" cy="28" rx="7" ry="11" fill="#FBBF24" transform="rotate(240 50 50)"/>
-  <circle cx="50" cy="36" r="4" fill="#0a0e18" transform="rotate(240 50 50)"/>
-  <circle cx="50" cy="50" r="8" fill="#FBBF24"/>
-  <circle cx="50" cy="50" r="4" fill="#0a0e18"/>
-</svg></div>
-    <h2>P — Mon</h2><p>Japanese tomoe</p>
+  <div class="card">
+    <div class="img-wrap">
+      <img src="logo-mon.svg" width="100" height="100">
+    </div>
+    <h2>P — Mon</h2>
     <div class="sizes">
-      <div><svg width="36" height="36" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <circle cx="50" cy="50" r="47" fill="#0a0e18" stroke="#FBBF24" stroke-width="2"/>
-  <circle cx="50" cy="50" r="40" fill="none" stroke="#FBBF24" stroke-width="0.75" opacity="0.4"/>
-  <ellipse cx="50" cy="28" rx="7" ry="11" fill="#FBBF24"/>
-  <circle cx="50" cy="36" r="4" fill="#0a0e18"/>
-  <ellipse cx="50" cy="28" rx="7" ry="11" fill="#FBBF24" transform="rotate(120 50 50)"/>
-  <circle cx="50" cy="36" r="4" fill="#0a0e18" transform="rotate(120 50 50)"/>
-  <ellipse cx="50" cy="28" rx="7" ry="11" fill="#FBBF24" transform="rotate(240 50 50)"/>
-  <circle cx="50" cy="36" r="4" fill="#0a0e18" transform="rotate(240 50 50)"/>
-  <circle cx="50" cy="50" r="8" fill="#FBBF24"/>
-  <circle cx="50" cy="50" r="4" fill="#0a0e18"/>
-</svg><span>36</span></div>
-      <div><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <circle cx="50" cy="50" r="47" fill="#0a0e18" stroke="#FBBF24" stroke-width="2"/>
-  <circle cx="50" cy="50" r="40" fill="none" stroke="#FBBF24" stroke-width="0.75" opacity="0.4"/>
-  <ellipse cx="50" cy="28" rx="7" ry="11" fill="#FBBF24"/>
-  <circle cx="50" cy="36" r="4" fill="#0a0e18"/>
-  <ellipse cx="50" cy="28" rx="7" ry="11" fill="#FBBF24" transform="rotate(120 50 50)"/>
-  <circle cx="50" cy="36" r="4" fill="#0a0e18" transform="rotate(120 50 50)"/>
-  <ellipse cx="50" cy="28" rx="7" ry="11" fill="#FBBF24" transform="rotate(240 50 50)"/>
-  <circle cx="50" cy="36" r="4" fill="#0a0e18" transform="rotate(240 50 50)"/>
-  <circle cx="50" cy="50" r="8" fill="#FBBF24"/>
-  <circle cx="50" cy="50" r="4" fill="#0a0e18"/>
-</svg><span>24</span></div>
-      <div><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <circle cx="50" cy="50" r="47" fill="#0a0e18" stroke="#FBBF24" stroke-width="2"/>
-  <circle cx="50" cy="50" r="40" fill="none" stroke="#FBBF24" stroke-width="0.75" opacity="0.4"/>
-  <ellipse cx="50" cy="28" rx="7" ry="11" fill="#FBBF24"/>
-  <circle cx="50" cy="36" r="4" fill="#0a0e18"/>
-  <ellipse cx="50" cy="28" rx="7" ry="11" fill="#FBBF24" transform="rotate(120 50 50)"/>
-  <circle cx="50" cy="36" r="4" fill="#0a0e18" transform="rotate(120 50 50)"/>
-  <ellipse cx="50" cy="28" rx="7" ry="11" fill="#FBBF24" transform="rotate(240 50 50)"/>
-  <circle cx="50" cy="36" r="4" fill="#0a0e18" transform="rotate(240 50 50)"/>
-  <circle cx="50" cy="50" r="8" fill="#FBBF24"/>
-  <circle cx="50" cy="50" r="4" fill="#0a0e18"/>
-</svg><span>16</span></div>
+      <div><img src="logo-mon.svg" width="48" height="48"><span>48</span></div>
+      <div><img src="logo-mon.svg" width="28" height="28"><span>28</span></div>
+      <div><img src="logo-mon.svg" width="16" height="16"><span>16</span></div>
     </div>
   </div>
-  <div class="card" onclick="this.classList.toggle('selected')">
-    <div class="img-wrap"><svg width="90" height="90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <radialGradient id="fg1" cx="50%" cy="80%" r="60%"><stop offset="0%" stop-color="#FCD34D" stop-opacity="0.25"/><stop offset="100%" stop-color="#F59E0B" stop-opacity="0"/></radialGradient>
-    <linearGradient id="fg2" x1="0" y1="1" x2="0" y2="0"><stop offset="0%" stop-color="#D97706"/><stop offset="60%" stop-color="#FBBF24"/><stop offset="100%" stop-color="#FDE68A"/></linearGradient>
-  </defs>
-  <ellipse cx="50" cy="72" rx="38" ry="26" fill="url(#fg1)"/>
-  <path d="M50 8 Q62 24 58 38 Q70 26 66 44 Q78 34 72 54 Q80 48 76 62 Q74 78 50 90 Q26 78 24 62 Q20 48 28 54 Q22 34 34 44 Q30 26 42 38 Q38 24 50 8 Z" fill="url(#fg2)"/>
-  <path d="M50 30 Q56 40 54 50 Q60 42 58 54 Q64 48 62 58 Q60 70 50 78 Q40 70 38 58 Q36 48 42 54 Q40 42 46 50 Q44 40 50 30 Z" fill="#0f172a" opacity="0.65"/>
-  <circle cx="50" cy="60" r="11" fill="#0f172a" stroke="#FCD34D" stroke-width="3"/>
-  <circle cx="50" cy="60" r="4" fill="#FCD34D"/>
-</svg></div>
-    <h2>Q — Flame</h2><p>Fire energy aura</p>
+  <div class="card">
+    <div class="img-wrap">
+      <img src="logo-flame.svg" width="100" height="100">
+    </div>
+    <h2>Q — Flame</h2>
     <div class="sizes">
-      <div><svg width="36" height="36" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <radialGradient id="fg1" cx="50%" cy="80%" r="60%"><stop offset="0%" stop-color="#FCD34D" stop-opacity="0.25"/><stop offset="100%" stop-color="#F59E0B" stop-opacity="0"/></radialGradient>
-    <linearGradient id="fg2" x1="0" y1="1" x2="0" y2="0"><stop offset="0%" stop-color="#D97706"/><stop offset="60%" stop-color="#FBBF24"/><stop offset="100%" stop-color="#FDE68A"/></linearGradient>
-  </defs>
-  <ellipse cx="50" cy="72" rx="38" ry="26" fill="url(#fg1)"/>
-  <path d="M50 8 Q62 24 58 38 Q70 26 66 44 Q78 34 72 54 Q80 48 76 62 Q74 78 50 90 Q26 78 24 62 Q20 48 28 54 Q22 34 34 44 Q30 26 42 38 Q38 24 50 8 Z" fill="url(#fg2)"/>
-  <path d="M50 30 Q56 40 54 50 Q60 42 58 54 Q64 48 62 58 Q60 70 50 78 Q40 70 38 58 Q36 48 42 54 Q40 42 46 50 Q44 40 50 30 Z" fill="#0f172a" opacity="0.65"/>
-  <circle cx="50" cy="60" r="11" fill="#0f172a" stroke="#FCD34D" stroke-width="3"/>
-  <circle cx="50" cy="60" r="4" fill="#FCD34D"/>
-</svg><span>36</span></div>
-      <div><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <radialGradient id="fg1" cx="50%" cy="80%" r="60%"><stop offset="0%" stop-color="#FCD34D" stop-opacity="0.25"/><stop offset="100%" stop-color="#F59E0B" stop-opacity="0"/></radialGradient>
-    <linearGradient id="fg2" x1="0" y1="1" x2="0" y2="0"><stop offset="0%" stop-color="#D97706"/><stop offset="60%" stop-color="#FBBF24"/><stop offset="100%" stop-color="#FDE68A"/></linearGradient>
-  </defs>
-  <ellipse cx="50" cy="72" rx="38" ry="26" fill="url(#fg1)"/>
-  <path d="M50 8 Q62 24 58 38 Q70 26 66 44 Q78 34 72 54 Q80 48 76 62 Q74 78 50 90 Q26 78 24 62 Q20 48 28 54 Q22 34 34 44 Q30 26 42 38 Q38 24 50 8 Z" fill="url(#fg2)"/>
-  <path d="M50 30 Q56 40 54 50 Q60 42 58 54 Q64 48 62 58 Q60 70 50 78 Q40 70 38 58 Q36 48 42 54 Q40 42 46 50 Q44 40 50 30 Z" fill="#0f172a" opacity="0.65"/>
-  <circle cx="50" cy="60" r="11" fill="#0f172a" stroke="#FCD34D" stroke-width="3"/>
-  <circle cx="50" cy="60" r="4" fill="#FCD34D"/>
-</svg><span>24</span></div>
-      <div><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <radialGradient id="fg1" cx="50%" cy="80%" r="60%"><stop offset="0%" stop-color="#FCD34D" stop-opacity="0.25"/><stop offset="100%" stop-color="#F59E0B" stop-opacity="0"/></radialGradient>
-    <linearGradient id="fg2" x1="0" y1="1" x2="0" y2="0"><stop offset="0%" stop-color="#D97706"/><stop offset="60%" stop-color="#FBBF24"/><stop offset="100%" stop-color="#FDE68A"/></linearGradient>
-  </defs>
-  <ellipse cx="50" cy="72" rx="38" ry="26" fill="url(#fg1)"/>
-  <path d="M50 8 Q62 24 58 38 Q70 26 66 44 Q78 34 72 54 Q80 48 76 62 Q74 78 50 90 Q26 78 24 62 Q20 48 28 54 Q22 34 34 44 Q30 26 42 38 Q38 24 50 8 Z" fill="url(#fg2)"/>
-  <path d="M50 30 Q56 40 54 50 Q60 42 58 54 Q64 48 62 58 Q60 70 50 78 Q40 70 38 58 Q36 48 42 54 Q40 42 46 50 Q44 40 50 30 Z" fill="#0f172a" opacity="0.65"/>
-  <circle cx="50" cy="60" r="11" fill="#0f172a" stroke="#FCD34D" stroke-width="3"/>
-  <circle cx="50" cy="60" r="4" fill="#FCD34D"/>
-</svg><span>16</span></div>
+      <div><img src="logo-flame.svg" width="48" height="48"><span>48</span></div>
+      <div><img src="logo-flame.svg" width="28" height="28"><span>28</span></div>
+      <div><img src="logo-flame.svg" width="16" height="16"><span>16</span></div>
     </div>
   </div>
-  <div class="card" onclick="this.classList.toggle('selected')">
-    <div class="img-wrap"><svg width="90" height="90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <rect x="4" y="4" rx="18" fill="#060d1a" stroke="#FBBF24" stroke-width="2"/>
-  <g stroke="#FBBF24" stroke-width="1.5" opacity="0.3">
-    <path d="M20 20 H36 V36"/><path d="M80 20 H64 V36"/>
-    <path d="M20 80 H36 V64"/><path d="M80 80 H64 V64"/>
-    <line x1="50" y1="4" x2="50" y2="20"/><line x1="50" y1="80" x2="50" y2="96"/>
-    <line x1="4" y1="50" x2="20" y2="50"/><line x1="80" y1="50" x2="96" y2="50"/>
-  </g>
-  <g fill="#FBBF24" opacity="0.6">
-    <rect x="16" y="16" rx="1.5"/>
-    <rect x="77" y="16" rx="1.5"/>
-    <rect x="16" y="77" rx="1.5"/>
-    <rect x="77" y="77" rx="1.5"/>
-  </g>
-  <circle cx="50" cy="50" r="22" fill="#0d1420" stroke="#FBBF24" stroke-width="2"/>
-  <path d="M28 50 A22 22 0 0 1 72 50 Z" fill="#FBBF24"/>
-  <rect x="28" y="47" fill="#0d1420"/>
-  <circle cx="50" cy="50" r="9" fill="#0d1420" stroke="#FBBF24" stroke-width="3.5"/>
-  <circle cx="50" cy="50" r="3" fill="#FBBF24"/>
-</svg></div>
-    <h2>R — Circuit</h2><p>Tech chip board</p>
+  <div class="card">
+    <div class="img-wrap">
+      <img src="logo-circuit.svg" width="100" height="100">
+    </div>
+    <h2>R — Circuit</h2>
     <div class="sizes">
-      <div><svg width="36" height="36" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <rect x="4" y="4" rx="18" fill="#060d1a" stroke="#FBBF24" stroke-width="2"/>
-  <g stroke="#FBBF24" stroke-width="1.5" opacity="0.3">
-    <path d="M20 20 H36 V36"/><path d="M80 20 H64 V36"/>
-    <path d="M20 80 H36 V64"/><path d="M80 80 H64 V64"/>
-    <line x1="50" y1="4" x2="50" y2="20"/><line x1="50" y1="80" x2="50" y2="96"/>
-    <line x1="4" y1="50" x2="20" y2="50"/><line x1="80" y1="50" x2="96" y2="50"/>
-  </g>
-  <g fill="#FBBF24" opacity="0.6">
-    <rect x="16" y="16" rx="1.5"/>
-    <rect x="77" y="16" rx="1.5"/>
-    <rect x="16" y="77" rx="1.5"/>
-    <rect x="77" y="77" rx="1.5"/>
-  </g>
-  <circle cx="50" cy="50" r="22" fill="#0d1420" stroke="#FBBF24" stroke-width="2"/>
-  <path d="M28 50 A22 22 0 0 1 72 50 Z" fill="#FBBF24"/>
-  <rect x="28" y="47" fill="#0d1420"/>
-  <circle cx="50" cy="50" r="9" fill="#0d1420" stroke="#FBBF24" stroke-width="3.5"/>
-  <circle cx="50" cy="50" r="3" fill="#FBBF24"/>
-</svg><span>36</span></div>
-      <div><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <rect x="4" y="4" rx="18" fill="#060d1a" stroke="#FBBF24" stroke-width="2"/>
-  <g stroke="#FBBF24" stroke-width="1.5" opacity="0.3">
-    <path d="M20 20 H36 V36"/><path d="M80 20 H64 V36"/>
-    <path d="M20 80 H36 V64"/><path d="M80 80 H64 V64"/>
-    <line x1="50" y1="4" x2="50" y2="20"/><line x1="50" y1="80" x2="50" y2="96"/>
-    <line x1="4" y1="50" x2="20" y2="50"/><line x1="80" y1="50" x2="96" y2="50"/>
-  </g>
-  <g fill="#FBBF24" opacity="0.6">
-    <rect x="16" y="16" rx="1.5"/>
-    <rect x="77" y="16" rx="1.5"/>
-    <rect x="16" y="77" rx="1.5"/>
-    <rect x="77" y="77" rx="1.5"/>
-  </g>
-  <circle cx="50" cy="50" r="22" fill="#0d1420" stroke="#FBBF24" stroke-width="2"/>
-  <path d="M28 50 A22 22 0 0 1 72 50 Z" fill="#FBBF24"/>
-  <rect x="28" y="47" fill="#0d1420"/>
-  <circle cx="50" cy="50" r="9" fill="#0d1420" stroke="#FBBF24" stroke-width="3.5"/>
-  <circle cx="50" cy="50" r="3" fill="#FBBF24"/>
-</svg><span>24</span></div>
-      <div><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <rect x="4" y="4" rx="18" fill="#060d1a" stroke="#FBBF24" stroke-width="2"/>
-  <g stroke="#FBBF24" stroke-width="1.5" opacity="0.3">
-    <path d="M20 20 H36 V36"/><path d="M80 20 H64 V36"/>
-    <path d="M20 80 H36 V64"/><path d="M80 80 H64 V64"/>
-    <line x1="50" y1="4" x2="50" y2="20"/><line x1="50" y1="80" x2="50" y2="96"/>
-    <line x1="4" y1="50" x2="20" y2="50"/><line x1="80" y1="50" x2="96" y2="50"/>
-  </g>
-  <g fill="#FBBF24" opacity="0.6">
-    <rect x="16" y="16" rx="1.5"/>
-    <rect x="77" y="16" rx="1.5"/>
-    <rect x="16" y="77" rx="1.5"/>
-    <rect x="77" y="77" rx="1.5"/>
-  </g>
-  <circle cx="50" cy="50" r="22" fill="#0d1420" stroke="#FBBF24" stroke-width="2"/>
-  <path d="M28 50 A22 22 0 0 1 72 50 Z" fill="#FBBF24"/>
-  <rect x="28" y="47" fill="#0d1420"/>
-  <circle cx="50" cy="50" r="9" fill="#0d1420" stroke="#FBBF24" stroke-width="3.5"/>
-  <circle cx="50" cy="50" r="3" fill="#FBBF24"/>
-</svg><span>16</span></div>
+      <div><img src="logo-circuit.svg" width="48" height="48"><span>48</span></div>
+      <div><img src="logo-circuit.svg" width="28" height="28"><span>28</span></div>
+      <div><img src="logo-circuit.svg" width="16" height="16"><span>16</span></div>
     </div>
   </div>
-  <div class="card" onclick="this.classList.toggle('selected')">
-    <div class="img-wrap"><svg width="90" height="90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs><clipPath id="yyc"><circle cx="50" cy="50" r="44"/></clipPath></defs>
-  <circle cx="50" cy="50" r="46" fill="#0a0e18" stroke="#FBBF24" stroke-width="2.5"/>
-  <path d="M50 6 A44 44 0 0 0 50 94 A22 22 0 0 1 50 50 A22 22 0 0 0 50 6 Z" fill="#0a0e18" clip-path="url(#yyc)"/>
-  <path d="M50 6 A44 44 0 0 1 50 94 A22 22 0 0 0 50 50 A22 22 0 0 1 50 6 Z" fill="#FBBF24" clip-path="url(#yyc)"/>
-  <circle cx="50" cy="28" r="10" fill="#FBBF24"/>
-  <circle cx="50" cy="72" r="10" fill="#0a0e18"/>
-  <circle cx="50" cy="28" r="4" fill="#0a0e18"/>
-  <circle cx="50" cy="72" r="4" fill="#FBBF24"/>
-  <circle cx="50" cy="50" r="44" fill="none" stroke="#FBBF24" stroke-width="2.5"/>
-</svg></div>
-    <h2>S — Yin Yang</h2><p>Balance & duality</p>
+  <div class="card">
+    <div class="img-wrap">
+      <img src="logo-yinyang.svg" width="100" height="100">
+    </div>
+    <h2>S — Yin Yang</h2>
     <div class="sizes">
-      <div><svg width="36" height="36" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs><clipPath id="yyc"><circle cx="50" cy="50" r="44"/></clipPath></defs>
-  <circle cx="50" cy="50" r="46" fill="#0a0e18" stroke="#FBBF24" stroke-width="2.5"/>
-  <path d="M50 6 A44 44 0 0 0 50 94 A22 22 0 0 1 50 50 A22 22 0 0 0 50 6 Z" fill="#0a0e18" clip-path="url(#yyc)"/>
-  <path d="M50 6 A44 44 0 0 1 50 94 A22 22 0 0 0 50 50 A22 22 0 0 1 50 6 Z" fill="#FBBF24" clip-path="url(#yyc)"/>
-  <circle cx="50" cy="28" r="10" fill="#FBBF24"/>
-  <circle cx="50" cy="72" r="10" fill="#0a0e18"/>
-  <circle cx="50" cy="28" r="4" fill="#0a0e18"/>
-  <circle cx="50" cy="72" r="4" fill="#FBBF24"/>
-  <circle cx="50" cy="50" r="44" fill="none" stroke="#FBBF24" stroke-width="2.5"/>
-</svg><span>36</span></div>
-      <div><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs><clipPath id="yyc"><circle cx="50" cy="50" r="44"/></clipPath></defs>
-  <circle cx="50" cy="50" r="46" fill="#0a0e18" stroke="#FBBF24" stroke-width="2.5"/>
-  <path d="M50 6 A44 44 0 0 0 50 94 A22 22 0 0 1 50 50 A22 22 0 0 0 50 6 Z" fill="#0a0e18" clip-path="url(#yyc)"/>
-  <path d="M50 6 A44 44 0 0 1 50 94 A22 22 0 0 0 50 50 A22 22 0 0 1 50 6 Z" fill="#FBBF24" clip-path="url(#yyc)"/>
-  <circle cx="50" cy="28" r="10" fill="#FBBF24"/>
-  <circle cx="50" cy="72" r="10" fill="#0a0e18"/>
-  <circle cx="50" cy="28" r="4" fill="#0a0e18"/>
-  <circle cx="50" cy="72" r="4" fill="#FBBF24"/>
-  <circle cx="50" cy="50" r="44" fill="none" stroke="#FBBF24" stroke-width="2.5"/>
-</svg><span>24</span></div>
-      <div><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs><clipPath id="yyc"><circle cx="50" cy="50" r="44"/></clipPath></defs>
-  <circle cx="50" cy="50" r="46" fill="#0a0e18" stroke="#FBBF24" stroke-width="2.5"/>
-  <path d="M50 6 A44 44 0 0 0 50 94 A22 22 0 0 1 50 50 A22 22 0 0 0 50 6 Z" fill="#0a0e18" clip-path="url(#yyc)"/>
-  <path d="M50 6 A44 44 0 0 1 50 94 A22 22 0 0 0 50 50 A22 22 0 0 1 50 6 Z" fill="#FBBF24" clip-path="url(#yyc)"/>
-  <circle cx="50" cy="28" r="10" fill="#FBBF24"/>
-  <circle cx="50" cy="72" r="10" fill="#0a0e18"/>
-  <circle cx="50" cy="28" r="4" fill="#0a0e18"/>
-  <circle cx="50" cy="72" r="4" fill="#FBBF24"/>
-  <circle cx="50" cy="50" r="44" fill="none" stroke="#FBBF24" stroke-width="2.5"/>
-</svg><span>16</span></div>
+      <div><img src="logo-yinyang.svg" width="48" height="48"><span>48</span></div>
+      <div><img src="logo-yinyang.svg" width="28" height="28"><span>28</span></div>
+      <div><img src="logo-yinyang.svg" width="16" height="16"><span>16</span></div>
     </div>
   </div>
-  <div class="card" onclick="this.classList.toggle('selected')">
-    <div class="img-wrap"><svg width="90" height="90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="pg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
-    <linearGradient id="pg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#D97706"/></linearGradient>
-  </defs>
-  <ellipse cx="50" cy="50" rx="46" ry="11" fill="none" stroke="#92400E" stroke-width="4.5" opacity="0.6"/>
-  <circle cx="50" cy="50" r="30" fill="url(#pg1)" stroke="#FBBF24" stroke-width="2.5"/>
-  <path d="M20 50 A30 30 0 0 1 80 50 Z" fill="url(#pg2)"/>
-  <rect x="20" y="47" fill="#0f172a"/>
-  <circle cx="50" cy="50" r="10" fill="#0f172a" stroke="#FBBF24" stroke-width="3.5"/>
-  <circle cx="50" cy="50" r="3.5" fill="#FCD34D"/>
-  <ellipse cx="50" cy="50" rx="46" ry="11" fill="none" stroke="#FBBF24" stroke-width="2.5" stroke-dasharray="58 36"/>
-</svg></div>
-    <h2>T — Planet</h2><p>Ball with rings</p>
+  <div class="card">
+    <div class="img-wrap">
+      <img src="logo-planet.svg" width="100" height="100">
+    </div>
+    <h2>T — Planet</h2>
     <div class="sizes">
-      <div><svg width="36" height="36" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="pg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
-    <linearGradient id="pg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#D97706"/></linearGradient>
-  </defs>
-  <ellipse cx="50" cy="50" rx="46" ry="11" fill="none" stroke="#92400E" stroke-width="4.5" opacity="0.6"/>
-  <circle cx="50" cy="50" r="30" fill="url(#pg1)" stroke="#FBBF24" stroke-width="2.5"/>
-  <path d="M20 50 A30 30 0 0 1 80 50 Z" fill="url(#pg2)"/>
-  <rect x="20" y="47" fill="#0f172a"/>
-  <circle cx="50" cy="50" r="10" fill="#0f172a" stroke="#FBBF24" stroke-width="3.5"/>
-  <circle cx="50" cy="50" r="3.5" fill="#FCD34D"/>
-  <ellipse cx="50" cy="50" rx="46" ry="11" fill="none" stroke="#FBBF24" stroke-width="2.5" stroke-dasharray="58 36"/>
-</svg><span>36</span></div>
-      <div><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="pg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
-    <linearGradient id="pg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#D97706"/></linearGradient>
-  </defs>
-  <ellipse cx="50" cy="50" rx="46" ry="11" fill="none" stroke="#92400E" stroke-width="4.5" opacity="0.6"/>
-  <circle cx="50" cy="50" r="30" fill="url(#pg1)" stroke="#FBBF24" stroke-width="2.5"/>
-  <path d="M20 50 A30 30 0 0 1 80 50 Z" fill="url(#pg2)"/>
-  <rect x="20" y="47" fill="#0f172a"/>
-  <circle cx="50" cy="50" r="10" fill="#0f172a" stroke="#FBBF24" stroke-width="3.5"/>
-  <circle cx="50" cy="50" r="3.5" fill="#FCD34D"/>
-  <ellipse cx="50" cy="50" rx="46" ry="11" fill="none" stroke="#FBBF24" stroke-width="2.5" stroke-dasharray="58 36"/>
-</svg><span>24</span></div>
-      <div><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="pg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
-    <linearGradient id="pg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#D97706"/></linearGradient>
-  </defs>
-  <ellipse cx="50" cy="50" rx="46" ry="11" fill="none" stroke="#92400E" stroke-width="4.5" opacity="0.6"/>
-  <circle cx="50" cy="50" r="30" fill="url(#pg1)" stroke="#FBBF24" stroke-width="2.5"/>
-  <path d="M20 50 A30 30 0 0 1 80 50 Z" fill="url(#pg2)"/>
-  <rect x="20" y="47" fill="#0f172a"/>
-  <circle cx="50" cy="50" r="10" fill="#0f172a" stroke="#FBBF24" stroke-width="3.5"/>
-  <circle cx="50" cy="50" r="3.5" fill="#FCD34D"/>
-  <ellipse cx="50" cy="50" rx="46" ry="11" fill="none" stroke="#FBBF24" stroke-width="2.5" stroke-dasharray="58 36"/>
-</svg><span>16</span></div>
+      <div><img src="logo-planet.svg" width="48" height="48"><span>48</span></div>
+      <div><img src="logo-planet.svg" width="28" height="28"><span>28</span></div>
+      <div><img src="logo-planet.svg" width="16" height="16"><span>16</span></div>
     </div>
   </div></div>
-<h2 class="section">In the nav bar</h2>
+<p class="section">In the nav bar</p>
 <div class="navs">
-  <div class="nav-demo"><svg width="26" height="26" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <clipPath id="hex">
-      <polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5"/>
-    </clipPath>
-    <linearGradient id="topGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FBBF24"/>
-      <stop offset="100%" stop-color="#F59E0B"/>
-    </linearGradient>
-  </defs>
-  <!-- Hexagon background -->
-  <polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5" fill="#111827"/>
-  <!-- Top half yellow -->
-  <rect x="0" y="0" fill="url(#topGrad)" clip-path="url(#hex)"/>
-  <!-- Dividing line -->
-  <line x1="7" y1="50" x2="93" y2="50" stroke="#111827" stroke-width="7"/>
-  <!-- Center circle -->
-  <circle cx="50" cy="50" r="11" fill="#111827" stroke="#FBBF24" stroke-width="5"/>
-  <circle cx="50" cy="50" r="4" fill="#FBBF24"/>
-  <!-- Hexagon border -->
-  <polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5" 
-    fill="none" stroke="#FBBF24" stroke-width="3" stroke-linejoin="round"/>
-</svg><span>PokéLeague</span><em>A — Hexagon</em></div>
-
-  <div class="nav-demo"><svg width="26" height="26" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="diamondGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#111827"/>
-    </linearGradient>
-  </defs>
-  <!-- Diamond shape -->
-  <polygon points="50,4 96,50 50,96 4,50" fill="url(#diamondGrad)" 
-    stroke="#FBBF24" stroke-width="3" stroke-linejoin="round"/>
-  <!-- Inner diamond top half yellow -->
-  <polygon points="50,14 86,50 50,50 14,50" fill="#FBBF24" opacity="0.9"/>
-  <!-- Dividing line -->
-  <line x1="14" y1="50" x2="86" y2="50" stroke="#111827" stroke-width="5"/>
-  <!-- Center ring -->
-  <circle cx="50" cy="50" r="10" fill="#111827" stroke="#FBBF24" stroke-width="4"/>
-  <circle cx="50" cy="50" r="3.5" fill="#FBBF24"/>
-</svg><span>PokéLeague</span><em>B — Diamond</em></div>
-
-  <div class="nav-demo"><svg width="26" height="26" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#0F172A"/>
-    </linearGradient>
-    <clipPath id="circ"><circle cx="50" cy="50" r="44"/></clipPath>
-  </defs>
-  <!-- Outer ring -->
-  <circle cx="50" cy="50" r="47" fill="#FBBF24"/>
-  <circle cx="50" cy="50" r="44" fill="url(#bgGrad)"/>
-  <!-- Top half yellow fill -->
-  <rect x="6" y="6" fill="#FBBF24" clip-path="url(#circ)"/>
-  <!-- Horizontal divider -->
-  <rect x="6" y="47" fill="#111827"/>
-  <!-- Center circle -->
-  <circle cx="50" cy="50" r="13" fill="#111827" stroke="#FBBF24" stroke-width="5"/>
-  <circle cx="50" cy="50" r="5" fill="#FBBF24"/>
-  <!-- Star points top - subtle -->
-  <polygon points="50,10 52.5,18 60,18 54,23 56.5,31 50,26 43.5,31 46,23 40,18 47.5,18"
-    fill="#111827" opacity="0.4"/>
-</svg><span>PokéLeague</span><em>C — Circle</em></div>
-
-  <div class="nav-demo"><svg width="26" height="26" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="sg4" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#0F172A"/>
-    </linearGradient>
-    <clipPath id="shield4">
-      <path d="M50 4 L90 18 L90 55 Q90 80 50 96 Q10 80 10 55 L10 18 Z"/>
-    </clipPath>
-  </defs>
-  <!-- Shield background -->
-  <path d="M50 4 L90 18 L90 55 Q90 80 50 96 Q10 80 10 55 L10 18 Z" fill="url(#sg4)" stroke="#FBBF24" stroke-width="3"/>
-  <!-- Top yellow half -->
-  <rect x="0" y="0" fill="#FBBF24" clip-path="url(#shield4)"/>
-  <!-- Divider -->
-  <rect x="10" y="47" fill="#0F172A"/>
-  <!-- Center circle -->
-  <circle cx="50" cy="50" r="12" fill="#0F172A" stroke="#FBBF24" stroke-width="4.5"/>
-  <circle cx="50" cy="50" r="4.5" fill="#FBBF24"/>
-</svg><span>PokéLeague</span><em>D — Shield</em></div>
-
-  <div class="nav-demo"><svg width="26" height="26" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <clipPath id="oct5">
-      <polygon points="30,4 70,4 96,30 96,70 70,96 30,96 4,70 4,30"/>
-    </clipPath>
-    <linearGradient id="g5top" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FCD34D"/>
-      <stop offset="100%" stop-color="#F59E0B"/>
-    </linearGradient>
-  </defs>
-  <!-- Octagon bg -->
-  <polygon points="30,4 70,4 96,30 96,70 70,96 30,96 4,70 4,30" fill="#111827"/>
-  <!-- Top half -->
-  <rect x="0" y="0" fill="url(#g5top)" clip-path="url(#oct5)"/>
-  <!-- Border -->
-  <polygon points="30,4 70,4 96,30 96,70 70,96 30,96 4,70 4,30" 
-    fill="none" stroke="#FBBF24" stroke-width="3"/>
-  <!-- Divider -->
-  <line x1="4" y1="50" x2="96" y2="50" stroke="#111827" stroke-width="6"/>
-  <!-- Center -->
-  <circle cx="50" cy="50" r="12" fill="#111827" stroke="#FBBF24" stroke-width="5"/>
-  <circle cx="50" cy="50" r="4" fill="#FBBF24"/>
-</svg><span>PokéLeague</span><em>E — Octagon</em></div>
-
-  <div class="nav-demo"><svg width="26" height="26" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <!-- Card shadow 3 -->
-  <rect x="20" y="22" rx="6" fill="#0F172A" stroke="#374151" stroke-width="1.5" transform="rotate(-12 50 56)"/>
-  <!-- Card shadow 2 -->
-  <rect x="20" y="22" rx="6" fill="#111827" stroke="#4B5563" stroke-width="1.5" transform="rotate(6 50 56)"/>
-  <!-- Main card -->
-  <rect x="22" y="18" rx="7" fill="#1F2937" stroke="#FBBF24" stroke-width="2.5"/>
-  <!-- Card top yellow band -->
-  <rect x="22" y="18" rx="7" fill="#FBBF24"/>
-  <rect x="22" y="36" fill="#FBBF24"/>
-  <!-- Center circle on card -->
-  <circle cx="50" cy="54" r="11" fill="#1F2937" stroke="#FBBF24" stroke-width="3.5"/>
-  <circle cx="50" cy="54" r="4" fill="#FBBF24"/>
-  <!-- Star on yellow section -->
-  <polygon points="50,24 52,30 58,30 53,34 55,40 50,36 45,40 47,34 42,30 48,30" fill="#92400E" opacity="0.4"/>
-</svg><span>PokéLeague</span><em>F — Cards</em></div>
-
-  <div class="nav-demo"><svg width="26" height="26" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <clipPath id="c7"><circle cx="50" cy="50" r="42"/></clipPath>
-    <linearGradient id="g7" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FCD34D"/>
-      <stop offset="100%" stop-color="#FBBF24"/>
-    </linearGradient>
-  </defs>
-  <!-- Outer glow ring -->
-  <circle cx="50" cy="50" r="48" fill="#FBBF24" opacity="0.15"/>
-  <!-- Main circle -->
-  <circle cx="50" cy="50" r="42" fill="#111827" stroke="#FBBF24" stroke-width="3.5"/>
-  <!-- Top arc yellow -->
-  <path d="M8 50 A42 42 0 0 1 92 50 Z" fill="url(#g7)"/>
-  <!-- Divider line -->
-  <rect x="8" y="47" fill="#111827"/>
-  <!-- Outer ring notches -->
-  <circle cx="50" cy="8" r="3" fill="#FBBF24"/>
-  <circle cx="50" cy="92" r="3" fill="#374151"/>
-  <!-- Center -->
-  <circle cx="50" cy="50" r="13" fill="#111827" stroke="#FBBF24" stroke-width="4.5"/>
-  <circle cx="50" cy="50" r="5" fill="#FBBF24"/>
-</svg><span>PokéLeague</span><em>G — Minimal</em></div>
-
-  <div class="nav-demo"><svg width="26" height="26" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="g8bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#111827"/>
-    </linearGradient>
-    <linearGradient id="g8y" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FCD34D"/>
-      <stop offset="100%" stop-color="#F59E0B"/>
-    </linearGradient>
-    <clipPath id="trophy">
-      <path d="M28 8 H72 V52 Q72 76 50 84 Q28 76 28 52 Z"/>
-    </clipPath>
-  </defs>
-  <!-- Trophy cup shape -->
-  <path d="M28 8 H72 V52 Q72 76 50 84 Q28 76 28 52 Z" fill="url(#g8bg)" stroke="#FBBF24" stroke-width="3"/>
-  <!-- Trophy handles -->
-  <path d="M28 20 Q12 20 12 36 Q12 48 28 48" stroke="#FBBF24" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-  <path d="M72 20 Q88 20 88 36 Q88 48 72 48" stroke="#FBBF24" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-  <!-- Trophy stem -->
-  <rect x="42" y="83" rx="2" fill="#FBBF24"/>
-  <rect x="36" y="89" rx="2.5" fill="#FBBF24"/>
-  <!-- Top half yellow fill -->
-  <rect x="0" y="0" fill="url(#g8y)" clip-path="url(#trophy)"/>
-  <!-- Divider -->
-  <rect x="28" y="43" fill="#111827"/>
-  <!-- Center ball -->
-  <circle cx="50" cy="46" r="11" fill="#111827" stroke="#FBBF24" stroke-width="4"/>
-  <circle cx="50" cy="46" r="4" fill="#FBBF24"/>
-</svg><span>PokéLeague</span><em>H — Trophy</em></div>
-
-  <div class="nav-demo"><svg width="26" height="26" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="g9" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#1F2937"/>
-      <stop offset="100%" stop-color="#0F172A"/>
-    </linearGradient>
-  </defs>
-  <!-- Background circle -->
-  <circle cx="50" cy="50" r="47" fill="url(#g9)" stroke="#FBBF24" stroke-width="3"/>
-  <!-- Subtle inner ring -->
-  <circle cx="50" cy="50" r="40" fill="none" stroke="#FBBF24" stroke-width="0.75" opacity="0.3"/>
-  <!-- P letterform -->
-  <rect x="22" y="28" rx="2" fill="#FBBF24"/>
-  <path d="M28 28 Q48 28 48 39 Q48 50 28 50" stroke="#FBBF24" stroke-width="6" fill="none" stroke-linecap="round"/>
-  <!-- L letterform -->
-  <rect x="54" y="28" rx="2" fill="white" opacity="0.9"/>
-  <rect x="54" y="66" rx="2" fill="white" opacity="0.9"/>
-  <!-- Bottom accent line -->
-  <line x1="20" y1="82" x2="80" y2="82" stroke="#FBBF24" stroke-width="1.5" opacity="0.4"/>
-</svg><span>PokéLeague</span><em>I — Monogram</em></div>
-
-  <div class="nav-demo"><svg width="26" height="26" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="cg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a2234"/><stop offset="100%" stop-color="#0d1117"/></linearGradient>
-    <linearGradient id="cg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#D97706"/></linearGradient>
-    <clipPath id="cc1"><circle cx="50" cy="62" r="32"/></clipPath>
-  </defs>
-  <path d="M18 40 L26 24 L50 36 L74 24 L82 40 L74 44 L26 44 Z" fill="url(#cg2)"/>
-  <circle cx="18" cy="40" r="4" fill="#FCD34D"/>
-  <circle cx="50" cy="22" r="4.5" fill="#FCD34D"/>
-  <circle cx="82" cy="40" r="4" fill="#FCD34D"/>
-  <circle cx="50" cy="62" r="32" fill="url(#cg1)" stroke="#FBBF24" stroke-width="2.5"/>
-  <path d="M18 62 A32 32 0 0 1 82 62 Z" fill="url(#cg2)"/>
-  <rect x="18" y="59" fill="#0d1117"/>
-  <circle cx="50" cy="62" r="11" fill="#0d1117" stroke="#FBBF24" stroke-width="4"/>
-  <circle cx="50" cy="62" r="4" fill="#FCD34D"/>
-</svg><span>PokéLeague</span><em>J — Crowned</em></div>
-
-  <div class="nav-demo"><svg width="26" height="26" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
-    <linearGradient id="lg2" x1="0" y1="1" x2="0" y2="0"><stop offset="0%" stop-color="#F59E0B"/><stop offset="100%" stop-color="#FDE68A"/></linearGradient>
-  </defs>
-  <circle cx="50" cy="50" r="46" fill="url(#lg1)" stroke="#FBBF24" stroke-width="2.5"/>
-  <circle cx="50" cy="50" r="39" fill="none" stroke="#FBBF24" stroke-width="0.75" opacity="0.2"/>
-  <path d="M56 12 L34 50 L48 50 L44 88 L66 46 L52 46 Z" fill="url(#lg2)"/>
-</svg><span>PokéLeague</span><em>K — Lightning</em></div>
-
-  <div class="nav-demo"><svg width="26" height="26" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="sb1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient>
-  </defs>
-  <g stroke="#FBBF24" stroke-width="2" opacity="0.2">
-    <line x1="50" y1="2" x2="50" y2="16"/><line x1="50" y1="84" x2="50" y2="98"/>
-    <line x1="2" y1="50" x2="16" y2="50"/><line x1="84" y1="50" x2="98" y2="50"/>
-    <line x1="14" y1="14" x2="24" y2="24"/><line x1="76" y1="76" x2="86" y2="86"/>
-    <line x1="86" y1="14" x2="76" y2="24"/><line x1="14" y1="86" x2="24" y2="76"/>
-  </g>
-  <rect x="18" y="12" rx="10" fill="#0f172a" stroke="#FBBF24" stroke-width="2.5"/>
-  <rect x="18" y="12" rx="10" fill="url(#sb1)"/>
-  <rect x="18" y="36" fill="url(#sb1)"/>
-  <circle cx="50" cy="50" r="13" fill="#0f172a" stroke="#FBBF24" stroke-width="4"/>
-  <path d="M37 50 A13 13 0 0 1 63 50 Z" fill="#FBBF24"/>
-  <rect x="37" y="47" fill="#0f172a"/>
-  <circle cx="50" cy="50" r="5" fill="#0f172a" stroke="#FBBF24" stroke-width="3"/>
-  <circle cx="50" cy="50" r="2" fill="#FBBF24"/>
-</svg><span>PokéLeague</span><em>L — Starburst</em></div>
-
-  <div class="nav-demo"><svg width="26" height="26" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="wg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
-    <linearGradient id="wg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#D97706"/></linearGradient>
-  </defs>
-  <path d="M26 52 Q6 38 10 16 Q18 28 24 40 Q16 24 22 12 Q28 26 30 42 Q24 28 28 16 Q34 32 30 48 Z" fill="#FBBF24" opacity="0.75"/>
-  <path d="M74 52 Q94 38 90 16 Q82 28 76 40 Q84 24 78 12 Q72 26 70 42 Q76 28 72 16 Q66 32 70 48 Z" fill="#FBBF24" opacity="0.75"/>
-  <circle cx="50" cy="54" r="28" fill="url(#wg1)" stroke="#FBBF24" stroke-width="2.5"/>
-  <path d="M22 54 A28 28 0 0 1 78 54 Z" fill="url(#wg2)"/>
-  <rect x="22" y="51" fill="#0f172a"/>
-  <circle cx="50" cy="54" r="10" fill="#0f172a" stroke="#FBBF24" stroke-width="3.5"/>
-  <circle cx="50" cy="54" r="3.5" fill="#FCD34D"/>
-</svg><span>PokéLeague</span><em>M — Wings</em></div>
-
-  <div class="nav-demo"><svg width="26" height="26" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <filter id="glow"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-  </defs>
-  <circle cx="50" cy="50" r="46" fill="#040810"/>
-  <circle cx="50" cy="50" r="42" fill="none" stroke="#FBBF24" stroke-width="1.5" opacity="0.3"/>
-  <path d="M10 50 A40 40 0 0 1 90 50" stroke="#FBBF24" stroke-width="3" fill="none" filter="url(#glow)"/>
-  <path d="M10 50 A40 40 0 0 0 90 50" stroke="#374151" stroke-width="2" fill="none"/>
-  <line x1="10" y1="50" x2="90" y2="50" stroke="#FBBF24" stroke-width="2.5" filter="url(#glow)"/>
-  <circle cx="50" cy="50" r="12" fill="#040810" stroke="#FBBF24" stroke-width="2.5" filter="url(#glow)"/>
-  <circle cx="50" cy="50" r="4.5" fill="#FBBF24" filter="url(#glow)"/>
-  <circle cx="50" cy="10" r="3" fill="#FBBF24" filter="url(#glow)"/>
-  <circle cx="10" cy="50" r="2" fill="#FBBF24" opacity="0.4"/>
-  <circle cx="90" cy="50" r="2" fill="#FBBF24" opacity="0.4"/>
-</svg><span>PokéLeague</span><em>N — Neon</em></div>
-
-  <div class="nav-demo"><svg width="26" height="26" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="cmpg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
-  </defs>
-  <circle cx="50" cy="50" r="46" fill="url(#cmpg)" stroke="#374151" stroke-width="1.5"/>
-  <circle cx="50" cy="50" r="38" fill="none" stroke="#1f2937" stroke-width="1"/>
-  <polygon points="50,10 54,44 50,50 46,44" fill="#FBBF24"/>
-  <polygon points="50,90 54,56 50,50 46,56" fill="#4b5563"/>
-  <polygon points="10,50 44,46 50,50 44,54" fill="#FBBF24" opacity="0.7"/>
-  <polygon points="90,50 56,46 50,50 56,54" fill="#FBBF24" opacity="0.7"/>
-  <circle cx="50" cy="50" r="9" fill="#0f172a" stroke="#FBBF24" stroke-width="3"/>
-  <circle cx="50" cy="50" r="3" fill="#FBBF24"/>
-</svg><span>PokéLeague</span><em>O — Compass</em></div>
-
-  <div class="nav-demo"><svg width="26" height="26" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <circle cx="50" cy="50" r="47" fill="#0a0e18" stroke="#FBBF24" stroke-width="2"/>
-  <circle cx="50" cy="50" r="40" fill="none" stroke="#FBBF24" stroke-width="0.75" opacity="0.4"/>
-  <ellipse cx="50" cy="28" rx="7" ry="11" fill="#FBBF24"/>
-  <circle cx="50" cy="36" r="4" fill="#0a0e18"/>
-  <ellipse cx="50" cy="28" rx="7" ry="11" fill="#FBBF24" transform="rotate(120 50 50)"/>
-  <circle cx="50" cy="36" r="4" fill="#0a0e18" transform="rotate(120 50 50)"/>
-  <ellipse cx="50" cy="28" rx="7" ry="11" fill="#FBBF24" transform="rotate(240 50 50)"/>
-  <circle cx="50" cy="36" r="4" fill="#0a0e18" transform="rotate(240 50 50)"/>
-  <circle cx="50" cy="50" r="8" fill="#FBBF24"/>
-  <circle cx="50" cy="50" r="4" fill="#0a0e18"/>
-</svg><span>PokéLeague</span><em>P — Mon</em></div>
-
-  <div class="nav-demo"><svg width="26" height="26" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <radialGradient id="fg1" cx="50%" cy="80%" r="60%"><stop offset="0%" stop-color="#FCD34D" stop-opacity="0.25"/><stop offset="100%" stop-color="#F59E0B" stop-opacity="0"/></radialGradient>
-    <linearGradient id="fg2" x1="0" y1="1" x2="0" y2="0"><stop offset="0%" stop-color="#D97706"/><stop offset="60%" stop-color="#FBBF24"/><stop offset="100%" stop-color="#FDE68A"/></linearGradient>
-  </defs>
-  <ellipse cx="50" cy="72" rx="38" ry="26" fill="url(#fg1)"/>
-  <path d="M50 8 Q62 24 58 38 Q70 26 66 44 Q78 34 72 54 Q80 48 76 62 Q74 78 50 90 Q26 78 24 62 Q20 48 28 54 Q22 34 34 44 Q30 26 42 38 Q38 24 50 8 Z" fill="url(#fg2)"/>
-  <path d="M50 30 Q56 40 54 50 Q60 42 58 54 Q64 48 62 58 Q60 70 50 78 Q40 70 38 58 Q36 48 42 54 Q40 42 46 50 Q44 40 50 30 Z" fill="#0f172a" opacity="0.65"/>
-  <circle cx="50" cy="60" r="11" fill="#0f172a" stroke="#FCD34D" stroke-width="3"/>
-  <circle cx="50" cy="60" r="4" fill="#FCD34D"/>
-</svg><span>PokéLeague</span><em>Q — Flame</em></div>
-
-  <div class="nav-demo"><svg width="26" height="26" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <rect x="4" y="4" rx="18" fill="#060d1a" stroke="#FBBF24" stroke-width="2"/>
-  <g stroke="#FBBF24" stroke-width="1.5" opacity="0.3">
-    <path d="M20 20 H36 V36"/><path d="M80 20 H64 V36"/>
-    <path d="M20 80 H36 V64"/><path d="M80 80 H64 V64"/>
-    <line x1="50" y1="4" x2="50" y2="20"/><line x1="50" y1="80" x2="50" y2="96"/>
-    <line x1="4" y1="50" x2="20" y2="50"/><line x1="80" y1="50" x2="96" y2="50"/>
-  </g>
-  <g fill="#FBBF24" opacity="0.6">
-    <rect x="16" y="16" rx="1.5"/>
-    <rect x="77" y="16" rx="1.5"/>
-    <rect x="16" y="77" rx="1.5"/>
-    <rect x="77" y="77" rx="1.5"/>
-  </g>
-  <circle cx="50" cy="50" r="22" fill="#0d1420" stroke="#FBBF24" stroke-width="2"/>
-  <path d="M28 50 A22 22 0 0 1 72 50 Z" fill="#FBBF24"/>
-  <rect x="28" y="47" fill="#0d1420"/>
-  <circle cx="50" cy="50" r="9" fill="#0d1420" stroke="#FBBF24" stroke-width="3.5"/>
-  <circle cx="50" cy="50" r="3" fill="#FBBF24"/>
-</svg><span>PokéLeague</span><em>R — Circuit</em></div>
-
-  <div class="nav-demo"><svg width="26" height="26" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs><clipPath id="yyc"><circle cx="50" cy="50" r="44"/></clipPath></defs>
-  <circle cx="50" cy="50" r="46" fill="#0a0e18" stroke="#FBBF24" stroke-width="2.5"/>
-  <path d="M50 6 A44 44 0 0 0 50 94 A22 22 0 0 1 50 50 A22 22 0 0 0 50 6 Z" fill="#0a0e18" clip-path="url(#yyc)"/>
-  <path d="M50 6 A44 44 0 0 1 50 94 A22 22 0 0 0 50 50 A22 22 0 0 1 50 6 Z" fill="#FBBF24" clip-path="url(#yyc)"/>
-  <circle cx="50" cy="28" r="10" fill="#FBBF24"/>
-  <circle cx="50" cy="72" r="10" fill="#0a0e18"/>
-  <circle cx="50" cy="28" r="4" fill="#0a0e18"/>
-  <circle cx="50" cy="72" r="4" fill="#FBBF24"/>
-  <circle cx="50" cy="50" r="44" fill="none" stroke="#FBBF24" stroke-width="2.5"/>
-</svg><span>PokéLeague</span><em>S — Yin Yang</em></div>
-
-  <div class="nav-demo"><svg width="26" height="26" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="pg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
-    <linearGradient id="pg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#D97706"/></linearGradient>
-  </defs>
-  <ellipse cx="50" cy="50" rx="46" ry="11" fill="none" stroke="#92400E" stroke-width="4.5" opacity="0.6"/>
-  <circle cx="50" cy="50" r="30" fill="url(#pg1)" stroke="#FBBF24" stroke-width="2.5"/>
-  <path d="M20 50 A30 30 0 0 1 80 50 Z" fill="url(#pg2)"/>
-  <rect x="20" y="47" fill="#0f172a"/>
-  <circle cx="50" cy="50" r="10" fill="#0f172a" stroke="#FBBF24" stroke-width="3.5"/>
-  <circle cx="50" cy="50" r="3.5" fill="#FCD34D"/>
-  <ellipse cx="50" cy="50" rx="46" ry="11" fill="none" stroke="#FBBF24" stroke-width="2.5" stroke-dasharray="58 36"/>
-</svg><span>PokéLeague</span><em>T — Planet</em></div>
-</div>
+  <div class="nav-demo">
+    <img src="logo-hex.svg" width="28" height="28">
+    <span>PokéLeague</span>
+    <em>A — Hexagon</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-diamond.svg" width="28" height="28">
+    <span>PokéLeague</span>
+    <em>B — Diamond</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-circle.svg" width="28" height="28">
+    <span>PokéLeague</span>
+    <em>C — Circle</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-shield.svg" width="28" height="28">
+    <span>PokéLeague</span>
+    <em>D — Shield</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-octagon.svg" width="28" height="28">
+    <span>PokéLeague</span>
+    <em>E — Octagon</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-cards.svg" width="28" height="28">
+    <span>PokéLeague</span>
+    <em>F — Cards ⭐</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-minimal.svg" width="28" height="28">
+    <span>PokéLeague</span>
+    <em>G — Minimal</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-trophy.svg" width="28" height="28">
+    <span>PokéLeague</span>
+    <em>H — Trophy</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-monogram.svg" width="28" height="28">
+    <span>PokéLeague</span>
+    <em>I — Monogram</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-crowned.svg" width="28" height="28">
+    <span>PokéLeague</span>
+    <em>J — Crowned</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-lightning.svg" width="28" height="28">
+    <span>PokéLeague</span>
+    <em>K — Lightning</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-starburst.svg" width="28" height="28">
+    <span>PokéLeague</span>
+    <em>L — Starburst</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-wings.svg" width="28" height="28">
+    <span>PokéLeague</span>
+    <em>M — Wings</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-neon.svg" width="28" height="28">
+    <span>PokéLeague</span>
+    <em>N — Neon</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-compass.svg" width="28" height="28">
+    <span>PokéLeague</span>
+    <em>O — Compass</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-mon.svg" width="28" height="28">
+    <span>PokéLeague</span>
+    <em>P — Mon</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-flame.svg" width="28" height="28">
+    <span>PokéLeague</span>
+    <em>Q — Flame</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-circuit.svg" width="28" height="28">
+    <span>PokéLeague</span>
+    <em>R — Circuit</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-yinyang.svg" width="28" height="28">
+    <span>PokéLeague</span>
+    <em>S — Yin Yang</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-planet.svg" width="28" height="28">
+    <span>PokéLeague</span>
+    <em>T — Planet</em>
+  </div></div>
 </body>
 </html>
