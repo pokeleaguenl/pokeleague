@@ -106,6 +106,7 @@ export default function Playmat({
   const [variantSlot, setVariantSlot] = useState<SlotKey | null>(null);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [unsaved, setUnsaved] = useState(false);
   const [showLockConfirm, setShowLockConfirm] = useState(false);
   const [theme, setTheme] = useState<Theme>(DEFAULT_THEME);
   const [showThemePicker, setShowThemePicker] = useState(false);
@@ -158,6 +159,7 @@ export default function Playmat({
     setSquad(newSquad);
     setVariants((v) => ({ ...v, [openSlot]: null }));
     setOpenSlot(null);
+    setUnsaved(true);
 
     const deckVariants = variantsByDeckId[deck.id] ?? [];
     if (deckVariants.length > 0) {
@@ -176,6 +178,7 @@ export default function Playmat({
     pushHistory(squad, variants);
     setSquad((s) => ({ ...s, [key]: null }));
     setVariants((v) => ({ ...v, [key]: null }));
+    setUnsaved(true);
   };
 
   const handleClear = () => {
@@ -223,6 +226,7 @@ export default function Playmat({
     await fetch("/api/squad", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
     setSaving(false);
     setSaved(true);
+    setUnsaved(false);
     setTimeout(() => setSaved(false), 2000);
   };
 
@@ -265,7 +269,13 @@ export default function Playmat({
             <span className="text-gray-500 text-xs">▾</span>
           </button>
           <div className="text-right">
-            <p className={`text-xs font-semibold ${remaining < 20 ? "text-red-400" : theme.accent}`}>
+            <div className="flex items-center gap-3">
+              {unsaved && !locked && (
+                <span className="text-[10px] text-orange-400 font-semibold animate-pulse">● Unsaved</span>
+              )}
+              <span className="text-xs text-gray-500">{filledCount}/10 picks</span>
+            </div>
+          <p className={`text-xs font-semibold ${remaining < 20 ? "text-red-400" : theme.accent}`}>
               {remaining} / {BUDGET} pts remaining
             </p>
             <div className="mt-1 h-1.5 w-32 rounded-full bg-white/10">
@@ -398,8 +408,8 @@ export default function Playmat({
           </div>
           <div className="flex gap-2">
             <button onClick={handleSave} disabled={saving || locked}
-              className="rounded-lg bg-black/30 px-4 py-2 text-sm font-medium text-white border border-white/10 hover:bg-black/40 disabled:opacity-30 backdrop-blur-sm">
-              {saving ? "Saving..." : saved ? "✅ Saved" : "Save"}
+              className={`rounded-lg px-4 py-2 text-sm font-medium text-white border hover:bg-black/40 disabled:opacity-30 backdrop-blur-sm ${unsaved && !locked ? "border-orange-400/50 bg-orange-400/10" : "bg-black/30 border-white/10"}`}>
+              {saving ? "Saving..." : saved ? "✅ Saved" : unsaved ? "● Save" : "Save"}
             </button>
             <button onClick={handleLock}
               className={`rounded-lg px-4 py-2 text-sm font-semibold transition-colors ${
