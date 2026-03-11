@@ -44,7 +44,7 @@ export default function HowToScore() {
           {[
             { icon: "⚔️", label: "Had at least 1 win", pts: "+1" },
             { icon: "📅", label: "Made Day 2", pts: "+3" },
-            { icon: "📈", label: "Win rate >60%", pts: "+20" },
+            { icon: "📈", label: "Win rate &gt;60%", pts: "+20" },
             { icon: "🏅", label: "Top 8 finish", pts: "+10" },
             { icon: "🏆", label: "Tournament win", pts: "+25" },
           ].map((s) => (
