@@ -18,7 +18,7 @@ export default function NavClient({ isLoggedIn }: { isLoggedIn: boolean }) {
     <nav className="sticky top-0 z-40 border-b border-white/5 bg-gray-950/95 backdrop-blur-md">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 font-black text-lg tracking-tight hover:opacity-80 transition-opacity">
+        <Link href={isLoggedIn ? "/dashboard" : "/"} className="flex items-center gap-2 font-black text-lg tracking-tight hover:opacity-80 transition-opacity">
           <span className="text-yellow-400">⚡</span>
           <span>Poké<span className="text-yellow-400">League</span></span>
         </Link>
