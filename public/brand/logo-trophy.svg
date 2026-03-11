@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <defs>
+    <linearGradient id="g8bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1F2937"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="g8y" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FCD34D"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <clipPath id="trophy">
+      <path d="M28 8 H72 V52 Q72 76 50 84 Q28 76 28 52 Z"/>
+    </clipPath>
+  </defs>
+  <!-- Trophy cup shape -->
+  <path d="M28 8 H72 V52 Q72 76 50 84 Q28 76 28 52 Z" fill="url(#g8bg)" stroke="#FBBF24" stroke-width="3"/>
+  <!-- Trophy handles -->
+  <path d="M28 20 Q12 20 12 36 Q12 48 28 48" stroke="#FBBF24" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <path d="M72 20 Q88 20 88 36 Q88 48 72 48" stroke="#FBBF24" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <!-- Trophy stem -->
+  <rect x="42" y="83" width="16" height="8" rx="2" fill="#FBBF24"/>
+  <rect x="36" y="89" width="28" height="5" rx="2.5" fill="#FBBF24"/>
+  <!-- Top half yellow fill -->
+  <rect x="0" y="0" width="100" height="46" fill="url(#g8y)" clip-path="url(#trophy)"/>
+  <!-- Divider -->
+  <rect x="28" y="43" width="44" height="6" fill="#111827"/>
+  <!-- Center ball -->
+  <circle cx="50" cy="46" r="11" fill="#111827" stroke="#FBBF24" stroke-width="4"/>
+  <circle cx="50" cy="46" r="4" fill="#FBBF24"/>
+</svg>

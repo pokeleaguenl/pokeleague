@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Card shadow 3 -->
+  <rect x="20" y="22" width="52" height="68" rx="6" fill="#0F172A" stroke="#374151" stroke-width="1.5" transform="rotate(-12 50 56)"/>
+  <!-- Card shadow 2 -->
+  <rect x="20" y="22" width="52" height="68" rx="6" fill="#111827" stroke="#4B5563" stroke-width="1.5" transform="rotate(6 50 56)"/>
+  <!-- Main card -->
+  <rect x="22" y="18" width="56" height="72" rx="7" fill="#1F2937" stroke="#FBBF24" stroke-width="2.5"/>
+  <!-- Card top yellow band -->
+  <rect x="22" y="18" width="56" height="32" rx="7" fill="#FBBF24"/>
+  <rect x="22" y="36" width="56" height="14" fill="#FBBF24"/>
+  <!-- Center circle on card -->
+  <circle cx="50" cy="54" r="11" fill="#1F2937" stroke="#FBBF24" stroke-width="3.5"/>
+  <circle cx="50" cy="54" r="4" fill="#FBBF24"/>
+  <!-- Star on yellow section -->
+  <polygon points="50,24 52,30 58,30 53,34 55,40 50,36 45,40 47,34 42,30 48,30" fill="#92400E" opacity="0.4"/>
+</svg>

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <defs>
+    <clipPath id="c7"><circle cx="50" cy="50" r="42"/></clipPath>
+    <linearGradient id="g7" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FCD34D"/>
+      <stop offset="100%" stop-color="#FBBF24"/>
+    </linearGradient>
+  </defs>
+  <!-- Outer glow ring -->
+  <circle cx="50" cy="50" r="48" fill="#FBBF24" opacity="0.15"/>
+  <!-- Main circle -->
+  <circle cx="50" cy="50" r="42" fill="#111827" stroke="#FBBF24" stroke-width="3.5"/>
+  <!-- Top arc yellow -->
+  <path d="M8 50 A42 42 0 0 1 92 50 Z" fill="url(#g7)"/>
+  <!-- Divider line -->
+  <rect x="8" y="47" width="84" height="6" fill="#111827"/>
+  <!-- Outer ring notches -->
+  <circle cx="50" cy="8" r="3" fill="#FBBF24"/>
+  <circle cx="50" cy="92" r="3" fill="#374151"/>
+  <!-- Center -->
+  <circle cx="50" cy="50" r="13" fill="#111827" stroke="#FBBF24" stroke-width="4.5"/>
+  <circle cx="50" cy="50" r="5" fill="#FBBF24"/>
+</svg>
