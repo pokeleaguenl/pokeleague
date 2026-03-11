@@ -4,119 +4,334 @@
 <meta charset="UTF-8">
 <title>PokéLeague Logo Concepts</title>
 <style>
-  body { background: #060912; font-family: system-ui, sans-serif; color: #fff; padding: 40px; margin: 0; }
-  h1 { color: #FBBF24; margin-bottom: 4px; font-size: 28px; }
-  .sub { color: #6b7280; margin-bottom: 40px; font-size: 14px; }
-  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 860px; }
-  .card { background: #0f1623; border: 1px solid #1f2937; border-radius: 16px; padding: 24px 20px; text-align: center; transition: border-color 0.2s; cursor: pointer; }
-  .card:hover { border-color: #FBBF24; }
-  .card h2 { font-size: 12px; color: #9ca3af; margin: 14px 0 4px; text-transform: uppercase; letter-spacing: 0.1em; }
-  .card p { color: #4b5563; font-size: 11px; margin: 0 0 12px; }
-  .sizes { display: flex; align-items: flex-end; justify-content: center; gap: 16px; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #060912; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #fff; padding: 40px; }
+  h1 { color: #FBBF24; font-size: 26px; margin-bottom: 4px; }
+  .sub { color: #6b7280; font-size: 13px; margin-bottom: 8px; }
+  .hint { color: #374151; font-size: 11px; margin-bottom: 36px; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; max-width: 960px; margin-bottom: 48px; }
+  .card { background: #0d1220; border: 2px solid #1f2937; border-radius: 14px; padding: 20px 14px 14px; text-align: center; cursor: pointer; transition: all 0.15s; }
+  .card:hover { border-color: #4b5563; transform: translateY(-2px); }
+  .card.selected { border-color: #FBBF24 !important; background: #1a1f2e; box-shadow: 0 0 20px rgba(251,191,36,0.15); }
+  .img-wrap { display: flex; justify-content: center; align-items: center; height: 90px; }
+  .card h2 { font-size: 11px; color: #9ca3af; margin: 12px 0 4px; text-transform: uppercase; letter-spacing: 0.08em; }
+  .card p { color: #4b5563; font-size: 10px; margin-bottom: 12px; line-height: 1.4; }
+  .sizes { display: flex; align-items: flex-end; justify-content: center; gap: 14px; }
   .sizes div { text-align: center; }
-  .sizes span { color: #374151; font-size: 9px; display: block; margin-top: 4px; }
-  h2.section { color: #6b7280; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; margin: 40px 0 16px; }
-  .navs { display: flex; flex-direction: column; gap: 10px; max-width: 400px; }
-  .nav-demo { background: #0f1623; border: 1px solid #1f2937; border-radius: 10px; padding: 12px 20px; display: flex; align-items: center; gap: 10px; }
-  .nav-demo span { color: #FBBF24; font-weight: 700; font-size: 16px; flex: 1; }
-  .nav-demo em { color: #374151; font-size: 11px; font-style: normal; }
+  .sizes span { color: #2d3748; font-size: 9px; display: block; margin-top: 3px; }
+  h2.section { color: #6b7280; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; margin: 0 0 14px; }
+  .navs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; max-width: 700px; }
+  .nav-demo { background: #0d1220; border: 1px solid #1f2937; border-radius: 10px; padding: 10px 16px; display: flex; align-items: center; gap-10px; gap: 10px; }
+  .nav-demo span { color: #FBBF24; font-weight: 700; font-size: 15px; flex: 1; }
+  .nav-demo em { color: #2d3748; font-size: 10px; font-style: normal; }
 </style>
 </head>
 <body>
-<h1>PokéLeague Logo Concepts</h1>
-<p class="sub">9 abstract mark concepts — hover to highlight, compare at different sizes below.</p>
+<h1>PokéLeague — Logo Concepts</h1>
+<p class="sub">20 concepts across different styles</p>
+<p class="hint">Click a card to highlight your favourites, then scroll down to see them in the nav bar.</p>
 <div class="grid">
-  <div class="card">
-    <img src="logo-hex.svg" width="100" height="100" alt="A — Hexagon">
+  <div class="card" onclick="this.classList.toggle('selected')">
+    <div class="img-wrap"><img src="logo-hex.svg" width="90" height="90" alt="A — Hexagon"></div>
     <h2>A — Hexagon</h2>
     <p>Six-sided badge with Poké Ball split</p>
     <div class="sizes">
-      <div><img src="logo-hex.svg" width="40" height="40"><span>40px</span></div>
-      <div><img src="logo-hex.svg" width="24" height="24"><span>24px</span></div>
-      <div><img src="logo-hex.svg" width="16" height="16"><span>16px</span></div>
+      <div><img src="logo-hex.svg" width="36" height="36"><span>36</span></div>
+      <div><img src="logo-hex.svg" width="24" height="24"><span>24</span></div>
+      <div><img src="logo-hex.svg" width="16" height="16"><span>16</span></div>
     </div>
   </div>
-  <div class="card">
-    <img src="logo-diamond.svg" width="100" height="100" alt="B — Diamond">
+  <div class="card" onclick="this.classList.toggle('selected')">
+    <div class="img-wrap"><img src="logo-diamond.svg" width="90" height="90" alt="B — Diamond"></div>
     <h2>B — Diamond</h2>
     <p>Card-suit diamond with split line</p>
     <div class="sizes">
-      <div><img src="logo-diamond.svg" width="40" height="40"><span>40px</span></div>
-      <div><img src="logo-diamond.svg" width="24" height="24"><span>24px</span></div>
-      <div><img src="logo-diamond.svg" width="16" height="16"><span>16px</span></div>
+      <div><img src="logo-diamond.svg" width="36" height="36"><span>36</span></div>
+      <div><img src="logo-diamond.svg" width="24" height="24"><span>24</span></div>
+      <div><img src="logo-diamond.svg" width="16" height="16"><span>16</span></div>
     </div>
   </div>
-  <div class="card">
-    <img src="logo-circle.svg" width="100" height="100" alt="C — Circle">
+  <div class="card" onclick="this.classList.toggle('selected')">
+    <div class="img-wrap"><img src="logo-circle.svg" width="90" height="90" alt="C — Circle"></div>
     <h2>C — Circle</h2>
     <p>Classic badge, clean at any size</p>
     <div class="sizes">
-      <div><img src="logo-circle.svg" width="40" height="40"><span>40px</span></div>
-      <div><img src="logo-circle.svg" width="24" height="24"><span>24px</span></div>
-      <div><img src="logo-circle.svg" width="16" height="16"><span>16px</span></div>
+      <div><img src="logo-circle.svg" width="36" height="36"><span>36</span></div>
+      <div><img src="logo-circle.svg" width="24" height="24"><span>24</span></div>
+      <div><img src="logo-circle.svg" width="16" height="16"><span>16</span></div>
     </div>
   </div>
-  <div class="card">
-    <img src="logo-shield.svg" width="100" height="100" alt="D — Shield">
+  <div class="card" onclick="this.classList.toggle('selected')">
+    <div class="img-wrap"><img src="logo-shield.svg" width="90" height="90" alt="D — Shield"></div>
     <h2>D — Shield</h2>
     <p>Fantasy crest / league badge</p>
     <div class="sizes">
-      <div><img src="logo-shield.svg" width="40" height="40"><span>40px</span></div>
-      <div><img src="logo-shield.svg" width="24" height="24"><span>24px</span></div>
-      <div><img src="logo-shield.svg" width="16" height="16"><span>16px</span></div>
+      <div><img src="logo-shield.svg" width="36" height="36"><span>36</span></div>
+      <div><img src="logo-shield.svg" width="24" height="24"><span>24</span></div>
+      <div><img src="logo-shield.svg" width="16" height="16"><span>16</span></div>
     </div>
   </div>
-  <div class="card">
-    <img src="logo-octagon.svg" width="100" height="100" alt="E — Octagon">
+  <div class="card" onclick="this.classList.toggle('selected')">
+    <div class="img-wrap"><img src="logo-octagon.svg" width="90" height="90" alt="E — Octagon"></div>
     <h2>E — Octagon</h2>
-    <p>Stop-sign cut corners, bold</p>
+    <p>Bold stop-sign cut corners</p>
     <div class="sizes">
-      <div><img src="logo-octagon.svg" width="40" height="40"><span>40px</span></div>
-      <div><img src="logo-octagon.svg" width="24" height="24"><span>24px</span></div>
-      <div><img src="logo-octagon.svg" width="16" height="16"><span>16px</span></div>
+      <div><img src="logo-octagon.svg" width="36" height="36"><span>36</span></div>
+      <div><img src="logo-octagon.svg" width="24" height="24"><span>24</span></div>
+      <div><img src="logo-octagon.svg" width="16" height="16"><span>16</span></div>
     </div>
   </div>
-  <div class="card">
-    <img src="logo-cards.svg" width="100" height="100" alt="F — Cards">
+  <div class="card" onclick="this.classList.toggle('selected')">
+    <div class="img-wrap"><img src="logo-cards.svg" width="90" height="90" alt="F — Cards"></div>
     <h2>F — Cards</h2>
     <p>Stacked card fan, very TCG</p>
     <div class="sizes">
-      <div><img src="logo-cards.svg" width="40" height="40"><span>40px</span></div>
-      <div><img src="logo-cards.svg" width="24" height="24"><span>24px</span></div>
-      <div><img src="logo-cards.svg" width="16" height="16"><span>16px</span></div>
+      <div><img src="logo-cards.svg" width="36" height="36"><span>36</span></div>
+      <div><img src="logo-cards.svg" width="24" height="24"><span>24</span></div>
+      <div><img src="logo-cards.svg" width="16" height="16"><span>16</span></div>
     </div>
   </div>
-  <div class="card">
-    <img src="logo-minimal.svg" width="100" height="100" alt="G — Minimal">
+  <div class="card" onclick="this.classList.toggle('selected')">
+    <div class="img-wrap"><img src="logo-minimal.svg" width="90" height="90" alt="G — Minimal"></div>
     <h2>G — Minimal</h2>
     <p>Cleanest Poké Ball, glow ring</p>
     <div class="sizes">
-      <div><img src="logo-minimal.svg" width="40" height="40"><span>40px</span></div>
-      <div><img src="logo-minimal.svg" width="24" height="24"><span>24px</span></div>
-      <div><img src="logo-minimal.svg" width="16" height="16"><span>16px</span></div>
+      <div><img src="logo-minimal.svg" width="36" height="36"><span>36</span></div>
+      <div><img src="logo-minimal.svg" width="24" height="24"><span>24</span></div>
+      <div><img src="logo-minimal.svg" width="16" height="16"><span>16</span></div>
     </div>
   </div>
-  <div class="card">
-    <img src="logo-trophy.svg" width="100" height="100" alt="H — Trophy">
+  <div class="card" onclick="this.classList.toggle('selected')">
+    <div class="img-wrap"><img src="logo-trophy.svg" width="90" height="90" alt="H — Trophy"></div>
     <h2>H — Trophy</h2>
     <p>Trophy + Poké Ball hybrid</p>
     <div class="sizes">
-      <div><img src="logo-trophy.svg" width="40" height="40"><span>40px</span></div>
-      <div><img src="logo-trophy.svg" width="24" height="24"><span>24px</span></div>
-      <div><img src="logo-trophy.svg" width="16" height="16"><span>16px</span></div>
+      <div><img src="logo-trophy.svg" width="36" height="36"><span>36</span></div>
+      <div><img src="logo-trophy.svg" width="24" height="24"><span>24</span></div>
+      <div><img src="logo-trophy.svg" width="16" height="16"><span>16</span></div>
     </div>
   </div>
-  <div class="card">
-    <img src="logo-monogram.svg" width="100" height="100" alt="I — Monogram">
+  <div class="card" onclick="this.classList.toggle('selected')">
+    <div class="img-wrap"><img src="logo-monogram.svg" width="90" height="90" alt="I — Monogram"></div>
     <h2>I — Monogram</h2>
     <p>PL lettermark in a circle</p>
     <div class="sizes">
-      <div><img src="logo-monogram.svg" width="40" height="40"><span>40px</span></div>
-      <div><img src="logo-monogram.svg" width="24" height="24"><span>24px</span></div>
-      <div><img src="logo-monogram.svg" width="16" height="16"><span>16px</span></div>
+      <div><img src="logo-monogram.svg" width="36" height="36"><span>36</span></div>
+      <div><img src="logo-monogram.svg" width="24" height="24"><span>24</span></div>
+      <div><img src="logo-monogram.svg" width="16" height="16"><span>16</span></div>
+    </div>
+  </div>
+  <div class="card" onclick="this.classList.toggle('selected')">
+    <div class="img-wrap"><img src="logo-crowned.svg" width="90" height="90" alt="J — Crowned"></div>
+    <h2>J — Crowned</h2>
+    <p>Regal crown above Poké Ball</p>
+    <div class="sizes">
+      <div><img src="logo-crowned.svg" width="36" height="36"><span>36</span></div>
+      <div><img src="logo-crowned.svg" width="24" height="24"><span>24</span></div>
+      <div><img src="logo-crowned.svg" width="16" height="16"><span>16</span></div>
+    </div>
+  </div>
+  <div class="card" onclick="this.classList.toggle('selected')">
+    <div class="img-wrap"><img src="logo-lightning.svg" width="90" height="90" alt="K — Lightning"></div>
+    <h2>K — Lightning</h2>
+    <p>Energy bolt inside circle</p>
+    <div class="sizes">
+      <div><img src="logo-lightning.svg" width="36" height="36"><span>36</span></div>
+      <div><img src="logo-lightning.svg" width="24" height="24"><span>24</span></div>
+      <div><img src="logo-lightning.svg" width="16" height="16"><span>16</span></div>
+    </div>
+  </div>
+  <div class="card" onclick="this.classList.toggle('selected')">
+    <div class="img-wrap"><img src="logo-starburst.svg" width="90" height="90" alt="L — Starburst"></div>
+    <h2>L — Starburst</h2>
+    <p>Card with radiating rays</p>
+    <div class="sizes">
+      <div><img src="logo-starburst.svg" width="36" height="36"><span>36</span></div>
+      <div><img src="logo-starburst.svg" width="24" height="24"><span>24</span></div>
+      <div><img src="logo-starburst.svg" width="16" height="16"><span>16</span></div>
+    </div>
+  </div>
+  <div class="card" onclick="this.classList.toggle('selected')">
+    <div class="img-wrap"><img src="logo-wings.svg" width="90" height="90" alt="M — Wings"></div>
+    <h2>M — Wings</h2>
+    <p>Winged Poké Ball, legendary feel</p>
+    <div class="sizes">
+      <div><img src="logo-wings.svg" width="36" height="36"><span>36</span></div>
+      <div><img src="logo-wings.svg" width="24" height="24"><span>24</span></div>
+      <div><img src="logo-wings.svg" width="16" height="16"><span>16</span></div>
+    </div>
+  </div>
+  <div class="card" onclick="this.classList.toggle('selected')">
+    <div class="img-wrap"><img src="logo-neon.svg" width="90" height="90" alt="N — Neon"></div>
+    <h2>N — Neon</h2>
+    <p>Glowing outline, cyberpunk</p>
+    <div class="sizes">
+      <div><img src="logo-neon.svg" width="36" height="36"><span>36</span></div>
+      <div><img src="logo-neon.svg" width="24" height="24"><span>24</span></div>
+      <div><img src="logo-neon.svg" width="16" height="16"><span>16</span></div>
+    </div>
+  </div>
+  <div class="card" onclick="this.classList.toggle('selected')">
+    <div class="img-wrap"><img src="logo-compass.svg" width="90" height="90" alt="O — Compass"></div>
+    <h2>O — Compass</h2>
+    <p>Navigation rose, explorer vibe</p>
+    <div class="sizes">
+      <div><img src="logo-compass.svg" width="36" height="36"><span>36</span></div>
+      <div><img src="logo-compass.svg" width="24" height="24"><span>24</span></div>
+      <div><img src="logo-compass.svg" width="16" height="16"><span>16</span></div>
+    </div>
+  </div>
+  <div class="card" onclick="this.classList.toggle('selected')">
+    <div class="img-wrap"><img src="logo-mon.svg" width="90" height="90" alt="P — Mon"></div>
+    <h2>P — Mon</h2>
+    <p>Japanese family crest (tomoe)</p>
+    <div class="sizes">
+      <div><img src="logo-mon.svg" width="36" height="36"><span>36</span></div>
+      <div><img src="logo-mon.svg" width="24" height="24"><span>24</span></div>
+      <div><img src="logo-mon.svg" width="16" height="16"><span>16</span></div>
+    </div>
+  </div>
+  <div class="card" onclick="this.classList.toggle('selected')">
+    <div class="img-wrap"><img src="logo-flame.svg" width="90" height="90" alt="Q — Flame"></div>
+    <h2>Q — Flame</h2>
+    <p>Fire energy aura</p>
+    <div class="sizes">
+      <div><img src="logo-flame.svg" width="36" height="36"><span>36</span></div>
+      <div><img src="logo-flame.svg" width="24" height="24"><span>24</span></div>
+      <div><img src="logo-flame.svg" width="16" height="16"><span>16</span></div>
+    </div>
+  </div>
+  <div class="card" onclick="this.classList.toggle('selected')">
+    <div class="img-wrap"><img src="logo-circuit.svg" width="90" height="90" alt="R — Circuit"></div>
+    <h2>R — Circuit</h2>
+    <p>Tech/chip board aesthetic</p>
+    <div class="sizes">
+      <div><img src="logo-circuit.svg" width="36" height="36"><span>36</span></div>
+      <div><img src="logo-circuit.svg" width="24" height="24"><span>24</span></div>
+      <div><img src="logo-circuit.svg" width="16" height="16"><span>16</span></div>
+    </div>
+  </div>
+  <div class="card" onclick="this.classList.toggle('selected')">
+    <div class="img-wrap"><img src="logo-yinyang.svg" width="90" height="90" alt="S — Yin Yang"></div>
+    <h2>S — Yin Yang</h2>
+    <p>Balance, duality, clean</p>
+    <div class="sizes">
+      <div><img src="logo-yinyang.svg" width="36" height="36"><span>36</span></div>
+      <div><img src="logo-yinyang.svg" width="24" height="24"><span>24</span></div>
+      <div><img src="logo-yinyang.svg" width="16" height="16"><span>16</span></div>
+    </div>
+  </div>
+  <div class="card" onclick="this.classList.toggle('selected')">
+    <div class="img-wrap"><img src="logo-planet.svg" width="90" height="90" alt="T — Planet"></div>
+    <h2>T — Planet</h2>
+    <p>Poké Ball as planet with rings</p>
+    <div class="sizes">
+      <div><img src="logo-planet.svg" width="36" height="36"><span>36</span></div>
+      <div><img src="logo-planet.svg" width="24" height="24"><span>24</span></div>
+      <div><img src="logo-planet.svg" width="16" height="16"><span>16</span></div>
     </div>
   </div></div>
 <h2 class="section">In the nav bar</h2>
-<div class="navs"><div class="nav-demo"><img src="logo-hex.svg" width="28" height="28"> <span>PokéLeague</span><em>A — Hexagon</em></div><div class="nav-demo"><img src="logo-diamond.svg" width="28" height="28"> <span>PokéLeague</span><em>B — Diamond</em></div><div class="nav-demo"><img src="logo-circle.svg" width="28" height="28"> <span>PokéLeague</span><em>C — Circle</em></div><div class="nav-demo"><img src="logo-shield.svg" width="28" height="28"> <span>PokéLeague</span><em>D — Shield</em></div><div class="nav-demo"><img src="logo-octagon.svg" width="28" height="28"> <span>PokéLeague</span><em>E — Octagon</em></div><div class="nav-demo"><img src="logo-cards.svg" width="28" height="28"> <span>PokéLeague</span><em>F — Cards</em></div><div class="nav-demo"><img src="logo-minimal.svg" width="28" height="28"> <span>PokéLeague</span><em>G — Minimal</em></div><div class="nav-demo"><img src="logo-trophy.svg" width="28" height="28"> <span>PokéLeague</span><em>H — Trophy</em></div><div class="nav-demo"><img src="logo-monogram.svg" width="28" height="28"> <span>PokéLeague</span><em>I — Monogram</em></div></div>
+<div class="navs">
+  <div class="nav-demo">
+    <img src="logo-hex.svg" width="26" height="26">
+    <span>PokéLeague</span>
+    <em>A — Hexagon</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-diamond.svg" width="26" height="26">
+    <span>PokéLeague</span>
+    <em>B — Diamond</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-circle.svg" width="26" height="26">
+    <span>PokéLeague</span>
+    <em>C — Circle</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-shield.svg" width="26" height="26">
+    <span>PokéLeague</span>
+    <em>D — Shield</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-octagon.svg" width="26" height="26">
+    <span>PokéLeague</span>
+    <em>E — Octagon</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-cards.svg" width="26" height="26">
+    <span>PokéLeague</span>
+    <em>F — Cards</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-minimal.svg" width="26" height="26">
+    <span>PokéLeague</span>
+    <em>G — Minimal</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-trophy.svg" width="26" height="26">
+    <span>PokéLeague</span>
+    <em>H — Trophy</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-monogram.svg" width="26" height="26">
+    <span>PokéLeague</span>
+    <em>I — Monogram</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-crowned.svg" width="26" height="26">
+    <span>PokéLeague</span>
+    <em>J — Crowned</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-lightning.svg" width="26" height="26">
+    <span>PokéLeague</span>
+    <em>K — Lightning</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-starburst.svg" width="26" height="26">
+    <span>PokéLeague</span>
+    <em>L — Starburst</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-wings.svg" width="26" height="26">
+    <span>PokéLeague</span>
+    <em>M — Wings</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-neon.svg" width="26" height="26">
+    <span>PokéLeague</span>
+    <em>N — Neon</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-compass.svg" width="26" height="26">
+    <span>PokéLeague</span>
+    <em>O — Compass</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-mon.svg" width="26" height="26">
+    <span>PokéLeague</span>
+    <em>P — Mon</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-flame.svg" width="26" height="26">
+    <span>PokéLeague</span>
+    <em>Q — Flame</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-circuit.svg" width="26" height="26">
+    <span>PokéLeague</span>
+    <em>R — Circuit</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-yinyang.svg" width="26" height="26">
+    <span>PokéLeague</span>
+    <em>S — Yin Yang</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-planet.svg" width="26" height="26">
+    <span>PokéLeague</span>
+    <em>T — Planet</em>
+  </div></div>
 </body>
 </html>
