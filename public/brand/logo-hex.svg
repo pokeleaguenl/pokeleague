@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <defs>
+    <clipPath id="hex">
+      <polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5"/>
+    </clipPath>
+    <linearGradient id="topGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+  </defs>
+  <!-- Hexagon background -->
+  <polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5" fill="#111827"/>
+  <!-- Top half yellow -->
+  <rect x="0" y="0" width="100" height="50" fill="url(#topGrad)" clip-path="url(#hex)"/>
+  <!-- Dividing line -->
+  <line x1="7" y1="50" x2="93" y2="50" stroke="#111827" stroke-width="7"/>
+  <!-- Center circle -->
+  <circle cx="50" cy="50" r="11" fill="#111827" stroke="#FBBF24" stroke-width="5"/>
+  <circle cx="50" cy="50" r="4" fill="#FBBF24"/>
+  <!-- Hexagon border -->
+  <polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5" 
+    fill="none" stroke="#FBBF24" stroke-width="3" stroke-linejoin="round"/>
+</svg>

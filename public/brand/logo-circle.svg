@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1F2937"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+    <clipPath id="circ"><circle cx="50" cy="50" r="44"/></clipPath>
+  </defs>
+  <!-- Outer ring -->
+  <circle cx="50" cy="50" r="47" fill="#FBBF24"/>
+  <circle cx="50" cy="50" r="44" fill="url(#bgGrad)"/>
+  <!-- Top half yellow fill -->
+  <rect x="6" y="6" width="88" height="44" fill="#FBBF24" clip-path="url(#circ)"/>
+  <!-- Horizontal divider -->
+  <rect x="6" y="47" width="88" height="6" fill="#111827"/>
+  <!-- Center circle -->
+  <circle cx="50" cy="50" r="13" fill="#111827" stroke="#FBBF24" stroke-width="5"/>
+  <circle cx="50" cy="50" r="5" fill="#FBBF24"/>
+  <!-- Star points top - subtle -->
+  <polygon points="50,10 52.5,18 60,18 54,23 56.5,31 50,26 43.5,31 46,23 40,18 47.5,18"
+    fill="#111827" opacity="0.4"/>
+</svg>

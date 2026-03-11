@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <defs>
+    <linearGradient id="diamondGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1F2937"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+  </defs>
+  <!-- Diamond shape -->
+  <polygon points="50,4 96,50 50,96 4,50" fill="url(#diamondGrad)" 
+    stroke="#FBBF24" stroke-width="3" stroke-linejoin="round"/>
+  <!-- Inner diamond top half yellow -->
+  <polygon points="50,14 86,50 50,50 14,50" fill="#FBBF24" opacity="0.9"/>
+  <!-- Dividing line -->
+  <line x1="14" y1="50" x2="86" y2="50" stroke="#111827" stroke-width="5"/>
+  <!-- Center ring -->
+  <circle cx="50" cy="50" r="10" fill="#111827" stroke="#FBBF24" stroke-width="4"/>
+  <circle cx="50" cy="50" r="3.5" fill="#FBBF24"/>
+</svg>

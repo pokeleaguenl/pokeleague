@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PokéLeague Logo Concepts</title>
+<style>
+  body { background: #0a0a0a; font-family: system-ui, sans-serif; color: #fff; padding: 40px; }
+  h1 { color: #FBBF24; margin-bottom: 8px; }
+  p { color: #6b7280; margin-bottom: 40px; font-size: 14px; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; max-width: 800px; }
+  .card { background: #111827; border: 1px solid #1f2937; border-radius: 16px; padding: 32px; text-align: center; }
+  .card h2 { font-size: 13px; color: #9ca3af; margin: 16px 0 4px; text-transform: uppercase; letter-spacing: 0.1em; }
+  .card p { color: #4b5563; font-size: 11px; margin: 0; }
+  .sizes { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 20px; }
+  .sizes span { color: #374151; font-size: 10px; display: block; text-align: center; margin-top: 4px; }
+  .nav-demo { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px 24px; max-width: 800px; margin-top: 40px; display: flex; align-items: center; gap: 10px; }
+  .nav-demo span { color: #FBBF24; font-weight: 700; font-size: 18px; }
+</style>
+</head>
+<body>
+<h1>PokéLeague Logo Concepts</h1>
+<p>Three abstract mark concepts — pick your favourite or mix elements.</p>
+
+<div class="grid">
+  <div class="card">
+    <img src="logo-hex.svg" width="120" height="120" alt="Hex">
+    <h2>A — Hexagon</h2>
+    <p>Six-sided card shape with Poké Ball split. Strong, geometric, badge-like.</p>
+    <div class="sizes">
+      <div><img src="logo-hex.svg" width="48" height="48"><span>48px</span></div>
+      <div><img src="logo-hex.svg" width="24" height="24"><span>24px</span></div>
+      <div><img src="logo-hex.svg" width="16" height="16"><span>16px</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="logo-diamond.svg" width="120" height="120" alt="Diamond">
+    <h2>B — Diamond</h2>
+    <p>Card-suit diamond with Poké Ball split. Sleek, sharp, recognisable.</p>
+    <div class="sizes">
+      <div><img src="logo-diamond.svg" width="48" height="48"><span>48px</span></div>
+      <div><img src="logo-diamond.svg" width="24" height="24"><span>24px</span></div>
+      <div><img src="logo-diamond.svg" width="16" height="16"><span>16px</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <img src="logo-circle.svg" width="120" height="120" alt="Circle">
+    <h2>C — Circle</h2>
+    <p>Classic Poké Ball circular badge. Familiar, clean, works great small.</p>
+    <div class="sizes">
+      <div><img src="logo-circle.svg" width="48" height="48"><span>48px</span></div>
+      <div><img src="logo-circle.svg" width="24" height="24"><span>24px</span></div>
+      <div><img src="logo-circle.svg" width="16" height="16"><span>16px</span></div>
+    </div>
+  </div>
+</div>
+
+<p style="margin-top:40px;margin-bottom:16px;color:#6b7280;font-size:13px;">How each looks in the nav bar:</p>
+
+<div class="nav-demo">
+  <img src="logo-hex.svg" width="28" height="28"> <span>PokéLeague</span>
+  <span style="color:#374151;margin:0 16px">|</span>
+  <img src="logo-diamond.svg" width="28" height="28"> <span>PokéLeague</span>
+  <span style="color:#374151;margin:0 16px">|</span>
+  <img src="logo-circle.svg" width="28" height="28"> <span>PokéLeague</span>
+</div>
+
+</body>
+</html>
