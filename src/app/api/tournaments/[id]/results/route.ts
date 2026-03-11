@@ -10,7 +10,7 @@ function calcBasePoints(made_day2: boolean, top8: boolean, won: boolean, win_rat
   if (made_day2) pts += 3;
   if (top8) pts += 10;
   if (won) pts += 25;
-  if (win_rate >= 60) pts += 20;
+  if (win_rate >= 0.6) pts += 20;
   if (had_win) pts += 1; // participation bonus
   return pts;
 }

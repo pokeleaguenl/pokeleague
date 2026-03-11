@@ -48,10 +48,36 @@ export interface RK9Analytics {
 export async function calculateRK9Analytics(
   supabase: SupabaseClient,
   archetypeName: string,
-  tournamentId: string = 'SG0167ss5UCjklsDaPrA',
-  round: number = 18
+  tournamentId?: string,
+  round?: number
 ): Promise<RK9Analytics | null> {
-  
+
+  // Resolve tournament ID dynamically if not provided
+  if (!tournamentId) {
+    const { data: latestTournament } = await supabase
+      .from("tournaments")
+      .select("rk9_id")
+      .eq("status", "completed")
+      .order("event_date", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (!latestTournament?.rk9_id) return null;
+    tournamentId = latestTournament.rk9_id;
+  }
+
+  // Resolve round dynamically if not provided
+  if (!round) {
+    const { data: roundData } = await supabase
+      .from("rk9_standings")
+      .select("round")
+      .eq("tournament_id", tournamentId)
+      .order("round", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (!roundData?.round) return null;
+    round = roundData.round;
+  }
+
   // Try exact match first
   let { data: standings, error: standingsError } = await supabase
     .from("rk9_standings")

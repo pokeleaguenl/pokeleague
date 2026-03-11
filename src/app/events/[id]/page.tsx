@@ -118,7 +118,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
                     {r.made_day2 && <span className="text-[9px] rounded bg-blue-900/50 px-1 py-0.5 text-blue-300">Day 2 +3</span>}
                     {r.top8 && <span className="text-[9px] rounded bg-purple-900/50 px-1 py-0.5 text-purple-300">Top 8 +10</span>}
                     {r.won && <span className="text-[9px] rounded bg-yellow-900/50 px-1 py-0.5 text-yellow-300">Winner +25</span>}
-                    {r.win_rate >= 60 && <span className="text-[9px] rounded bg-green-900/50 px-1 py-0.5 text-green-300">60%+ WR +20</span>}
+                    {r.win_rate >= 0.6 && <span className="text-[9px] rounded bg-green-900/50 px-1 py-0.5 text-green-300">60%+ WR +20</span>}
                   </div>
                 </div>
                 <span className="shrink-0 font-bold text-yellow-400">{r.base_points}pts</span>

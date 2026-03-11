@@ -10,7 +10,7 @@ export function calcArchetypeBasePoints(result: ArchetypeResult): number {
   if (result.made_day2) pts += FANTASY_CONFIG.POINTS.DAY2;
   if (result.top8) pts += FANTASY_CONFIG.POINTS.TOP8;
   if (result.won) pts += FANTASY_CONFIG.POINTS.WIN;
-  if (result.win_rate >= 60) pts += FANTASY_CONFIG.POINTS.WIN_RATE_60;
+  if (result.win_rate >= 0.6) pts += FANTASY_CONFIG.POINTS.WIN_RATE_60;
   if (result.had_win) pts += FANTASY_CONFIG.WIN_BONUS;
   return pts;
 }
