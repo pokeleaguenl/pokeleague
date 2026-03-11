@@ -13,6 +13,8 @@ const tierColors: Record<string, string> = {
   D: "bg-gray-600 text-white",
 };
 
+const TIERS = ["All", "S", "A", "B", "C", "D"];
+
 interface Props {
   decks: Deck[];
   usedIds: Set<number>;
@@ -25,12 +27,15 @@ interface Props {
 
 export default function DeckBrowser({ decks, usedIds, remaining, currentSlotCost, onSelect, onClose, theme }: Props) {
   const [search, setSearch] = useState("");
+  const [tierFilter, setTierFilter] = useState("All");
 
-  const effectiveBudget = remaining + currentSlotCost; // budget if we remove current slot deck
+  const effectiveBudget = remaining + currentSlotCost;
 
-  const filtered = decks.filter((d) =>
-    d.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = decks
+    .filter((d) => d.meta_share >= 0.5)
+    .filter((d) => tierFilter === "All" || d.tier === tierFilter)
+    .filter((d) => d.name.toLowerCase().includes(search.toLowerCase()))
+    .sort((a, b) => (b.total_points ?? 0) - (a.total_points ?? 0));
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/80 backdrop-blur-sm sm:items-center" onClick={onClose}>
@@ -38,6 +43,7 @@ export default function DeckBrowser({ decks, usedIds, remaining, currentSlotCost
         className={`w-full max-w-lg rounded-t-2xl p-4 sm:rounded-2xl ${theme.bg} border border-white/10`}
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Header */}
         <div className="mb-3 flex items-center justify-between">
           <div>
             <h2 className="text-lg font-bold">Select a Deck</h2>
@@ -48,16 +54,39 @@ export default function DeckBrowser({ decks, usedIds, remaining, currentSlotCost
           <button onClick={onClose} className="text-gray-400 hover:text-white text-xl">✕</button>
         </div>
 
+        {/* Search */}
         <input
           type="text"
           placeholder="Search decks..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="mb-3 w-full rounded-lg border border-white/10 bg-black/30 px-4 py-2 text-sm placeholder-gray-500 focus:border-yellow-400 focus:outline-none"
+          className="mb-2 w-full rounded-lg border border-white/10 bg-black/30 px-4 py-2 text-sm placeholder-gray-500 focus:border-yellow-400 focus:outline-none"
           autoFocus
         />
 
-        <div className="max-h-96 space-y-2 overflow-y-auto pr-1">
+        {/* Tier filter tabs */}
+        <div className="mb-3 flex gap-1.5">
+          {TIERS.map((t) => (
+            <button
+              key={t}
+              onClick={() => setTierFilter(t)}
+              className={`rounded-md px-2.5 py-1 text-xs font-bold transition-all
+                ${tierFilter === t
+                  ? t === "All" ? "bg-white/20 text-white" : `${tierColors[t]} ring-1 ring-white/30`
+                  : "bg-white/5 text-gray-400 hover:bg-white/10"
+                }`}
+            >
+              {t}
+            </button>
+          ))}
+          <span className="ml-auto text-xs text-gray-600 self-center">{filtered.length} decks</span>
+        </div>
+
+        {/* Deck list */}
+        <div className="max-h-96 space-y-1.5 overflow-y-auto pr-1">
+          {filtered.length === 0 && (
+            <p className="py-8 text-center text-sm text-gray-500">No decks found</p>
+          )}
           {filtered.map((deck) => {
             const used = usedIds.has(deck.id);
             const tooExpensive = !used && deck.cost > effectiveBudget;
@@ -68,22 +97,43 @@ export default function DeckBrowser({ decks, usedIds, remaining, currentSlotCost
                 key={deck.id}
                 disabled={disabled}
                 onClick={() => !disabled && onSelect(deck)}
-                className={`flex w-full items-center gap-3 rounded-lg border p-3 text-left transition-all
+                className={`flex w-full items-center gap-3 rounded-lg border p-2.5 text-left transition-all
                   ${used ? "border-white/5 opacity-25 cursor-not-allowed" :
                     tooExpensive ? "border-red-900/50 opacity-40 cursor-not-allowed" :
-                    `border-white/10 hover:border-yellow-400/60 hover:bg-white/5 cursor-pointer`
+                    "border-white/10 hover:border-yellow-400/60 hover:bg-white/5 cursor-pointer"
                   }`}
               >
-                {deck.image_url && (
-                  <Image src={deck.image_url} alt={deck.name} width={36} height={36} className="shrink-0 object-contain" />
-                )}
+                {/* Images — dual for combo decks */}
+                <div className="relative shrink-0 w-10 h-10">
+                  {deck.image_url && (
+                    <Image src={deck.image_url} alt={deck.name} width={36} height={36}
+                      className="absolute left-0 top-0 object-contain" />
+                  )}
+                  {deck.image_url_2 && (
+                    <Image src={deck.image_url_2} alt="" width={24} height={24}
+                      className="absolute right-0 bottom-0 object-contain drop-shadow-md" />
+                  )}
+                </div>
+
+                {/* Name + meta share */}
                 <div className="flex-1 min-w-0">
                   <p className="truncate font-medium text-sm">{deck.name}</p>
-                  <p className="text-xs text-gray-500">{deck.meta_share}% meta share</p>
+                  <p className="text-xs text-gray-500">{deck.meta_share}% meta</p>
                 </div>
+
+                {/* Fantasy points */}
+                {(deck.total_points ?? 0) > 0 && (
+                  <span className="shrink-0 text-xs font-semibold text-green-400">
+                    {deck.total_points}pts
+                  </span>
+                )}
+
+                {/* Tier badge */}
                 <span className={`shrink-0 rounded px-1.5 py-0.5 text-xs font-bold ${tierColors[deck.tier] || tierColors.D}`}>
                   {deck.tier}
                 </span>
+
+                {/* Cost */}
                 <span className={`shrink-0 text-sm font-bold ${tooExpensive ? "text-red-400" : "text-yellow-400"}`}>
                   {deck.cost}pts
                 </span>

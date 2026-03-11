@@ -13,6 +13,8 @@ export interface Deck {
   cost: number;
   meta_share: number;
   image_url: string | null;
+  image_url_2: string | null;
+  total_points?: number;
 }
 
 type SlotKey =
@@ -503,13 +505,22 @@ function DeckSlot({
           {isActive && (
             <div className={`absolute inset-0 rounded-xl opacity-20 bg-gradient-to-b ${theme.overlay}`} />
           )}
-          {deck.image_url && (
-            <Image src={deck.image_url} alt={deck.name}
-              width={isActive ? 72 : isHand ? 32 : 44}
-              height={isActive ? 72 : isHand ? 32 : 44}
-              className={`relative z-10 object-contain drop-shadow-lg ${isActive ? "animate-pulse-slow" : ""}`}
-            />
-          )}
+          <div className={`relative z-10 flex items-center justify-center ${isActive ? "w-20 h-20" : isHand ? "w-10 h-10" : "w-12 h-12"}`}>
+            {deck.image_url && (
+              <Image src={deck.image_url} alt={deck.name}
+                width={isActive ? 64 : isHand ? 28 : 40}
+                height={isActive ? 64 : isHand ? 28 : 40}
+                className={`object-contain drop-shadow-lg ${isActive ? "animate-pulse-slow" : ""}`}
+              />
+            )}
+            {deck.image_url_2 && (
+              <Image src={deck.image_url_2} alt=""
+                width={isActive ? 32 : isHand ? 16 : 22}
+                height={isActive ? 32 : isHand ? 16 : 22}
+                className="absolute bottom-0 right-0 object-contain drop-shadow-md"
+              />
+            )}
+          </div>
           <p className={`relative z-10 mt-1 text-center font-semibold leading-tight px-1 text-white ${isActive ? "text-sm" : "text-[9px]"}`}>
             {deck.name}
           </p>

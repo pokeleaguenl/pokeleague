@@ -11,8 +11,8 @@ export default async function SquadPage() {
 
   const today = new Date().toISOString().split("T")[0];
 
-  const [{ data: decks }, { data: squadRaw }, { data: nextEvent }] = await Promise.all([
-    supabase.from("decks").select("*").order("meta_share", { ascending: false }),
+  const [{ data: rpcDecks }, { data: squadRaw }, { data: nextEvent }] = await Promise.all([
+    supabase.rpc("get_deck_list_with_points"),
     supabase.from("squads")
       .select(`
         *,
@@ -36,6 +36,18 @@ export default async function SquadPage() {
       .limit(1)
       .maybeSingle(),
   ]);
+
+  // Map RPC results to Deck shape
+  const decks = (rpcDecks ?? []).map((d: Record<string, unknown>) => ({
+    id: d.deck_id as number,
+    name: d.deck_name as string,
+    tier: d.tier as string,
+    cost: d.cost as number,
+    meta_share: d.meta_share as number,
+    image_url: d.image_url as string | null,
+    image_url_2: d.image_url_2 as string | null,
+    total_points: d.total_points as number,
+  }));
 
   const variantResult = await supabase.from("deck_variants").select("*");
   const allVariants = variantResult.data ?? [];
@@ -97,7 +109,7 @@ export default async function SquadPage() {
         )}
       </div>
       <Playmat
-        allDecks={decks ?? []}
+        allDecks={decks}
         initialSquad={initialSquad}
         initialVariants={initialVariants}
         variantsByDeckId={variantsByDeckId}
