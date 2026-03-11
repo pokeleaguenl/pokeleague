@@ -57,7 +57,7 @@ export default function HowToScore() {
             </div>
           ))}
         </div>
-        <p className="mt-2 text-xs text-gray-600">Points stack — a deck that wins and has >60% WR earns +25 +20 +10 +3 +1 = <span className="text-yellow-400 font-semibold">59 pts</span> before multiplier</p>
+        <p className="mt-2 text-xs text-gray-600">Points stack — a deck that wins and has &gt;60% WR earns +25 +20 +10 +3 +1 = <span className="text-yellow-400 font-semibold">59 pts</span> before multiplier</p>
       </section>
 
       {/* Worked example */}
