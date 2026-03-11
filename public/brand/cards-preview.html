@@ -12,7 +12,7 @@
   .card{background:#0d1220;border:2px solid #1f2937;border-radius:16px;padding:28px 20px 20px;text-align:center;cursor:pointer;transition:all 0.15s}
   .card:hover{border-color:#4b5563;transform:translateY(-3px)}
   .card.selected{border-color:#FBBF24!important;background:#141b2e;box-shadow:0 0 32px rgba(251,191,36,0.12)}
-  .img-wrap{display:flex;justify-content:center;align-items:center;height:160px;margin-bottom:8px}
+  .img-wrap{display:flex;justify-content:center;align-items:center;height:160px;margin-bottom:8px;overflow:visible}
   .card h2{font-size:12px;color:#e2e8f0;margin:14px 0 6px;text-transform:uppercase;letter-spacing:0.08em;font-weight:700}
   .card p{color:#4b5563;font-size:11px;margin-bottom:16px;line-height:1.5}
   .sizes{display:flex;align-items:flex-end;justify-content:center;gap:20px}
@@ -32,161 +32,121 @@
   <div class="card" onclick="this.classList.toggle('selected')">
     <div class="img-wrap"><svg width="160" height="160" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
   <defs>
-    <linearGradient id="v1g1" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FCD34D"/>
-      <stop offset="100%" stop-color="#D97706"/>
+    <linearGradient id="v1gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#D97706"/>
     </linearGradient>
-    <linearGradient id="v1g2" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1e293b"/>
-      <stop offset="100%" stop-color="#0f172a"/>
-    </linearGradient>
-    <filter id="v1shadow">
-      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.5"/>
-    </filter>
   </defs>
-  <!-- Back card left -->
-  <rect x="14" y="22" rx="7"
-    fill="#1a2744" stroke="#3b4f7a" stroke-width="1.5"
-    transform="rotate(-18 39 55)" filter="url(#v1shadow)"/>
-  <rect x="14" y="22" rx="7"
-    fill="#2a3f6e" transform="rotate(-18 39 55)"/>
-  <!-- Back card right -->
-  <rect x="36" y="22" rx="7"
-    fill="#1a2744" stroke="#3b4f7a" stroke-width="1.5"
-    transform="rotate(18 61 55)" filter="url(#v1shadow)"/>
-  <rect x="36" y="22" rx="7"
-    fill="#2a3f6e" transform="rotate(18 61 55)"/>
-  <!-- Main card centre -->
-  <rect x="25" y="14" rx="8"
-    fill="url(#v1g2)" stroke="#FBBF24" stroke-width="2.5" filter="url(#v1shadow)"/>
-  <!-- Gold top band -->
-  <rect x="25" y="14" rx="8" fill="url(#v1g1)"/>
-  <rect x="25" y="30" fill="url(#v1g1)"/>
-  <!-- Pokeball on centre card -->
-  <circle cx="50" cy="56" r="13" fill="#0f172a" stroke="#FBBF24" stroke-width="3"/>
-  <path d="M37 56 A13 13 0 0 1 63 56 Z" fill="#FBBF24"/>
-  <rect x="37" y="53" fill="#0f172a"/>
-  <circle cx="50" cy="56" r="5" fill="#0f172a" stroke="#FBBF24" stroke-width="3"/>
-  <circle cx="50" cy="56" r="2" fill="#FBBF24"/>
+  <!-- Left card rotated -15deg around centre -->
+  <g transform="rotate(-15 50 60)">
+    <rect x="14" y="18" rx="5" fill="#111f3a" stroke="#2a4070" stroke-width="1.5"/>
+    <rect x="14" y="18" rx="5" fill="#1e3560"/>
+    <rect x="14" y="26" fill="#1e3560"/>
+  </g>
+  <!-- Right card rotated +15deg -->
+  <g transform="rotate(15 50 60)">
+    <rect x="48" y="18" rx="5" fill="#111f3a" stroke="#2a4070" stroke-width="1.5"/>
+    <rect x="48" y="18" rx="5" fill="#1e3560"/>
+    <rect x="48" y="26" fill="#1e3560"/>
+  </g>
+  <!-- Centre card — no rotation, on top -->
+  <rect x="27" y="12" rx="7" fill="#0f172a" stroke="#FBBF24" stroke-width="2.5"/>
+  <rect x="27" y="12" rx="7" fill="url(#v1gold)"/>
+  <rect x="27" y="28" fill="url(#v1gold)"/>
+  <!-- Pokeball -->
+  <circle cx="50" cy="58" r="13" fill="#0a0f1e" stroke="#FBBF24" stroke-width="2.5"/>
+  <path d="M37 58 A13 13 0 0 1 63 58 Z" fill="#FBBF24"/>
+  <rect x="37" y="55" fill="#0a0f1e"/>
+  <circle cx="50" cy="58" r="5" fill="#0a0f1e" stroke="#FBBF24" stroke-width="2.5"/>
+  <circle cx="50" cy="58" r="2" fill="#FBBF24"/>
 </svg></div>
-    <h2>V1 — Tight Fan</h2><p>3 cards, clean gold/dark, sharp shadows</p>
+    <h2>V1 — Tight Fan</h2><p>3 cards, gold centre, dark side cards</p>
     <div class="sizes">
       <div><svg width="64" height="64" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
   <defs>
-    <linearGradient id="v1g1" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FCD34D"/>
-      <stop offset="100%" stop-color="#D97706"/>
+    <linearGradient id="v1gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#D97706"/>
     </linearGradient>
-    <linearGradient id="v1g2" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1e293b"/>
-      <stop offset="100%" stop-color="#0f172a"/>
-    </linearGradient>
-    <filter id="v1shadow">
-      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.5"/>
-    </filter>
   </defs>
-  <!-- Back card left -->
-  <rect x="14" y="22" rx="7"
-    fill="#1a2744" stroke="#3b4f7a" stroke-width="1.5"
-    transform="rotate(-18 39 55)" filter="url(#v1shadow)"/>
-  <rect x="14" y="22" rx="7"
-    fill="#2a3f6e" transform="rotate(-18 39 55)"/>
-  <!-- Back card right -->
-  <rect x="36" y="22" rx="7"
-    fill="#1a2744" stroke="#3b4f7a" stroke-width="1.5"
-    transform="rotate(18 61 55)" filter="url(#v1shadow)"/>
-  <rect x="36" y="22" rx="7"
-    fill="#2a3f6e" transform="rotate(18 61 55)"/>
-  <!-- Main card centre -->
-  <rect x="25" y="14" rx="8"
-    fill="url(#v1g2)" stroke="#FBBF24" stroke-width="2.5" filter="url(#v1shadow)"/>
-  <!-- Gold top band -->
-  <rect x="25" y="14" rx="8" fill="url(#v1g1)"/>
-  <rect x="25" y="30" fill="url(#v1g1)"/>
-  <!-- Pokeball on centre card -->
-  <circle cx="50" cy="56" r="13" fill="#0f172a" stroke="#FBBF24" stroke-width="3"/>
-  <path d="M37 56 A13 13 0 0 1 63 56 Z" fill="#FBBF24"/>
-  <rect x="37" y="53" fill="#0f172a"/>
-  <circle cx="50" cy="56" r="5" fill="#0f172a" stroke="#FBBF24" stroke-width="3"/>
-  <circle cx="50" cy="56" r="2" fill="#FBBF24"/>
+  <!-- Left card rotated -15deg around centre -->
+  <g transform="rotate(-15 50 60)">
+    <rect x="14" y="18" rx="5" fill="#111f3a" stroke="#2a4070" stroke-width="1.5"/>
+    <rect x="14" y="18" rx="5" fill="#1e3560"/>
+    <rect x="14" y="26" fill="#1e3560"/>
+  </g>
+  <!-- Right card rotated +15deg -->
+  <g transform="rotate(15 50 60)">
+    <rect x="48" y="18" rx="5" fill="#111f3a" stroke="#2a4070" stroke-width="1.5"/>
+    <rect x="48" y="18" rx="5" fill="#1e3560"/>
+    <rect x="48" y="26" fill="#1e3560"/>
+  </g>
+  <!-- Centre card — no rotation, on top -->
+  <rect x="27" y="12" rx="7" fill="#0f172a" stroke="#FBBF24" stroke-width="2.5"/>
+  <rect x="27" y="12" rx="7" fill="url(#v1gold)"/>
+  <rect x="27" y="28" fill="url(#v1gold)"/>
+  <!-- Pokeball -->
+  <circle cx="50" cy="58" r="13" fill="#0a0f1e" stroke="#FBBF24" stroke-width="2.5"/>
+  <path d="M37 58 A13 13 0 0 1 63 58 Z" fill="#FBBF24"/>
+  <rect x="37" y="55" fill="#0a0f1e"/>
+  <circle cx="50" cy="58" r="5" fill="#0a0f1e" stroke="#FBBF24" stroke-width="2.5"/>
+  <circle cx="50" cy="58" r="2" fill="#FBBF24"/>
 </svg><span>64px</span></div>
       <div><svg width="32" height="32" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
   <defs>
-    <linearGradient id="v1g1" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FCD34D"/>
-      <stop offset="100%" stop-color="#D97706"/>
+    <linearGradient id="v1gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#D97706"/>
     </linearGradient>
-    <linearGradient id="v1g2" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1e293b"/>
-      <stop offset="100%" stop-color="#0f172a"/>
-    </linearGradient>
-    <filter id="v1shadow">
-      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.5"/>
-    </filter>
   </defs>
-  <!-- Back card left -->
-  <rect x="14" y="22" rx="7"
-    fill="#1a2744" stroke="#3b4f7a" stroke-width="1.5"
-    transform="rotate(-18 39 55)" filter="url(#v1shadow)"/>
-  <rect x="14" y="22" rx="7"
-    fill="#2a3f6e" transform="rotate(-18 39 55)"/>
-  <!-- Back card right -->
-  <rect x="36" y="22" rx="7"
-    fill="#1a2744" stroke="#3b4f7a" stroke-width="1.5"
-    transform="rotate(18 61 55)" filter="url(#v1shadow)"/>
-  <rect x="36" y="22" rx="7"
-    fill="#2a3f6e" transform="rotate(18 61 55)"/>
-  <!-- Main card centre -->
-  <rect x="25" y="14" rx="8"
-    fill="url(#v1g2)" stroke="#FBBF24" stroke-width="2.5" filter="url(#v1shadow)"/>
-  <!-- Gold top band -->
-  <rect x="25" y="14" rx="8" fill="url(#v1g1)"/>
-  <rect x="25" y="30" fill="url(#v1g1)"/>
-  <!-- Pokeball on centre card -->
-  <circle cx="50" cy="56" r="13" fill="#0f172a" stroke="#FBBF24" stroke-width="3"/>
-  <path d="M37 56 A13 13 0 0 1 63 56 Z" fill="#FBBF24"/>
-  <rect x="37" y="53" fill="#0f172a"/>
-  <circle cx="50" cy="56" r="5" fill="#0f172a" stroke="#FBBF24" stroke-width="3"/>
-  <circle cx="50" cy="56" r="2" fill="#FBBF24"/>
+  <!-- Left card rotated -15deg around centre -->
+  <g transform="rotate(-15 50 60)">
+    <rect x="14" y="18" rx="5" fill="#111f3a" stroke="#2a4070" stroke-width="1.5"/>
+    <rect x="14" y="18" rx="5" fill="#1e3560"/>
+    <rect x="14" y="26" fill="#1e3560"/>
+  </g>
+  <!-- Right card rotated +15deg -->
+  <g transform="rotate(15 50 60)">
+    <rect x="48" y="18" rx="5" fill="#111f3a" stroke="#2a4070" stroke-width="1.5"/>
+    <rect x="48" y="18" rx="5" fill="#1e3560"/>
+    <rect x="48" y="26" fill="#1e3560"/>
+  </g>
+  <!-- Centre card — no rotation, on top -->
+  <rect x="27" y="12" rx="7" fill="#0f172a" stroke="#FBBF24" stroke-width="2.5"/>
+  <rect x="27" y="12" rx="7" fill="url(#v1gold)"/>
+  <rect x="27" y="28" fill="url(#v1gold)"/>
+  <!-- Pokeball -->
+  <circle cx="50" cy="58" r="13" fill="#0a0f1e" stroke="#FBBF24" stroke-width="2.5"/>
+  <path d="M37 58 A13 13 0 0 1 63 58 Z" fill="#FBBF24"/>
+  <rect x="37" y="55" fill="#0a0f1e"/>
+  <circle cx="50" cy="58" r="5" fill="#0a0f1e" stroke="#FBBF24" stroke-width="2.5"/>
+  <circle cx="50" cy="58" r="2" fill="#FBBF24"/>
 </svg><span>32px</span></div>
       <div><svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
   <defs>
-    <linearGradient id="v1g1" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FCD34D"/>
-      <stop offset="100%" stop-color="#D97706"/>
+    <linearGradient id="v1gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#D97706"/>
     </linearGradient>
-    <linearGradient id="v1g2" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1e293b"/>
-      <stop offset="100%" stop-color="#0f172a"/>
-    </linearGradient>
-    <filter id="v1shadow">
-      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.5"/>
-    </filter>
   </defs>
-  <!-- Back card left -->
-  <rect x="14" y="22" rx="7"
-    fill="#1a2744" stroke="#3b4f7a" stroke-width="1.5"
-    transform="rotate(-18 39 55)" filter="url(#v1shadow)"/>
-  <rect x="14" y="22" rx="7"
-    fill="#2a3f6e" transform="rotate(-18 39 55)"/>
-  <!-- Back card right -->
-  <rect x="36" y="22" rx="7"
-    fill="#1a2744" stroke="#3b4f7a" stroke-width="1.5"
-    transform="rotate(18 61 55)" filter="url(#v1shadow)"/>
-  <rect x="36" y="22" rx="7"
-    fill="#2a3f6e" transform="rotate(18 61 55)"/>
-  <!-- Main card centre -->
-  <rect x="25" y="14" rx="8"
-    fill="url(#v1g2)" stroke="#FBBF24" stroke-width="2.5" filter="url(#v1shadow)"/>
-  <!-- Gold top band -->
-  <rect x="25" y="14" rx="8" fill="url(#v1g1)"/>
-  <rect x="25" y="30" fill="url(#v1g1)"/>
-  <!-- Pokeball on centre card -->
-  <circle cx="50" cy="56" r="13" fill="#0f172a" stroke="#FBBF24" stroke-width="3"/>
-  <path d="M37 56 A13 13 0 0 1 63 56 Z" fill="#FBBF24"/>
-  <rect x="37" y="53" fill="#0f172a"/>
-  <circle cx="50" cy="56" r="5" fill="#0f172a" stroke="#FBBF24" stroke-width="3"/>
-  <circle cx="50" cy="56" r="2" fill="#FBBF24"/>
+  <!-- Left card rotated -15deg around centre -->
+  <g transform="rotate(-15 50 60)">
+    <rect x="14" y="18" rx="5" fill="#111f3a" stroke="#2a4070" stroke-width="1.5"/>
+    <rect x="14" y="18" rx="5" fill="#1e3560"/>
+    <rect x="14" y="26" fill="#1e3560"/>
+  </g>
+  <!-- Right card rotated +15deg -->
+  <g transform="rotate(15 50 60)">
+    <rect x="48" y="18" rx="5" fill="#111f3a" stroke="#2a4070" stroke-width="1.5"/>
+    <rect x="48" y="18" rx="5" fill="#1e3560"/>
+    <rect x="48" y="26" fill="#1e3560"/>
+  </g>
+  <!-- Centre card — no rotation, on top -->
+  <rect x="27" y="12" rx="7" fill="#0f172a" stroke="#FBBF24" stroke-width="2.5"/>
+  <rect x="27" y="12" rx="7" fill="url(#v1gold)"/>
+  <rect x="27" y="28" fill="url(#v1gold)"/>
+  <!-- Pokeball -->
+  <circle cx="50" cy="58" r="13" fill="#0a0f1e" stroke="#FBBF24" stroke-width="2.5"/>
+  <path d="M37 58 A13 13 0 0 1 63 58 Z" fill="#FBBF24"/>
+  <rect x="37" y="55" fill="#0a0f1e"/>
+  <circle cx="50" cy="58" r="5" fill="#0a0f1e" stroke="#FBBF24" stroke-width="2.5"/>
+  <circle cx="50" cy="58" r="2" fill="#FBBF24"/>
 </svg><span>20px</span></div>
     </div>
   </div>
@@ -194,353 +154,317 @@
     <div class="img-wrap"><svg width="160" height="160" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
   <defs>
     <linearGradient id="v2gold" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FDE68A"/>
-      <stop offset="100%" stop-color="#F59E0B"/>
+      <stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#D97706"/>
     </linearGradient>
-    <filter id="v2s"><feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-opacity="0.6"/></filter>
   </defs>
-  <!-- Far left card -->
-  <rect x="18" y="30" rx="5"
-    fill="#0c1829" stroke="#1e3a5f" stroke-width="1.2"
-    transform="rotate(-30 36 56)" filter="url(#v2s)"/>
-  <!-- Left card -->
-  <rect x="22" y="24" rx="6"
-    fill="#0f1f35" stroke="#2a4a7a" stroke-width="1.5"
-    transform="rotate(-15 41 52)" filter="url(#v2s)"/>
-  <!-- Centre card — gold -->
-  <rect x="31" y="16" rx="7"
-    fill="#111827" stroke="#FBBF24" stroke-width="2.5" filter="url(#v2s)"/>
-  <rect x="31" y="16" rx="7" fill="url(#v2gold)"/>
-  <rect x="31" y="28" fill="url(#v2gold)"/>
-  <!-- Star on gold section -->
-  <polygon points="50,20 51.8,25.5 57.5,25.5 53,28.8 54.8,34.3 50,31 45.2,34.3 47,28.8 42.5,25.5 48.2,25.5"
-    fill="#92400E" opacity="0.5"/>
-  <!-- Pokeball -->
-  <circle cx="50" cy="57" r="11" fill="#0a0f1a" stroke="#FBBF24" stroke-width="2.5"/>
-  <path d="M39 57 A11 11 0 0 1 61 57 Z" fill="#FBBF24"/>
-  <rect x="39" y="54.5" fill="#0a0f1a"/>
-  <circle cx="50" cy="57" r="4.5" fill="#0a0f1a" stroke="#FBBF24" stroke-width="2.5"/>
-  <circle cx="50" cy="57" r="1.8" fill="#FBBF24"/>
-  <!-- Right card -->
-  <rect x="40" y="24" rx="6"
-    fill="#0f1f35" stroke="#2a4a7a" stroke-width="1.5"
-    transform="rotate(15 59 52)" filter="url(#v2s)"/>
-  <!-- Far right card -->
-  <rect x="46" y="30" rx="5"
-    fill="#0c1829" stroke="#1e3a5f" stroke-width="1.2"
-    transform="rotate(30 64 56)" filter="url(#v2s)"/>
+  <!-- Far left -->
+  <g transform="rotate(-28 50 65)">
+    <rect x="16" y="22" rx="5" fill="#0c1628" stroke="#1a2e50" stroke-width="1.2"/>
+    <rect x="16" y="22" rx="5" fill="#162040"/>
+    <rect x="16" y="30" fill="#162040"/>
+  </g>
+  <!-- Left -->
+  <g transform="rotate(-14 50 65)">
+    <rect x="18" y="18" rx="6" fill="#0f1e38" stroke="#243660" stroke-width="1.5"/>
+    <rect x="18" y="18" rx="6" fill="#1a3060"/>
+    <rect x="18" y="28" fill="#1a3060"/>
+  </g>
+  <!-- Centre -->
+  <rect x="28" y="10" rx="7" fill="#0f172a" stroke="#FBBF24" stroke-width="2.5"/>
+  <rect x="28" y="10" rx="7" fill="url(#v2gold)"/>
+  <rect x="28" y="26" fill="url(#v2gold)"/>
+  <!-- Pokeball on centre -->
+  <circle cx="50" cy="54" r="12" fill="#080e1c" stroke="#FBBF24" stroke-width="2.5"/>
+  <path d="M38 54 A12 12 0 0 1 62 54 Z" fill="#FBBF24"/>
+  <rect x="38" y="51" fill="#080e1c"/>
+  <circle cx="50" cy="54" r="4.5" fill="#080e1c" stroke="#FBBF24" stroke-width="2.5"/>
+  <circle cx="50" cy="54" r="1.8" fill="#FBBF24"/>
+  <!-- Right -->
+  <g transform="rotate(14 50 65)">
+    <rect x="46" y="18" rx="6" fill="#0f1e38" stroke="#243660" stroke-width="1.5"/>
+    <rect x="46" y="18" rx="6" fill="#1a3060"/>
+    <rect x="46" y="28" fill="#1a3060"/>
+  </g>
+  <!-- Far right -->
+  <g transform="rotate(28 50 65)">
+    <rect x="50" y="22" rx="5" fill="#0c1628" stroke="#1a2e50" stroke-width="1.2"/>
+    <rect x="50" y="22" rx="5" fill="#162040"/>
+    <rect x="50" y="30" fill="#162040"/>
+  </g>
 </svg></div>
-    <h2>V2 — Wide Fan</h2><p>5 cards spread, dramatic, blue depth</p>
+    <h2>V2 — Wide Fan</h2><p>5 cards spread wide, dramatic depth</p>
     <div class="sizes">
       <div><svg width="64" height="64" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
   <defs>
     <linearGradient id="v2gold" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FDE68A"/>
-      <stop offset="100%" stop-color="#F59E0B"/>
+      <stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#D97706"/>
     </linearGradient>
-    <filter id="v2s"><feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-opacity="0.6"/></filter>
   </defs>
-  <!-- Far left card -->
-  <rect x="18" y="30" rx="5"
-    fill="#0c1829" stroke="#1e3a5f" stroke-width="1.2"
-    transform="rotate(-30 36 56)" filter="url(#v2s)"/>
-  <!-- Left card -->
-  <rect x="22" y="24" rx="6"
-    fill="#0f1f35" stroke="#2a4a7a" stroke-width="1.5"
-    transform="rotate(-15 41 52)" filter="url(#v2s)"/>
-  <!-- Centre card — gold -->
-  <rect x="31" y="16" rx="7"
-    fill="#111827" stroke="#FBBF24" stroke-width="2.5" filter="url(#v2s)"/>
-  <rect x="31" y="16" rx="7" fill="url(#v2gold)"/>
-  <rect x="31" y="28" fill="url(#v2gold)"/>
-  <!-- Star on gold section -->
-  <polygon points="50,20 51.8,25.5 57.5,25.5 53,28.8 54.8,34.3 50,31 45.2,34.3 47,28.8 42.5,25.5 48.2,25.5"
-    fill="#92400E" opacity="0.5"/>
-  <!-- Pokeball -->
-  <circle cx="50" cy="57" r="11" fill="#0a0f1a" stroke="#FBBF24" stroke-width="2.5"/>
-  <path d="M39 57 A11 11 0 0 1 61 57 Z" fill="#FBBF24"/>
-  <rect x="39" y="54.5" fill="#0a0f1a"/>
-  <circle cx="50" cy="57" r="4.5" fill="#0a0f1a" stroke="#FBBF24" stroke-width="2.5"/>
-  <circle cx="50" cy="57" r="1.8" fill="#FBBF24"/>
-  <!-- Right card -->
-  <rect x="40" y="24" rx="6"
-    fill="#0f1f35" stroke="#2a4a7a" stroke-width="1.5"
-    transform="rotate(15 59 52)" filter="url(#v2s)"/>
-  <!-- Far right card -->
-  <rect x="46" y="30" rx="5"
-    fill="#0c1829" stroke="#1e3a5f" stroke-width="1.2"
-    transform="rotate(30 64 56)" filter="url(#v2s)"/>
+  <!-- Far left -->
+  <g transform="rotate(-28 50 65)">
+    <rect x="16" y="22" rx="5" fill="#0c1628" stroke="#1a2e50" stroke-width="1.2"/>
+    <rect x="16" y="22" rx="5" fill="#162040"/>
+    <rect x="16" y="30" fill="#162040"/>
+  </g>
+  <!-- Left -->
+  <g transform="rotate(-14 50 65)">
+    <rect x="18" y="18" rx="6" fill="#0f1e38" stroke="#243660" stroke-width="1.5"/>
+    <rect x="18" y="18" rx="6" fill="#1a3060"/>
+    <rect x="18" y="28" fill="#1a3060"/>
+  </g>
+  <!-- Centre -->
+  <rect x="28" y="10" rx="7" fill="#0f172a" stroke="#FBBF24" stroke-width="2.5"/>
+  <rect x="28" y="10" rx="7" fill="url(#v2gold)"/>
+  <rect x="28" y="26" fill="url(#v2gold)"/>
+  <!-- Pokeball on centre -->
+  <circle cx="50" cy="54" r="12" fill="#080e1c" stroke="#FBBF24" stroke-width="2.5"/>
+  <path d="M38 54 A12 12 0 0 1 62 54 Z" fill="#FBBF24"/>
+  <rect x="38" y="51" fill="#080e1c"/>
+  <circle cx="50" cy="54" r="4.5" fill="#080e1c" stroke="#FBBF24" stroke-width="2.5"/>
+  <circle cx="50" cy="54" r="1.8" fill="#FBBF24"/>
+  <!-- Right -->
+  <g transform="rotate(14 50 65)">
+    <rect x="46" y="18" rx="6" fill="#0f1e38" stroke="#243660" stroke-width="1.5"/>
+    <rect x="46" y="18" rx="6" fill="#1a3060"/>
+    <rect x="46" y="28" fill="#1a3060"/>
+  </g>
+  <!-- Far right -->
+  <g transform="rotate(28 50 65)">
+    <rect x="50" y="22" rx="5" fill="#0c1628" stroke="#1a2e50" stroke-width="1.2"/>
+    <rect x="50" y="22" rx="5" fill="#162040"/>
+    <rect x="50" y="30" fill="#162040"/>
+  </g>
 </svg><span>64px</span></div>
       <div><svg width="32" height="32" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
   <defs>
     <linearGradient id="v2gold" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FDE68A"/>
-      <stop offset="100%" stop-color="#F59E0B"/>
+      <stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#D97706"/>
     </linearGradient>
-    <filter id="v2s"><feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-opacity="0.6"/></filter>
   </defs>
-  <!-- Far left card -->
-  <rect x="18" y="30" rx="5"
-    fill="#0c1829" stroke="#1e3a5f" stroke-width="1.2"
-    transform="rotate(-30 36 56)" filter="url(#v2s)"/>
-  <!-- Left card -->
-  <rect x="22" y="24" rx="6"
-    fill="#0f1f35" stroke="#2a4a7a" stroke-width="1.5"
-    transform="rotate(-15 41 52)" filter="url(#v2s)"/>
-  <!-- Centre card — gold -->
-  <rect x="31" y="16" rx="7"
-    fill="#111827" stroke="#FBBF24" stroke-width="2.5" filter="url(#v2s)"/>
-  <rect x="31" y="16" rx="7" fill="url(#v2gold)"/>
-  <rect x="31" y="28" fill="url(#v2gold)"/>
-  <!-- Star on gold section -->
-  <polygon points="50,20 51.8,25.5 57.5,25.5 53,28.8 54.8,34.3 50,31 45.2,34.3 47,28.8 42.5,25.5 48.2,25.5"
-    fill="#92400E" opacity="0.5"/>
-  <!-- Pokeball -->
-  <circle cx="50" cy="57" r="11" fill="#0a0f1a" stroke="#FBBF24" stroke-width="2.5"/>
-  <path d="M39 57 A11 11 0 0 1 61 57 Z" fill="#FBBF24"/>
-  <rect x="39" y="54.5" fill="#0a0f1a"/>
-  <circle cx="50" cy="57" r="4.5" fill="#0a0f1a" stroke="#FBBF24" stroke-width="2.5"/>
-  <circle cx="50" cy="57" r="1.8" fill="#FBBF24"/>
-  <!-- Right card -->
-  <rect x="40" y="24" rx="6"
-    fill="#0f1f35" stroke="#2a4a7a" stroke-width="1.5"
-    transform="rotate(15 59 52)" filter="url(#v2s)"/>
-  <!-- Far right card -->
-  <rect x="46" y="30" rx="5"
-    fill="#0c1829" stroke="#1e3a5f" stroke-width="1.2"
-    transform="rotate(30 64 56)" filter="url(#v2s)"/>
+  <!-- Far left -->
+  <g transform="rotate(-28 50 65)">
+    <rect x="16" y="22" rx="5" fill="#0c1628" stroke="#1a2e50" stroke-width="1.2"/>
+    <rect x="16" y="22" rx="5" fill="#162040"/>
+    <rect x="16" y="30" fill="#162040"/>
+  </g>
+  <!-- Left -->
+  <g transform="rotate(-14 50 65)">
+    <rect x="18" y="18" rx="6" fill="#0f1e38" stroke="#243660" stroke-width="1.5"/>
+    <rect x="18" y="18" rx="6" fill="#1a3060"/>
+    <rect x="18" y="28" fill="#1a3060"/>
+  </g>
+  <!-- Centre -->
+  <rect x="28" y="10" rx="7" fill="#0f172a" stroke="#FBBF24" stroke-width="2.5"/>
+  <rect x="28" y="10" rx="7" fill="url(#v2gold)"/>
+  <rect x="28" y="26" fill="url(#v2gold)"/>
+  <!-- Pokeball on centre -->
+  <circle cx="50" cy="54" r="12" fill="#080e1c" stroke="#FBBF24" stroke-width="2.5"/>
+  <path d="M38 54 A12 12 0 0 1 62 54 Z" fill="#FBBF24"/>
+  <rect x="38" y="51" fill="#080e1c"/>
+  <circle cx="50" cy="54" r="4.5" fill="#080e1c" stroke="#FBBF24" stroke-width="2.5"/>
+  <circle cx="50" cy="54" r="1.8" fill="#FBBF24"/>
+  <!-- Right -->
+  <g transform="rotate(14 50 65)">
+    <rect x="46" y="18" rx="6" fill="#0f1e38" stroke="#243660" stroke-width="1.5"/>
+    <rect x="46" y="18" rx="6" fill="#1a3060"/>
+    <rect x="46" y="28" fill="#1a3060"/>
+  </g>
+  <!-- Far right -->
+  <g transform="rotate(28 50 65)">
+    <rect x="50" y="22" rx="5" fill="#0c1628" stroke="#1a2e50" stroke-width="1.2"/>
+    <rect x="50" y="22" rx="5" fill="#162040"/>
+    <rect x="50" y="30" fill="#162040"/>
+  </g>
 </svg><span>32px</span></div>
       <div><svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
   <defs>
     <linearGradient id="v2gold" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FDE68A"/>
-      <stop offset="100%" stop-color="#F59E0B"/>
+      <stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#D97706"/>
     </linearGradient>
-    <filter id="v2s"><feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-opacity="0.6"/></filter>
   </defs>
-  <!-- Far left card -->
-  <rect x="18" y="30" rx="5"
-    fill="#0c1829" stroke="#1e3a5f" stroke-width="1.2"
-    transform="rotate(-30 36 56)" filter="url(#v2s)"/>
-  <!-- Left card -->
-  <rect x="22" y="24" rx="6"
-    fill="#0f1f35" stroke="#2a4a7a" stroke-width="1.5"
-    transform="rotate(-15 41 52)" filter="url(#v2s)"/>
-  <!-- Centre card — gold -->
-  <rect x="31" y="16" rx="7"
-    fill="#111827" stroke="#FBBF24" stroke-width="2.5" filter="url(#v2s)"/>
-  <rect x="31" y="16" rx="7" fill="url(#v2gold)"/>
-  <rect x="31" y="28" fill="url(#v2gold)"/>
-  <!-- Star on gold section -->
-  <polygon points="50,20 51.8,25.5 57.5,25.5 53,28.8 54.8,34.3 50,31 45.2,34.3 47,28.8 42.5,25.5 48.2,25.5"
-    fill="#92400E" opacity="0.5"/>
-  <!-- Pokeball -->
-  <circle cx="50" cy="57" r="11" fill="#0a0f1a" stroke="#FBBF24" stroke-width="2.5"/>
-  <path d="M39 57 A11 11 0 0 1 61 57 Z" fill="#FBBF24"/>
-  <rect x="39" y="54.5" fill="#0a0f1a"/>
-  <circle cx="50" cy="57" r="4.5" fill="#0a0f1a" stroke="#FBBF24" stroke-width="2.5"/>
-  <circle cx="50" cy="57" r="1.8" fill="#FBBF24"/>
-  <!-- Right card -->
-  <rect x="40" y="24" rx="6"
-    fill="#0f1f35" stroke="#2a4a7a" stroke-width="1.5"
-    transform="rotate(15 59 52)" filter="url(#v2s)"/>
-  <!-- Far right card -->
-  <rect x="46" y="30" rx="5"
-    fill="#0c1829" stroke="#1e3a5f" stroke-width="1.2"
-    transform="rotate(30 64 56)" filter="url(#v2s)"/>
+  <!-- Far left -->
+  <g transform="rotate(-28 50 65)">
+    <rect x="16" y="22" rx="5" fill="#0c1628" stroke="#1a2e50" stroke-width="1.2"/>
+    <rect x="16" y="22" rx="5" fill="#162040"/>
+    <rect x="16" y="30" fill="#162040"/>
+  </g>
+  <!-- Left -->
+  <g transform="rotate(-14 50 65)">
+    <rect x="18" y="18" rx="6" fill="#0f1e38" stroke="#243660" stroke-width="1.5"/>
+    <rect x="18" y="18" rx="6" fill="#1a3060"/>
+    <rect x="18" y="28" fill="#1a3060"/>
+  </g>
+  <!-- Centre -->
+  <rect x="28" y="10" rx="7" fill="#0f172a" stroke="#FBBF24" stroke-width="2.5"/>
+  <rect x="28" y="10" rx="7" fill="url(#v2gold)"/>
+  <rect x="28" y="26" fill="url(#v2gold)"/>
+  <!-- Pokeball on centre -->
+  <circle cx="50" cy="54" r="12" fill="#080e1c" stroke="#FBBF24" stroke-width="2.5"/>
+  <path d="M38 54 A12 12 0 0 1 62 54 Z" fill="#FBBF24"/>
+  <rect x="38" y="51" fill="#080e1c"/>
+  <circle cx="50" cy="54" r="4.5" fill="#080e1c" stroke="#FBBF24" stroke-width="2.5"/>
+  <circle cx="50" cy="54" r="1.8" fill="#FBBF24"/>
+  <!-- Right -->
+  <g transform="rotate(14 50 65)">
+    <rect x="46" y="18" rx="6" fill="#0f1e38" stroke="#243660" stroke-width="1.5"/>
+    <rect x="46" y="18" rx="6" fill="#1a3060"/>
+    <rect x="46" y="28" fill="#1a3060"/>
+  </g>
+  <!-- Far right -->
+  <g transform="rotate(28 50 65)">
+    <rect x="50" y="22" rx="5" fill="#0c1628" stroke="#1a2e50" stroke-width="1.2"/>
+    <rect x="50" y="22" rx="5" fill="#162040"/>
+    <rect x="50" y="30" fill="#162040"/>
+  </g>
 </svg><span>20px</span></div>
     </div>
   </div>
   <div class="card" onclick="this.classList.toggle('selected')">
     <div class="img-wrap"><svg width="160" height="160" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
   <defs>
-    <linearGradient id="v3bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0d1b2a"/>
-      <stop offset="100%" stop-color="#060d18"/>
+    <linearGradient id="v3gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDE68A"/><stop offset="100%" stop-color="#F97316"/>
     </linearGradient>
-    <linearGradient id="v3accent" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#FCD34D"/>
-      <stop offset="100%" stop-color="#F97316"/>
+    <linearGradient id="v3card" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a1f35"/><stop offset="100%" stop-color="#0d111f"/>
     </linearGradient>
-    <filter id="v3s"><feDropShadow dx="1" dy="2" stdDeviation="2" flood-opacity="0.7"/></filter>
   </defs>
-  <!-- Card shadow stack base -->
-  <rect x="10" y="28" rx="7" fill="#060d18" opacity="0.6"
-    transform="rotate(-12 34 59)"/>
-  <rect x="42" y="28" rx="7" fill="#060d18" opacity="0.6"
-    transform="rotate(12 66 59)"/>
-  <!-- Left card -->
-  <rect x="8" y="20" rx="7"
-    fill="url(#v3bg)" stroke="#1e3a5f" stroke-width="2"
-    transform="rotate(-10 32 52)" filter="url(#v3s)"/>
-  <!-- Left card accent stripe -->
-  <rect x="8" y="20" rx="7"
-    fill="#1a3a6e" transform="rotate(-10 32 52)"/>
-  <!-- Right card -->
-  <rect x="44" y="20" rx="7"
-    fill="url(#v3bg)" stroke="#1e3a5f" stroke-width="2"
-    transform="rotate(10 68 52)" filter="url(#v3s)"/>
-  <rect x="44" y="20" rx="7"
-    fill="#1a3a6e" transform="rotate(10 68 52)"/>
-  <!-- Centre hero card -->
-  <rect x="26" y="10" rx="9"
-    fill="#0d1b2a" stroke-width="0" filter="url(#v3s)"/>
-  <!-- Glowing border on centre -->
-  <rect x="26" y="10" rx="9"
-    fill="none" stroke="url(#v3accent)" stroke-width="2.5"/>
+  <!-- Back left card peeking -->
+  <g transform="rotate(-20 50 55)">
+    <rect x="10" y="16" rx="7" fill="#0f172a" stroke="#2a3560" stroke-width="1.5"/>
+    <rect x="10" y="16" rx="7" fill="#1e2d55"/>
+    <rect x="10" y="26" fill="#1e2d55"/>
+  </g>
+  <!-- Back right card peeking -->
+  <g transform="rotate(20 50 55)">
+    <rect x="48" y="16" rx="7" fill="#0f172a" stroke="#2a3560" stroke-width="1.5"/>
+    <rect x="48" y="16" rx="7" fill="#1e2d55"/>
+    <rect x="48" y="26" fill="#1e2d55"/>
+  </g>
+  <!-- Hero centre card -->
+  <rect x="20" y="8" rx="9" fill="url(#v3card)"/>
+  <!-- Glowing border -->
+  <rect x="20" y="8" rx="9" fill="none" stroke="url(#v3gold)" stroke-width="2.5"/>
   <!-- Gold top section -->
-  <rect x="26" y="10" rx="9" fill="url(#v3accent)" opacity="0.9"/>
-  <rect x="26" y="26" fill="url(#v3accent)" opacity="0.9"/>
-  <!-- Pokeball centre -->
-  <circle cx="50" cy="57" r="13" fill="#060d18" stroke-width="0"/>
-  <path d="M37 57 A13 13 0 0 1 63 57 Z" fill="url(#v3accent)"/>
-  <rect x="37" y="54" fill="#060d18"/>
-  <circle cx="50" cy="57" r="13" fill="none" stroke="url(#v3accent)" stroke-width="2.5"/>
-  <circle cx="50" cy="57" r="5.5" fill="#060d18" stroke="url(#v3accent)" stroke-width="2.5"/>
-  <circle cx="50" cy="57" r="2" fill="#FCD34D"/>
+  <rect x="20" y="8" rx="9" fill="url(#v3gold)"/>
+  <rect x="20" y="28" fill="url(#v3gold)"/>
+  <!-- Pokeball -->
+  <circle cx="50" cy="60" r="15" fill="#0a0d1a"/>
+  <circle cx="50" cy="60" r="15" fill="none" stroke="url(#v3gold)" stroke-width="2.5"/>
+  <path d="M35 60 A15 15 0 0 1 65 60 Z" fill="url(#v3gold)"/>
+  <rect x="35" y="57" fill="#0a0d1a"/>
+  <circle cx="50" cy="60" r="6" fill="#0a0d1a" stroke="url(#v3gold)" stroke-width="2.5"/>
+  <circle cx="50" cy="60" r="2.5" fill="#FDE68A"/>
 </svg></div>
-    <h2>V3 — Hero Card</h2><p>Centre focus, orange-gold gradient glow</p>
+    <h2>V3 — Hero Card</h2><p>Large centre card, orange-gold glow</p>
     <div class="sizes">
       <div><svg width="64" height="64" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
   <defs>
-    <linearGradient id="v3bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0d1b2a"/>
-      <stop offset="100%" stop-color="#060d18"/>
+    <linearGradient id="v3gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDE68A"/><stop offset="100%" stop-color="#F97316"/>
     </linearGradient>
-    <linearGradient id="v3accent" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#FCD34D"/>
-      <stop offset="100%" stop-color="#F97316"/>
+    <linearGradient id="v3card" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a1f35"/><stop offset="100%" stop-color="#0d111f"/>
     </linearGradient>
-    <filter id="v3s"><feDropShadow dx="1" dy="2" stdDeviation="2" flood-opacity="0.7"/></filter>
   </defs>
-  <!-- Card shadow stack base -->
-  <rect x="10" y="28" rx="7" fill="#060d18" opacity="0.6"
-    transform="rotate(-12 34 59)"/>
-  <rect x="42" y="28" rx="7" fill="#060d18" opacity="0.6"
-    transform="rotate(12 66 59)"/>
-  <!-- Left card -->
-  <rect x="8" y="20" rx="7"
-    fill="url(#v3bg)" stroke="#1e3a5f" stroke-width="2"
-    transform="rotate(-10 32 52)" filter="url(#v3s)"/>
-  <!-- Left card accent stripe -->
-  <rect x="8" y="20" rx="7"
-    fill="#1a3a6e" transform="rotate(-10 32 52)"/>
-  <!-- Right card -->
-  <rect x="44" y="20" rx="7"
-    fill="url(#v3bg)" stroke="#1e3a5f" stroke-width="2"
-    transform="rotate(10 68 52)" filter="url(#v3s)"/>
-  <rect x="44" y="20" rx="7"
-    fill="#1a3a6e" transform="rotate(10 68 52)"/>
-  <!-- Centre hero card -->
-  <rect x="26" y="10" rx="9"
-    fill="#0d1b2a" stroke-width="0" filter="url(#v3s)"/>
-  <!-- Glowing border on centre -->
-  <rect x="26" y="10" rx="9"
-    fill="none" stroke="url(#v3accent)" stroke-width="2.5"/>
+  <!-- Back left card peeking -->
+  <g transform="rotate(-20 50 55)">
+    <rect x="10" y="16" rx="7" fill="#0f172a" stroke="#2a3560" stroke-width="1.5"/>
+    <rect x="10" y="16" rx="7" fill="#1e2d55"/>
+    <rect x="10" y="26" fill="#1e2d55"/>
+  </g>
+  <!-- Back right card peeking -->
+  <g transform="rotate(20 50 55)">
+    <rect x="48" y="16" rx="7" fill="#0f172a" stroke="#2a3560" stroke-width="1.5"/>
+    <rect x="48" y="16" rx="7" fill="#1e2d55"/>
+    <rect x="48" y="26" fill="#1e2d55"/>
+  </g>
+  <!-- Hero centre card -->
+  <rect x="20" y="8" rx="9" fill="url(#v3card)"/>
+  <!-- Glowing border -->
+  <rect x="20" y="8" rx="9" fill="none" stroke="url(#v3gold)" stroke-width="2.5"/>
   <!-- Gold top section -->
-  <rect x="26" y="10" rx="9" fill="url(#v3accent)" opacity="0.9"/>
-  <rect x="26" y="26" fill="url(#v3accent)" opacity="0.9"/>
-  <!-- Pokeball centre -->
-  <circle cx="50" cy="57" r="13" fill="#060d18" stroke-width="0"/>
-  <path d="M37 57 A13 13 0 0 1 63 57 Z" fill="url(#v3accent)"/>
-  <rect x="37" y="54" fill="#060d18"/>
-  <circle cx="50" cy="57" r="13" fill="none" stroke="url(#v3accent)" stroke-width="2.5"/>
-  <circle cx="50" cy="57" r="5.5" fill="#060d18" stroke="url(#v3accent)" stroke-width="2.5"/>
-  <circle cx="50" cy="57" r="2" fill="#FCD34D"/>
+  <rect x="20" y="8" rx="9" fill="url(#v3gold)"/>
+  <rect x="20" y="28" fill="url(#v3gold)"/>
+  <!-- Pokeball -->
+  <circle cx="50" cy="60" r="15" fill="#0a0d1a"/>
+  <circle cx="50" cy="60" r="15" fill="none" stroke="url(#v3gold)" stroke-width="2.5"/>
+  <path d="M35 60 A15 15 0 0 1 65 60 Z" fill="url(#v3gold)"/>
+  <rect x="35" y="57" fill="#0a0d1a"/>
+  <circle cx="50" cy="60" r="6" fill="#0a0d1a" stroke="url(#v3gold)" stroke-width="2.5"/>
+  <circle cx="50" cy="60" r="2.5" fill="#FDE68A"/>
 </svg><span>64px</span></div>
       <div><svg width="32" height="32" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
   <defs>
-    <linearGradient id="v3bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0d1b2a"/>
-      <stop offset="100%" stop-color="#060d18"/>
+    <linearGradient id="v3gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDE68A"/><stop offset="100%" stop-color="#F97316"/>
     </linearGradient>
-    <linearGradient id="v3accent" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#FCD34D"/>
-      <stop offset="100%" stop-color="#F97316"/>
+    <linearGradient id="v3card" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a1f35"/><stop offset="100%" stop-color="#0d111f"/>
     </linearGradient>
-    <filter id="v3s"><feDropShadow dx="1" dy="2" stdDeviation="2" flood-opacity="0.7"/></filter>
   </defs>
-  <!-- Card shadow stack base -->
-  <rect x="10" y="28" rx="7" fill="#060d18" opacity="0.6"
-    transform="rotate(-12 34 59)"/>
-  <rect x="42" y="28" rx="7" fill="#060d18" opacity="0.6"
-    transform="rotate(12 66 59)"/>
-  <!-- Left card -->
-  <rect x="8" y="20" rx="7"
-    fill="url(#v3bg)" stroke="#1e3a5f" stroke-width="2"
-    transform="rotate(-10 32 52)" filter="url(#v3s)"/>
-  <!-- Left card accent stripe -->
-  <rect x="8" y="20" rx="7"
-    fill="#1a3a6e" transform="rotate(-10 32 52)"/>
-  <!-- Right card -->
-  <rect x="44" y="20" rx="7"
-    fill="url(#v3bg)" stroke="#1e3a5f" stroke-width="2"
-    transform="rotate(10 68 52)" filter="url(#v3s)"/>
-  <rect x="44" y="20" rx="7"
-    fill="#1a3a6e" transform="rotate(10 68 52)"/>
-  <!-- Centre hero card -->
-  <rect x="26" y="10" rx="9"
-    fill="#0d1b2a" stroke-width="0" filter="url(#v3s)"/>
-  <!-- Glowing border on centre -->
-  <rect x="26" y="10" rx="9"
-    fill="none" stroke="url(#v3accent)" stroke-width="2.5"/>
+  <!-- Back left card peeking -->
+  <g transform="rotate(-20 50 55)">
+    <rect x="10" y="16" rx="7" fill="#0f172a" stroke="#2a3560" stroke-width="1.5"/>
+    <rect x="10" y="16" rx="7" fill="#1e2d55"/>
+    <rect x="10" y="26" fill="#1e2d55"/>
+  </g>
+  <!-- Back right card peeking -->
+  <g transform="rotate(20 50 55)">
+    <rect x="48" y="16" rx="7" fill="#0f172a" stroke="#2a3560" stroke-width="1.5"/>
+    <rect x="48" y="16" rx="7" fill="#1e2d55"/>
+    <rect x="48" y="26" fill="#1e2d55"/>
+  </g>
+  <!-- Hero centre card -->
+  <rect x="20" y="8" rx="9" fill="url(#v3card)"/>
+  <!-- Glowing border -->
+  <rect x="20" y="8" rx="9" fill="none" stroke="url(#v3gold)" stroke-width="2.5"/>
   <!-- Gold top section -->
-  <rect x="26" y="10" rx="9" fill="url(#v3accent)" opacity="0.9"/>
-  <rect x="26" y="26" fill="url(#v3accent)" opacity="0.9"/>
-  <!-- Pokeball centre -->
-  <circle cx="50" cy="57" r="13" fill="#060d18" stroke-width="0"/>
-  <path d="M37 57 A13 13 0 0 1 63 57 Z" fill="url(#v3accent)"/>
-  <rect x="37" y="54" fill="#060d18"/>
-  <circle cx="50" cy="57" r="13" fill="none" stroke="url(#v3accent)" stroke-width="2.5"/>
-  <circle cx="50" cy="57" r="5.5" fill="#060d18" stroke="url(#v3accent)" stroke-width="2.5"/>
-  <circle cx="50" cy="57" r="2" fill="#FCD34D"/>
+  <rect x="20" y="8" rx="9" fill="url(#v3gold)"/>
+  <rect x="20" y="28" fill="url(#v3gold)"/>
+  <!-- Pokeball -->
+  <circle cx="50" cy="60" r="15" fill="#0a0d1a"/>
+  <circle cx="50" cy="60" r="15" fill="none" stroke="url(#v3gold)" stroke-width="2.5"/>
+  <path d="M35 60 A15 15 0 0 1 65 60 Z" fill="url(#v3gold)"/>
+  <rect x="35" y="57" fill="#0a0d1a"/>
+  <circle cx="50" cy="60" r="6" fill="#0a0d1a" stroke="url(#v3gold)" stroke-width="2.5"/>
+  <circle cx="50" cy="60" r="2.5" fill="#FDE68A"/>
 </svg><span>32px</span></div>
       <div><svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
   <defs>
-    <linearGradient id="v3bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0d1b2a"/>
-      <stop offset="100%" stop-color="#060d18"/>
+    <linearGradient id="v3gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDE68A"/><stop offset="100%" stop-color="#F97316"/>
     </linearGradient>
-    <linearGradient id="v3accent" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#FCD34D"/>
-      <stop offset="100%" stop-color="#F97316"/>
+    <linearGradient id="v3card" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a1f35"/><stop offset="100%" stop-color="#0d111f"/>
     </linearGradient>
-    <filter id="v3s"><feDropShadow dx="1" dy="2" stdDeviation="2" flood-opacity="0.7"/></filter>
   </defs>
-  <!-- Card shadow stack base -->
-  <rect x="10" y="28" rx="7" fill="#060d18" opacity="0.6"
-    transform="rotate(-12 34 59)"/>
-  <rect x="42" y="28" rx="7" fill="#060d18" opacity="0.6"
-    transform="rotate(12 66 59)"/>
-  <!-- Left card -->
-  <rect x="8" y="20" rx="7"
-    fill="url(#v3bg)" stroke="#1e3a5f" stroke-width="2"
-    transform="rotate(-10 32 52)" filter="url(#v3s)"/>
-  <!-- Left card accent stripe -->
-  <rect x="8" y="20" rx="7"
-    fill="#1a3a6e" transform="rotate(-10 32 52)"/>
-  <!-- Right card -->
-  <rect x="44" y="20" rx="7"
-    fill="url(#v3bg)" stroke="#1e3a5f" stroke-width="2"
-    transform="rotate(10 68 52)" filter="url(#v3s)"/>
-  <rect x="44" y="20" rx="7"
-    fill="#1a3a6e" transform="rotate(10 68 52)"/>
-  <!-- Centre hero card -->
-  <rect x="26" y="10" rx="9"
-    fill="#0d1b2a" stroke-width="0" filter="url(#v3s)"/>
-  <!-- Glowing border on centre -->
-  <rect x="26" y="10" rx="9"
-    fill="none" stroke="url(#v3accent)" stroke-width="2.5"/>
+  <!-- Back left card peeking -->
+  <g transform="rotate(-20 50 55)">
+    <rect x="10" y="16" rx="7" fill="#0f172a" stroke="#2a3560" stroke-width="1.5"/>
+    <rect x="10" y="16" rx="7" fill="#1e2d55"/>
+    <rect x="10" y="26" fill="#1e2d55"/>
+  </g>
+  <!-- Back right card peeking -->
+  <g transform="rotate(20 50 55)">
+    <rect x="48" y="16" rx="7" fill="#0f172a" stroke="#2a3560" stroke-width="1.5"/>
+    <rect x="48" y="16" rx="7" fill="#1e2d55"/>
+    <rect x="48" y="26" fill="#1e2d55"/>
+  </g>
+  <!-- Hero centre card -->
+  <rect x="20" y="8" rx="9" fill="url(#v3card)"/>
+  <!-- Glowing border -->
+  <rect x="20" y="8" rx="9" fill="none" stroke="url(#v3gold)" stroke-width="2.5"/>
   <!-- Gold top section -->
-  <rect x="26" y="10" rx="9" fill="url(#v3accent)" opacity="0.9"/>
-  <rect x="26" y="26" fill="url(#v3accent)" opacity="0.9"/>
-  <!-- Pokeball centre -->
-  <circle cx="50" cy="57" r="13" fill="#060d18" stroke-width="0"/>
-  <path d="M37 57 A13 13 0 0 1 63 57 Z" fill="url(#v3accent)"/>
-  <rect x="37" y="54" fill="#060d18"/>
-  <circle cx="50" cy="57" r="13" fill="none" stroke="url(#v3accent)" stroke-width="2.5"/>
-  <circle cx="50" cy="57" r="5.5" fill="#060d18" stroke="url(#v3accent)" stroke-width="2.5"/>
-  <circle cx="50" cy="57" r="2" fill="#FCD34D"/>
+  <rect x="20" y="8" rx="9" fill="url(#v3gold)"/>
+  <rect x="20" y="28" fill="url(#v3gold)"/>
+  <!-- Pokeball -->
+  <circle cx="50" cy="60" r="15" fill="#0a0d1a"/>
+  <circle cx="50" cy="60" r="15" fill="none" stroke="url(#v3gold)" stroke-width="2.5"/>
+  <path d="M35 60 A15 15 0 0 1 65 60 Z" fill="url(#v3gold)"/>
+  <rect x="35" y="57" fill="#0a0d1a"/>
+  <circle cx="50" cy="60" r="6" fill="#0a0d1a" stroke="url(#v3gold)" stroke-width="2.5"/>
+  <circle cx="50" cy="60" r="2.5" fill="#FDE68A"/>
 </svg><span>20px</span></div>
     </div>
   </div></div>
@@ -548,130 +472,111 @@
 <div class="navs">
   <div class="nav-demo"><svg width="28" height="28" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
   <defs>
-    <linearGradient id="v1g1" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FCD34D"/>
-      <stop offset="100%" stop-color="#D97706"/>
+    <linearGradient id="v1gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#D97706"/>
     </linearGradient>
-    <linearGradient id="v1g2" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1e293b"/>
-      <stop offset="100%" stop-color="#0f172a"/>
-    </linearGradient>
-    <filter id="v1shadow">
-      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.5"/>
-    </filter>
   </defs>
-  <!-- Back card left -->
-  <rect x="14" y="22" rx="7"
-    fill="#1a2744" stroke="#3b4f7a" stroke-width="1.5"
-    transform="rotate(-18 39 55)" filter="url(#v1shadow)"/>
-  <rect x="14" y="22" rx="7"
-    fill="#2a3f6e" transform="rotate(-18 39 55)"/>
-  <!-- Back card right -->
-  <rect x="36" y="22" rx="7"
-    fill="#1a2744" stroke="#3b4f7a" stroke-width="1.5"
-    transform="rotate(18 61 55)" filter="url(#v1shadow)"/>
-  <rect x="36" y="22" rx="7"
-    fill="#2a3f6e" transform="rotate(18 61 55)"/>
-  <!-- Main card centre -->
-  <rect x="25" y="14" rx="8"
-    fill="url(#v1g2)" stroke="#FBBF24" stroke-width="2.5" filter="url(#v1shadow)"/>
-  <!-- Gold top band -->
-  <rect x="25" y="14" rx="8" fill="url(#v1g1)"/>
-  <rect x="25" y="30" fill="url(#v1g1)"/>
-  <!-- Pokeball on centre card -->
-  <circle cx="50" cy="56" r="13" fill="#0f172a" stroke="#FBBF24" stroke-width="3"/>
-  <path d="M37 56 A13 13 0 0 1 63 56 Z" fill="#FBBF24"/>
-  <rect x="37" y="53" fill="#0f172a"/>
-  <circle cx="50" cy="56" r="5" fill="#0f172a" stroke="#FBBF24" stroke-width="3"/>
-  <circle cx="50" cy="56" r="2" fill="#FBBF24"/>
+  <!-- Left card rotated -15deg around centre -->
+  <g transform="rotate(-15 50 60)">
+    <rect x="14" y="18" rx="5" fill="#111f3a" stroke="#2a4070" stroke-width="1.5"/>
+    <rect x="14" y="18" rx="5" fill="#1e3560"/>
+    <rect x="14" y="26" fill="#1e3560"/>
+  </g>
+  <!-- Right card rotated +15deg -->
+  <g transform="rotate(15 50 60)">
+    <rect x="48" y="18" rx="5" fill="#111f3a" stroke="#2a4070" stroke-width="1.5"/>
+    <rect x="48" y="18" rx="5" fill="#1e3560"/>
+    <rect x="48" y="26" fill="#1e3560"/>
+  </g>
+  <!-- Centre card — no rotation, on top -->
+  <rect x="27" y="12" rx="7" fill="#0f172a" stroke="#FBBF24" stroke-width="2.5"/>
+  <rect x="27" y="12" rx="7" fill="url(#v1gold)"/>
+  <rect x="27" y="28" fill="url(#v1gold)"/>
+  <!-- Pokeball -->
+  <circle cx="50" cy="58" r="13" fill="#0a0f1e" stroke="#FBBF24" stroke-width="2.5"/>
+  <path d="M37 58 A13 13 0 0 1 63 58 Z" fill="#FBBF24"/>
+  <rect x="37" y="55" fill="#0a0f1e"/>
+  <circle cx="50" cy="58" r="5" fill="#0a0f1e" stroke="#FBBF24" stroke-width="2.5"/>
+  <circle cx="50" cy="58" r="2" fill="#FBBF24"/>
 </svg><span>PokéLeague</span><em>V1 — Tight Fan</em></div>
 
   <div class="nav-demo"><svg width="28" height="28" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
   <defs>
     <linearGradient id="v2gold" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FDE68A"/>
-      <stop offset="100%" stop-color="#F59E0B"/>
+      <stop offset="0%" stop-color="#FCD34D"/><stop offset="100%" stop-color="#D97706"/>
     </linearGradient>
-    <filter id="v2s"><feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-opacity="0.6"/></filter>
   </defs>
-  <!-- Far left card -->
-  <rect x="18" y="30" rx="5"
-    fill="#0c1829" stroke="#1e3a5f" stroke-width="1.2"
-    transform="rotate(-30 36 56)" filter="url(#v2s)"/>
-  <!-- Left card -->
-  <rect x="22" y="24" rx="6"
-    fill="#0f1f35" stroke="#2a4a7a" stroke-width="1.5"
-    transform="rotate(-15 41 52)" filter="url(#v2s)"/>
-  <!-- Centre card — gold -->
-  <rect x="31" y="16" rx="7"
-    fill="#111827" stroke="#FBBF24" stroke-width="2.5" filter="url(#v2s)"/>
-  <rect x="31" y="16" rx="7" fill="url(#v2gold)"/>
-  <rect x="31" y="28" fill="url(#v2gold)"/>
-  <!-- Star on gold section -->
-  <polygon points="50,20 51.8,25.5 57.5,25.5 53,28.8 54.8,34.3 50,31 45.2,34.3 47,28.8 42.5,25.5 48.2,25.5"
-    fill="#92400E" opacity="0.5"/>
-  <!-- Pokeball -->
-  <circle cx="50" cy="57" r="11" fill="#0a0f1a" stroke="#FBBF24" stroke-width="2.5"/>
-  <path d="M39 57 A11 11 0 0 1 61 57 Z" fill="#FBBF24"/>
-  <rect x="39" y="54.5" fill="#0a0f1a"/>
-  <circle cx="50" cy="57" r="4.5" fill="#0a0f1a" stroke="#FBBF24" stroke-width="2.5"/>
-  <circle cx="50" cy="57" r="1.8" fill="#FBBF24"/>
-  <!-- Right card -->
-  <rect x="40" y="24" rx="6"
-    fill="#0f1f35" stroke="#2a4a7a" stroke-width="1.5"
-    transform="rotate(15 59 52)" filter="url(#v2s)"/>
-  <!-- Far right card -->
-  <rect x="46" y="30" rx="5"
-    fill="#0c1829" stroke="#1e3a5f" stroke-width="1.2"
-    transform="rotate(30 64 56)" filter="url(#v2s)"/>
+  <!-- Far left -->
+  <g transform="rotate(-28 50 65)">
+    <rect x="16" y="22" rx="5" fill="#0c1628" stroke="#1a2e50" stroke-width="1.2"/>
+    <rect x="16" y="22" rx="5" fill="#162040"/>
+    <rect x="16" y="30" fill="#162040"/>
+  </g>
+  <!-- Left -->
+  <g transform="rotate(-14 50 65)">
+    <rect x="18" y="18" rx="6" fill="#0f1e38" stroke="#243660" stroke-width="1.5"/>
+    <rect x="18" y="18" rx="6" fill="#1a3060"/>
+    <rect x="18" y="28" fill="#1a3060"/>
+  </g>
+  <!-- Centre -->
+  <rect x="28" y="10" rx="7" fill="#0f172a" stroke="#FBBF24" stroke-width="2.5"/>
+  <rect x="28" y="10" rx="7" fill="url(#v2gold)"/>
+  <rect x="28" y="26" fill="url(#v2gold)"/>
+  <!-- Pokeball on centre -->
+  <circle cx="50" cy="54" r="12" fill="#080e1c" stroke="#FBBF24" stroke-width="2.5"/>
+  <path d="M38 54 A12 12 0 0 1 62 54 Z" fill="#FBBF24"/>
+  <rect x="38" y="51" fill="#080e1c"/>
+  <circle cx="50" cy="54" r="4.5" fill="#080e1c" stroke="#FBBF24" stroke-width="2.5"/>
+  <circle cx="50" cy="54" r="1.8" fill="#FBBF24"/>
+  <!-- Right -->
+  <g transform="rotate(14 50 65)">
+    <rect x="46" y="18" rx="6" fill="#0f1e38" stroke="#243660" stroke-width="1.5"/>
+    <rect x="46" y="18" rx="6" fill="#1a3060"/>
+    <rect x="46" y="28" fill="#1a3060"/>
+  </g>
+  <!-- Far right -->
+  <g transform="rotate(28 50 65)">
+    <rect x="50" y="22" rx="5" fill="#0c1628" stroke="#1a2e50" stroke-width="1.2"/>
+    <rect x="50" y="22" rx="5" fill="#162040"/>
+    <rect x="50" y="30" fill="#162040"/>
+  </g>
 </svg><span>PokéLeague</span><em>V2 — Wide Fan</em></div>
 
   <div class="nav-demo"><svg width="28" height="28" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
   <defs>
-    <linearGradient id="v3bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0d1b2a"/>
-      <stop offset="100%" stop-color="#060d18"/>
+    <linearGradient id="v3gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDE68A"/><stop offset="100%" stop-color="#F97316"/>
     </linearGradient>
-    <linearGradient id="v3accent" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#FCD34D"/>
-      <stop offset="100%" stop-color="#F97316"/>
+    <linearGradient id="v3card" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a1f35"/><stop offset="100%" stop-color="#0d111f"/>
     </linearGradient>
-    <filter id="v3s"><feDropShadow dx="1" dy="2" stdDeviation="2" flood-opacity="0.7"/></filter>
   </defs>
-  <!-- Card shadow stack base -->
-  <rect x="10" y="28" rx="7" fill="#060d18" opacity="0.6"
-    transform="rotate(-12 34 59)"/>
-  <rect x="42" y="28" rx="7" fill="#060d18" opacity="0.6"
-    transform="rotate(12 66 59)"/>
-  <!-- Left card -->
-  <rect x="8" y="20" rx="7"
-    fill="url(#v3bg)" stroke="#1e3a5f" stroke-width="2"
-    transform="rotate(-10 32 52)" filter="url(#v3s)"/>
-  <!-- Left card accent stripe -->
-  <rect x="8" y="20" rx="7"
-    fill="#1a3a6e" transform="rotate(-10 32 52)"/>
-  <!-- Right card -->
-  <rect x="44" y="20" rx="7"
-    fill="url(#v3bg)" stroke="#1e3a5f" stroke-width="2"
-    transform="rotate(10 68 52)" filter="url(#v3s)"/>
-  <rect x="44" y="20" rx="7"
-    fill="#1a3a6e" transform="rotate(10 68 52)"/>
-  <!-- Centre hero card -->
-  <rect x="26" y="10" rx="9"
-    fill="#0d1b2a" stroke-width="0" filter="url(#v3s)"/>
-  <!-- Glowing border on centre -->
-  <rect x="26" y="10" rx="9"
-    fill="none" stroke="url(#v3accent)" stroke-width="2.5"/>
+  <!-- Back left card peeking -->
+  <g transform="rotate(-20 50 55)">
+    <rect x="10" y="16" rx="7" fill="#0f172a" stroke="#2a3560" stroke-width="1.5"/>
+    <rect x="10" y="16" rx="7" fill="#1e2d55"/>
+    <rect x="10" y="26" fill="#1e2d55"/>
+  </g>
+  <!-- Back right card peeking -->
+  <g transform="rotate(20 50 55)">
+    <rect x="48" y="16" rx="7" fill="#0f172a" stroke="#2a3560" stroke-width="1.5"/>
+    <rect x="48" y="16" rx="7" fill="#1e2d55"/>
+    <rect x="48" y="26" fill="#1e2d55"/>
+  </g>
+  <!-- Hero centre card -->
+  <rect x="20" y="8" rx="9" fill="url(#v3card)"/>
+  <!-- Glowing border -->
+  <rect x="20" y="8" rx="9" fill="none" stroke="url(#v3gold)" stroke-width="2.5"/>
   <!-- Gold top section -->
-  <rect x="26" y="10" rx="9" fill="url(#v3accent)" opacity="0.9"/>
-  <rect x="26" y="26" fill="url(#v3accent)" opacity="0.9"/>
-  <!-- Pokeball centre -->
-  <circle cx="50" cy="57" r="13" fill="#060d18" stroke-width="0"/>
-  <path d="M37 57 A13 13 0 0 1 63 57 Z" fill="url(#v3accent)"/>
-  <rect x="37" y="54" fill="#060d18"/>
-  <circle cx="50" cy="57" r="13" fill="none" stroke="url(#v3accent)" stroke-width="2.5"/>
-  <circle cx="50" cy="57" r="5.5" fill="#060d18" stroke="url(#v3accent)" stroke-width="2.5"/>
-  <circle cx="50" cy="57" r="2" fill="#FCD34D"/>
+  <rect x="20" y="8" rx="9" fill="url(#v3gold)"/>
+  <rect x="20" y="28" fill="url(#v3gold)"/>
+  <!-- Pokeball -->
+  <circle cx="50" cy="60" r="15" fill="#0a0d1a"/>
+  <circle cx="50" cy="60" r="15" fill="none" stroke="url(#v3gold)" stroke-width="2.5"/>
+  <path d="M35 60 A15 15 0 0 1 65 60 Z" fill="url(#v3gold)"/>
+  <rect x="35" y="57" fill="#0a0d1a"/>
+  <circle cx="50" cy="60" r="6" fill="#0a0d1a" stroke="url(#v3gold)" stroke-width="2.5"/>
+  <circle cx="50" cy="60" r="2.5" fill="#FDE68A"/>
 </svg><span>PokéLeague</span><em>V3 — Hero Card</em></div>
 </div>
 </body>
