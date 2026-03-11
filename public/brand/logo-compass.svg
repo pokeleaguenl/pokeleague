@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <defs>
+    <linearGradient id="cmpg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+  </defs>
+  <circle cx="50" cy="50" r="46" fill="url(#cmpg)" stroke="#374151" stroke-width="1.5"/>
+  <circle cx="50" cy="50" r="38" fill="none" stroke="#1f2937" stroke-width="1"/>
+  <polygon points="50,10 54,44 50,50 46,44" fill="#FBBF24"/>
+  <polygon points="50,90 54,56 50,50 46,56" fill="#4b5563"/>
+  <polygon points="10,50 44,46 50,50 44,54" fill="#FBBF24" opacity="0.7"/>
+  <polygon points="90,50 56,46 50,50 56,54" fill="#FBBF24" opacity="0.7"/>
+  <circle cx="50" cy="50" r="9" fill="#0f172a" stroke="#FBBF24" stroke-width="3"/>
+  <circle cx="50" cy="50" r="3" fill="#FBBF24"/>
+</svg>
