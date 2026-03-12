@@ -3,6 +3,8 @@ import { redirect, notFound } from "next/navigation";
 import Image from "next/image";
 import LeagueActions from "./league-actions";
 
+export const dynamic = 'force-dynamic';
+
 interface Deck { id: number; name: string; tier: string; image_url: string | null; }
 const tierBorder: Record<string, string> = {
   S: "border-yellow-400/70", A: "border-purple-500/70",

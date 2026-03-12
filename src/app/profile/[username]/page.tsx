@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 
+export const dynamic = 'force-dynamic';
+
 const COUNTRIES: Record<string, { name: string; flag: string }> = {
   NL:{name:"Netherlands",flag:"🇳🇱"},US:{name:"United States",flag:"🇺🇸"},
   GB:{name:"United Kingdom",flag:"🇬🇧"},DE:{name:"Germany",flag:"🇩🇪"},

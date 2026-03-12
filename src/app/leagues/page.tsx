@@ -4,6 +4,8 @@ import Link from "next/link";
 import LeagueManager from "./league-manager";
 import CopyCode from "./copy-code";
 
+export const dynamic = 'force-dynamic';
+
 export default async function LeaguesPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();

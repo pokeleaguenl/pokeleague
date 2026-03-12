@@ -4,6 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import LogoutButton from "./logout-button";
 
+export const dynamic = 'force-dynamic';
+
 const RESOURCES = [
   { label: "Limitless TCG", url: "https://limitlesstcg.com", icon: "📊" },
   { label: "Trainer Hill", url: "https://trainerhill.com", icon: "🏔️" },

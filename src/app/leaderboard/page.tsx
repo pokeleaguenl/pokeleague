@@ -2,6 +2,8 @@ import { createClient } from "@/lib/supabase/server";
 import Image from "next/image";
 import Link from "next/link";
 
+export const dynamic = 'force-dynamic';
+
 const COUNTRIES: Record<string, string> = {
   NL:"🇳🇱",US:"🇺🇸",GB:"🇬🇧",DE:"🇩🇪",FR:"🇫🇷",ES:"🇪🇸",IT:"🇮🇹",JP:"🇯🇵",
   CA:"🇨🇦",AU:"🇦🇺",BR:"🇧🇷",MX:"🇲🇽",KR:"🇰🇷",PL:"🇵🇱",PT:"🇵🇹",BE:"🇧🇪",

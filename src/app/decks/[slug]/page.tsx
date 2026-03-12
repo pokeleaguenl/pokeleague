@@ -4,6 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { calculateRK9Analytics } from "@/lib/fantasy/rk9Analytics";
 
+export const dynamic = 'force-dynamic';
+
 export default async function DeckAnalyticsPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const supabase = await createClient();
