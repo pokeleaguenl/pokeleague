@@ -25,7 +25,7 @@ export default async function Dashboard() {
 
   await supabase.from("profiles").upsert({ id: user.id }, { onConflict: "id" });
 
-  const [{ data: profile }, { data: sq }, { data: upcoming }, { data: recentEvents }] = await Promise.all([
+  const [{ data: profile }, { data: sq }, { data: upcoming }, { data: allProfiles }, { data: recentEvents }] = await Promise.all([
     supabase.from("profiles").select("display_name, username, total_points").eq("id", user.id).single(),
     supabase.from("squads").select(`
       total_points, locked, event_effect,
@@ -43,6 +43,7 @@ export default async function Dashboard() {
     supabase.from("tournaments").select("id, name, event_date, submission_deadline")
       .gte("event_date", new Date().toISOString().split("T")[0])
       .order("event_date").limit(1).maybeSingle(),
+    supabase.from("profiles").select("id, total_points").order("total_points", { ascending: false }),
     supabase.from("tournaments").select("id, name, event_date")
       .order("event_date", { ascending: false }).limit(3),
   ]);
@@ -54,6 +55,7 @@ export default async function Dashboard() {
     : { data: null };
 
   const displayName = profile?.display_name ?? profile?.username ?? user.email?.split("@")[0] ?? "Trainer";
+  const rank = allProfiles ? allProfiles.findIndex((p: any) => p.id === user.id) + 1 : null;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const norm = (v: unknown) => (Array.isArray(v) ? v[0] ?? null : v ?? null) as any;
@@ -91,8 +93,8 @@ export default async function Dashboard() {
           <p className="text-xs text-gray-500 mt-0.5">Season pts</p>
         </div>
         <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-3 text-center">
-          <p className="text-2xl font-bold text-white">{lastScore?.points_earned ?? "—"}</p>
-          <p className="text-xs text-gray-500 mt-0.5">Last event</p>
+          <p className="text-2xl font-bold text-white">{rank ? `#${rank}` : "—"}</p>
+          <p className="text-xs text-gray-500 mt-0.5">Global rank</p>
         </div>
         <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-3 text-center">
           <p className="text-2xl font-bold text-white">{filledSlots}/10</p>
@@ -109,7 +111,9 @@ export default async function Dashboard() {
           <div>
             <p className="text-[10px] font-bold uppercase tracking-widest text-yellow-400 mb-0.5">Next Event</p>
             <p className="font-semibold">{upcoming.name}</p>
-            <p className="text-xs text-gray-400">{upcoming.event_date}</p>
+            <p className="text-xs text-gray-400">
+              {new Date(upcoming.event_date + "T00:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })}
+            </p>
           </div>
           <span className="text-2xl">🗓️</span>
         </Link>
@@ -234,6 +238,11 @@ export default async function Dashboard() {
             <span className="text-2xl mb-2">🏅</span>
             <span className="font-semibold">Leagues</span>
             <span className="text-xs text-gray-500 mt-0.5">Play with friends</span>
+          </Link>
+          <Link href="/leaderboard" className="flex flex-col rounded-xl border border-gray-800 bg-gray-900/40 p-4 hover:border-yellow-400/40 transition-colors col-span-2">
+            <span className="text-2xl mb-2">🏆</span>
+            <span className="font-semibold">Leaderboard</span>
+            <span className="text-xs text-gray-500 mt-0.5">{rank ? `You are #${rank} globally` : "See global rankings"}</span>
           </Link>
         </div>
       </section>
