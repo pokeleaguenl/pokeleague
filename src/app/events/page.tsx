@@ -6,6 +6,8 @@ const CUTOFF_DATE = "2025-09-01";
 
 export const dynamic = 'force-dynamic';
 
+export const dynamic = 'force-dynamic';
+
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; border: string }> = {
   live:      { label: "● LIVE",     color: "text-green-400",  bg: "bg-green-400/10",  border: "border-green-400/30"  },
   completed: { label: "Completed",  color: "text-gray-500",   bg: "bg-gray-800",      border: "border-gray-700"      },
