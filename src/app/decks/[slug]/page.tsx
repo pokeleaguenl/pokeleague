@@ -84,7 +84,7 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
               )}
               {rk9 && (
                 <span className="inline-flex items-center rounded-lg border border-white/10 bg-white/5 px-2.5 py-0.5 text-xs text-gray-400">
-                  {rk9.tournamentsPlayed} events played
+                  {rk9.totalPlayers} entries tracked
                 </span>
               )}
             </div>
@@ -111,8 +111,8 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
               <p className="text-2xl font-black">#{rk9.avgRank}</p>
             </div>
             <div className="text-center">
-              <p className="text-xs text-gray-500 mb-1">Event Wins</p>
-              <p className="text-2xl font-black text-yellow-400">{rk9.placementBreakdown.wins}</p>
+              <p className="text-xs text-gray-500 mb-1">Top 8 Finishes</p>
+              <p className="text-2xl font-black text-yellow-400">{rk9.placementBreakdown.top8}</p>
             </div>
           </div>
         )}
@@ -124,7 +124,7 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
           {/* Conversion Rates */}
           <section className="rounded-xl border border-white/10 bg-gray-900/50 p-6">
             <h2 className="mb-4 text-base font-bold text-white">Placement Conversion</h2>
-            <p className="text-xs text-gray-500 mb-4">% of entries finishing in each bracket — across {rk9.tournamentsPlayed} tournaments</p>
+            <p className="text-xs text-gray-500 mb-4">% of entries finishing in each bracket — across all tracked tournaments</p>
             <div className="space-y-3">
               {[
                 { label: "Top 8",  pct: rk9.top8Conversion,  count: rk9.placementBreakdown.top8,  color: "bg-yellow-400" },
@@ -157,7 +157,7 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
                     </span>
                     <div>
                       <p className="text-sm font-medium">{f.playerName}</p>
-                      <p className="text-xs text-gray-500">{f.tournamentName}</p>
+                      
                     </div>
                   </div>
                   <span className="text-xs text-gray-500">{f.country}</span>
@@ -166,42 +166,10 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
             </div>
           </section>
 
-          {/* Per-tournament breakdown */}
+          {/* Per-tournament breakdown — coming soon */}
           <section className="rounded-xl border border-white/10 bg-gray-900/50 p-6 lg:col-span-2">
             <h2 className="mb-4 text-base font-bold text-white">Tournament Breakdown</h2>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="text-xs text-gray-500 border-b border-white/5">
-                    <th className="text-left pb-2 font-medium">Tournament</th>
-                    <th className="text-right pb-2 font-medium">Players</th>
-                    <th className="text-right pb-2 font-medium">Meta%</th>
-                    <th className="text-right pb-2 font-medium">Best</th>
-                    <th className="text-right pb-2 font-medium">T8</th>
-                    <th className="text-right pb-2 font-medium">T16</th>
-                    <th className="text-right pb-2 font-medium">T32</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-white/5">
-                  {rk9.perTournament.map((t, i) => (
-                    <tr key={i} className="hover:bg-white/3 transition-colors">
-                      <td className="py-2.5 pr-4">
-                        <p className="font-medium text-gray-200">{t.tournamentName}</p>
-                        <p className="text-xs text-gray-600">{t.eventDate ? new Date(t.eventDate).toLocaleDateString("en-GB", { month: "short", year: "numeric" }) : ""}</p>
-                      </td>
-                      <td className="text-right py-2.5 text-gray-400">{t.players}</td>
-                      <td className="text-right py-2.5">
-                        <span className="text-yellow-400 font-semibold">{t.metaShare}%</span>
-                      </td>
-                      <td className="text-right py-2.5 font-bold">#{t.bestRank}</td>
-                      <td className="text-right py-2.5">{t.top8 > 0 ? <span className="text-yellow-400 font-bold">{t.top8}</span> : <span className="text-gray-700">—</span>}</td>
-                      <td className="text-right py-2.5">{t.top16 > 0 ? <span className="text-orange-400">{t.top16}</span> : <span className="text-gray-700">—</span>}</td>
-                      <td className="text-right py-2.5">{t.top32 > 0 ? <span className="text-blue-400">{t.top32}</span> : <span className="text-gray-700">—</span>}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <p className="text-sm text-gray-500">Per-tournament breakdown coming soon as more event data is ingested.</p>
           </section>
 
         </div>
