@@ -52,27 +52,33 @@ export async function processSnapshot(
   const BENCH_SLOTS = ["bench_1", "bench_2", "bench_3", "bench_4", "bench_5"] as const;
   const HAND_SLOTS = ["hand_1", "hand_2", "hand_3", "hand_4"] as const;
 
+  // Batch load all decks upfront to avoid N+1
+  const allDeckIds = new Set<number>();
+  for (const squad of squads ?? []) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const s = squad as any;
+    if (s.active_deck_id) allDeckIds.add(s.active_deck_id);
+    for (const k of BENCH_SLOTS) if (s[k]) allDeckIds.add(s[k]);
+    for (const k of HAND_SLOTS) if (s[k]) allDeckIds.add(s[k]);
+  }
+  const { data: allDecks } = await supabase
+    .from("decks").select("id, name").in("id", [...allDeckIds]);
+  const deckMap = new Map((allDecks ?? []).map(d => [d.id, d.name]));
+
   for (const squad of squads ?? []) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const s = squad as any;
     const eventEffect = s.event_effect as "x3" | "hand_boost" | null;
     const breakdown: TeamScoreBreakdown = { slots: [], total: 0 };
 
-    const processSlot = async (
+    const processSlot = (
       deckId: number | null,
       slotName: string,
       zone: "active" | "bench" | "hand"
     ) => {
       if (!deckId) return;
-      const { data: deck } = await supabase
-        .from("decks")
-        .select("name")
-        .eq("id", deckId)
-        .maybeSingle();
-
-      if (!deck) return;
-      // Match deck name to archetype slug via aliases or direct name
-      const deckName = deck.name as string;
+      const deckName = deckMap.get(deckId);
+      if (!deckName) return;
       const baseSlug = deckName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
       // Try to find matching archetype result in snapshot
@@ -94,9 +100,9 @@ export async function processSnapshot(
       breakdown.total += finalPoints;
     };
 
-    await processSlot(s.active_deck_id, "active", "active");
-    for (const k of BENCH_SLOTS) await processSlot(s[k], k, "bench");
-    for (const k of HAND_SLOTS) await processSlot(s[k], k, "hand");
+    processSlot(s.active_deck_id, "active", "active");
+    for (const k of BENCH_SLOTS) processSlot(s[k], k, "bench");
+    for (const k of HAND_SLOTS) processSlot(s[k], k, "hand");
 
     teamScores.push({
       fantasy_event_id: fantasyEventId,
