@@ -39,8 +39,8 @@ export async function GET(req: Request) {
     count: count ?? 0,
     standings: (standings ?? []).map(s => ({
       player_name: s.player_name,
-      archetype_name: s.archetype ?? "Unknown",
-      archetype_slug: (s.archetype ?? "unknown").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""),
+      deck_name: s.archetype ?? "Unknown",
+      placement: s.rank ?? 9999,
       placement: s.rank,
       record: s.record,
       country: s.country,
