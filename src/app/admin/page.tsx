@@ -91,6 +91,19 @@ export default async function AdminPage() {
         </div>
       </section>
 
+      {/* Squads viewer */}
+      <section className="mb-8">
+        <h2 className="mb-4 text-xs font-bold uppercase tracking-widest text-gray-500">Players & Squads</h2>
+        <Link href="/admin/squads"
+          className="flex items-center justify-between rounded-xl border border-gray-800 bg-gray-900/20 px-5 py-4 hover:border-yellow-400/30 transition-colors">
+          <div>
+            <p className="font-semibold text-sm">Squad Viewer</p>
+            <p className="text-xs text-gray-500 mt-0.5">See all player squads, lock status, active decks and effects</p>
+          </div>
+          <span className="text-yellow-400 text-sm">→</span>
+        </Link>
+      </section>
+
       {/* Dev tools */}
       <section className="mb-8">
         <h2 className="mb-4 text-xs font-bold uppercase tracking-widest text-gray-500">Dev Tools</h2>
