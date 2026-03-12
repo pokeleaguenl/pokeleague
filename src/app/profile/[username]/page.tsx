@@ -32,9 +32,9 @@ const tierBorder: Record<string, string> = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function DeckCard({ deck, isActive, isHand }: { deck: any; isActive?: boolean; isHand?: boolean }) {
   const border = deck ? (tierBorder[deck.tier] || "border-gray-700") : "border-dashed border-gray-800";
-  const size = isActive ? 40 : isHand ? 20 : 26;
-  const w = isActive ? "w-20" : isHand ? "w-12" : "w-14";
-  const h = isActive ? "h-28" : isHand ? "h-16" : "h-20";
+  const size = isActive ? 52 : isHand ? 28 : 36;
+  const w = isActive ? "w-24" : isHand ? "w-14" : "w-16";
+  const h = isActive ? "h-32" : isHand ? "h-20" : "h-24";
   return (
     <div className={`flex flex-col items-center justify-center rounded-xl border ${border} p-1.5 ${w} ${h} ${isHand ? "opacity-60" : ""}`}>
       {deck ? (
@@ -66,6 +66,13 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
 
   const isMe = me?.id === profile.id;
 
+  // Get leaderboard rank
+  const { data: allProfiles } = await supabase
+    .from("profiles")
+    .select("id, total_points")
+    .order("total_points", { ascending: false });
+  const rank = allProfiles ? allProfiles.findIndex(p => p.id === profile.id) + 1 : null;
+
   const [{ data: squadRaw }, { data: scores }] = await Promise.all([
     supabase.from("squads").select(`
       total_points, locked, event_effect,
@@ -85,6 +92,9 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
       .eq("user_id", profile.id)
       .order("points_earned", { ascending: false })
       .limit(10),
+    supabase.from("league_scores")
+      .select("tournament_id", { count: "exact", head: true })
+      .eq("user_id", profile.id),
   ]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -112,38 +122,51 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
     <div className="mx-auto max-w-lg px-4 py-10">
 
       {/* Header */}
-      <div className="mb-6 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-yellow-400/20 border border-yellow-400/30 text-xl font-bold text-yellow-400">
-            {initials}
+      {/* Header card */}
+      <div className="mb-6 rounded-2xl border border-white/8 bg-gray-900/40 p-5">
+        <div className="flex items-start justify-between mb-5">
+          <div className="flex items-center gap-4">
+            {/* Avatar */}
+            <div className="relative flex-shrink-0">
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-400/30 to-yellow-600/10 border border-yellow-400/30 text-2xl font-black text-yellow-400 shadow-lg shadow-yellow-400/10">
+                {initials}
+              </div>
+              {squad?.locked && (
+                <span className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-green-500 text-[9px]">🔒</span>
+              )}
+            </div>
+            <div>
+              <h1 className="text-2xl font-black leading-tight">{displayName}</h1>
+              <p className="text-sm text-gray-500 mt-0.5">
+                @{profile.username}
+                {country && <span className="ml-2">{country.flag} {country.name}</span>}
+              </p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-2xl font-bold leading-tight">{displayName}</h1>
-            <p className="text-sm text-gray-500">
-              @{profile.username}
-              {country && <span className="ml-2">{country.flag} {country.name}</span>}
-            </p>
-          </div>
+          {isMe && (
+            <Link href="/profile"
+              className="rounded-xl border border-gray-700 px-3 py-1.5 text-xs text-gray-400 hover:text-white hover:border-gray-500 transition-colors flex-shrink-0">
+              Edit profile
+            </Link>
+          )}
         </div>
-        {isMe && (
-          <Link href="/profile"
-            className="rounded-xl border border-gray-700 px-3 py-1.5 text-xs text-gray-400 hover:text-white hover:border-gray-500 transition-colors">
-            Edit profile
-          </Link>
-        )}
-      </div>
 
-      {/* Points */}
-      <div className="mb-6 grid grid-cols-2 gap-3">
-        <div className="rounded-xl border border-yellow-400/20 bg-yellow-400/5 p-4 text-center">
-          <p className="text-3xl font-black text-yellow-400">{profile.total_points ?? 0}</p>
-          <p className="text-xs text-gray-400 mt-0.5">Season points</p>
-        </div>
-        <div className="rounded-xl border border-gray-800 bg-gray-900/30 p-4 text-center">
-          <p className="text-3xl font-black text-white">{filledSlots}/10</p>
-          <p className="text-xs text-gray-400 mt-0.5">
-            {squad?.locked ? "🔒 Locked in" : "Squad slots"}
-          </p>
+        {/* Stats row */}
+        <div className="grid grid-cols-3 gap-3">
+          <div className="rounded-xl border border-yellow-400/20 bg-yellow-400/5 p-3 text-center">
+            <p className="text-2xl font-black text-yellow-400">{profile.total_points ?? 0}</p>
+            <p className="text-xs text-gray-500 mt-0.5">Season pts</p>
+          </div>
+          <div className="rounded-xl border border-gray-800 bg-gray-900/30 p-3 text-center">
+            <p className="text-2xl font-black text-white">
+              {rank ? `#${rank}` : "—"}
+            </p>
+            <p className="text-xs text-gray-500 mt-0.5">Global rank</p>
+          </div>
+          <div className="rounded-xl border border-gray-800 bg-gray-900/30 p-3 text-center">
+            <p className="text-2xl font-black text-white">{filledSlots}/10</p>
+            <p className="text-xs text-gray-500 mt-0.5">Squad slots</p>
+          </div>
         </div>
       </div>
 
