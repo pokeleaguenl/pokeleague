@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 
 /* ── Animated card sprite ── */
@@ -70,15 +71,29 @@ export default async function Home() {
 
       {/* ── Hero ── */}
       <section className="relative mx-auto flex min-h-[92vh] max-w-5xl flex-col items-center justify-center px-6 text-center">
-        <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-yellow-400/30 bg-yellow-400/10 px-4 py-1.5 text-xs font-semibold text-yellow-300">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-yellow-400" />
-          Season 1 — Now Live
+        {/* Logo mark */}
+        <div className="mb-6 flex flex-col items-center gap-4">
+          <div className="relative">
+            <div className="absolute inset-0 rounded-2xl bg-yellow-400/20 blur-2xl scale-150" />
+            <Image
+              src="/logo.svg"
+              alt="PokéLeague"
+              width={96}
+              height={96}
+              className="relative rounded-2xl drop-shadow-2xl"
+              priority
+            />
+          </div>
+          <div className="inline-flex items-center gap-2 rounded-full border border-yellow-400/30 bg-yellow-400/10 px-4 py-1.5 text-xs font-semibold text-yellow-300">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-yellow-400" />
+            Season 1 — Now Live
+          </div>
         </div>
 
         <h1 className="text-6xl font-black tracking-tight sm:text-7xl lg:text-8xl">
-          <span className="shimmer-text">Fantasy</span>
+          <span className="shimmer-text">Poké</span><span className="text-white">League</span>
           <br />
-          <span className="text-white">Pokémon TCG</span>
+          <span className="text-3xl sm:text-4xl font-bold text-gray-400 tracking-normal">Fantasy Pokémon TCG</span>
         </h1>
 
         <p className="mt-6 max-w-lg text-lg text-gray-400 leading-relaxed">
