@@ -91,6 +91,19 @@ export default async function AdminPage() {
         </div>
       </section>
 
+      {/* Scoring */}
+      <section className="mb-8">
+        <h2 className="mb-4 text-xs font-bold uppercase tracking-widest text-gray-500">Fantasy Scoring</h2>
+        <Link href="/admin/score-tournament"
+          className="flex items-center justify-between rounded-xl border border-yellow-400/20 bg-yellow-400/5 px-5 py-4 hover:border-yellow-400/40 transition-colors">
+          <div>
+            <p className="font-semibold text-sm text-yellow-300">▶ Score Tournament</p>
+            <p className="text-xs text-gray-500 mt-0.5">Run the full fantasy scoring pipeline for a completed event</p>
+          </div>
+          <span className="text-yellow-400 text-sm">→</span>
+        </Link>
+      </section>
+
       {/* Squads viewer */}
       <section className="mb-8">
         <h2 className="mb-4 text-xs font-bold uppercase tracking-widest text-gray-500">Players & Squads</h2>
