@@ -10,14 +10,32 @@ export async function GET(req: Request) {
   const tournament_id = parseInt(searchParams.get("tournament_id") ?? "");
   if (!tournament_id) return NextResponse.json({ error: "Missing tournament_id" }, { status: 400 });
 
+  // Get the rk9_id for this tournament
+  const { data: tournament } = await supabase
+    .from("tournaments")
+    .select("id, name, rk9_id")
+    .eq("id", tournament_id)
+    .maybeSingle();
+
+  if (!tournament) return NextResponse.json({ error: "Tournament not found" }, { status: 404 });
+  if (!tournament.rk9_id) return NextResponse.json({ 
+    error: "Tournament has no RK9 ID — cannot fetch standings",
+    tournament_id,
+    count: 0,
+    standings: [],
+  });
+
+  // Fetch standings using rk9_id
   const { data: standings, count } = await supabase
     .from("rk9_standings")
     .select("player_name, archetype, rank, record, country, decklist_url, card_list", { count: "exact" })
-    .eq("tournament_id", tournament_id)
+    .eq("tournament_id", tournament.rk9_id)
     .order("rank", { ascending: true });
 
   return NextResponse.json({
     tournament_id,
+    rk9_id: tournament.rk9_id,
+    tournament_name: tournament.name,
     count: count ?? 0,
     standings: (standings ?? []).map(s => ({
       player_name: s.player_name,
