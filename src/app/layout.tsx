@@ -3,9 +3,18 @@ import Nav from "@/components/nav";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "PokeLeague - Fantasy Pokémon TCG",
-  description:
-    "Draft your dream deck, compete with friends, and climb the leaderboard.",
+  title: "PokéLeague — Fantasy Pokémon TCG",
+  description: "Draft your dream deck, compete with friends, and climb the leaderboard.",
+  icons: {
+    icon: "/logo.svg",
+    shortcut: "/logo.svg",
+    apple: "/logo.svg",
+  },
+  openGraph: {
+    title: "PokéLeague — Fantasy Pokémon TCG",
+    description: "Draft your dream deck, compete with friends, and climb the leaderboard.",
+    siteName: "PokéLeague",
+  },
 };
 
 export default function RootLayout({
