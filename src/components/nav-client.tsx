@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 const mainLinks = [
@@ -19,7 +20,7 @@ export default function NavClient({ isLoggedIn }: { isLoggedIn: boolean }) {
       <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
         {/* Logo */}
         <Link href={isLoggedIn ? "/dashboard" : "/"} className="flex items-center gap-2 font-black text-lg tracking-tight hover:opacity-80 transition-opacity">
-          <span className="text-yellow-400">⚡</span>
+          <Image src="/logo.svg" alt="PokéLeague" width={28} height={28} className="rounded-sm" />
           <span>Poké<span className="text-yellow-400">League</span></span>
         </Link>
 
