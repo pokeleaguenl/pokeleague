@@ -42,7 +42,7 @@ export default async function EventsPage() {
       .eq("user_id", user.id),
   ]);
 
-  const scoreMap = Object.fromEntries((myScores ?? []).map(s => [s.tournament_id, s.points_earned]));
+  const scoreMap: Record<string, number> = Object.fromEntries((myScores ?? []).map(s => [s.tournament_id, (s.points_earned as number) ?? 0]));
 
   const now = new Date().toISOString().split("T")[0];
   const upcoming = (tournaments ?? []).filter(t => t.event_date >= now);
