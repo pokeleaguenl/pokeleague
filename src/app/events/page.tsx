@@ -37,7 +37,7 @@ export default async function EventsPage() {
   const [{ data: tournaments }, { data: myScores }] = await Promise.all([
     supabase
       .from("tournaments")
-      .select("id, name, event_date, status, city, country")
+      .select("id, name, event_date, status, city")
       .gte("event_date", CUTOFF_DATE)
       .order("event_date", { ascending: true }),
     supabase
@@ -111,7 +111,7 @@ export default async function EventsPage() {
                       {isNext && <p className="text-[10px] font-bold uppercase tracking-widest text-yellow-400 mb-0.5">Next Event</p>}
                       <p className="font-bold text-sm truncate">{t.name}</p>
                       <p className="text-xs text-gray-500">
-                        {t.city ? t.city + (t.country ? ", " + t.country : "") + " · " : ""}
+                        {t.city ? t.city + " · " : ""}
                         {formatDate(t.event_date)}
                       </p>
                     </div>
@@ -155,7 +155,7 @@ export default async function EventsPage() {
                     <div className="min-w-0">
                       <p className="font-bold text-sm truncate text-gray-300 group-hover:text-white transition-colors">{t.name}</p>
                       <p className="text-xs text-gray-600">
-                        {t.city ? t.city + (t.country ? ", " + t.country : "") + " · " : ""}
+                        {t.city ? t.city + " · " : ""}
                         {formatDate(t.event_date)}
                       </p>
                     </div>
