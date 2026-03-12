@@ -22,7 +22,7 @@ export default async function ScoreTournamentPage() {
     const { count } = await supabase
       .from("rk9_standings")
       .select("*", { count: "exact", head: true })
-      .eq("tournament_id", t.id);
+      .eq("tournament_id", t.rk9_id ?? "");
     counts[t.id] = count ?? 0;
   }
 
