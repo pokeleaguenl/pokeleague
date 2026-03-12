@@ -25,7 +25,7 @@ export default function ScoreTournamentClient({ tournaments }: { tournaments: To
 
     try {
       // Fetch standings from rk9_standings
-      const standingsRes = await fetch(`/api/fantasy/admin/get-standings?tournament_id=${selected}`);
+      const standingsRes = await fetch(`/api/fantasy/admin/get-standings?tournament_id=${selected}`, { credentials: 'include' });
       const standingsData = await standingsRes.json();
 
       if (!standingsData.standings?.length) {
@@ -37,6 +37,7 @@ export default function ScoreTournamentClient({ tournaments }: { tournaments: To
       // Run scoring pipeline
       const res = await fetch("/api/fantasy/admin/ingest-event", {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           tournament_id: selected,
