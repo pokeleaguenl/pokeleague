@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cards Logo — Refinements</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#060912;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#fff;padding:48px}
+  h1{color:#FBBF24;font-size:24px;margin-bottom:4px}
+  .sub{color:#6b7280;font-size:13px;margin-bottom:40px}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;max-width:960px;margin-bottom:48px}
+  .card{background:#0d1220;border:2px solid #1f2937;border-radius:16px;padding:24px 16px 16px;text-align:center;transition:all 0.15s;cursor:pointer}
+  .card:hover{border-color:#FBBF24;transform:translateY(-2px)}
+  .img-wrap{display:flex;justify-content:center;align-items:center;height:130px;margin-bottom:4px}
+  .card h2{font-size:12px;color:#e2e8f0;margin:12px 0 5px;text-transform:uppercase;letter-spacing:0.08em;font-weight:700}
+  .card p{color:#4b5563;font-size:10px;margin-bottom:14px;line-height:1.5}
+  .sizes{display:flex;align-items:flex-end;justify-content:center;gap:16px}
+  .sizes div{text-align:center;display:flex;flex-direction:column;align-items:center}
+  .sizes span{color:#374151;font-size:9px;display:block;margin-top:4px}
+  .section{color:#6b7280;font-size:11px;text-transform:uppercase;letter-spacing:0.1em;margin:0 0 14px}
+  .navs{display:flex;flex-direction:column;gap:10px;max-width:400px}
+  .nav-demo{background:#0d1220;border:1px solid #1f2937;border-radius:10px;padding:12px 18px;display:flex;align-items:center;gap:10px}
+  .nav-demo span{color:#FBBF24;font-weight:700;font-size:16px;flex:1}
+  .nav-demo em{color:#2d3748;font-size:11px;font-style:normal}
+</style>
+</head>
+<body>
+<h1>Cards Logo — Refinements</h1>
+<p class="sub">Original vs 3 refined versions — hover to highlight</p>
+<div class="grid">
+  <div class="card">
+    <div class="img-wrap"><img src="logo-cards.svg" width="130" height="130"></div>
+    <h2>Original</h2>
+    <p>The starting point</p>
+    <div class="sizes">
+      <div><img src="logo-cards.svg" width="56" height="56"><span>56px</span></div>
+      <div><img src="logo-cards.svg" width="32" height="32"><span>32px</span></div>
+      <div><img src="logo-cards.svg" width="20" height="20"><span>20px</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="img-wrap"><img src="logo-cards-r1.svg" width="130" height="130"></div>
+    <h2>R1 — Gradient + Ball</h2>
+    <p>Gradient band, proper pokeball split, crisper star</p>
+    <div class="sizes">
+      <div><img src="logo-cards-r1.svg" width="56" height="56"><span>56px</span></div>
+      <div><img src="logo-cards-r1.svg" width="32" height="32"><span>32px</span></div>
+      <div><img src="logo-cards-r1.svg" width="20" height="20"><span>20px</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="img-wrap"><img src="logo-cards-r2.svg" width="130" height="130"></div>
+    <h2>R2 — Blue Depth</h2>
+    <p>Blue-tinted backs, richer depth, gradient ball</p>
+    <div class="sizes">
+      <div><img src="logo-cards-r2.svg" width="56" height="56"><span>56px</span></div>
+      <div><img src="logo-cards-r2.svg" width="32" height="32"><span>32px</span></div>
+      <div><img src="logo-cards-r2.svg" width="20" height="20"><span>20px</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="img-wrap"><img src="logo-cards-r3.svg" width="130" height="130"></div>
+    <h2>R3 — Elegant</h2>
+    <p>Slimmer card, corner pips, larger pokeball</p>
+    <div class="sizes">
+      <div><img src="logo-cards-r3.svg" width="56" height="56"><span>56px</span></div>
+      <div><img src="logo-cards-r3.svg" width="32" height="32"><span>32px</span></div>
+      <div><img src="logo-cards-r3.svg" width="20" height="20"><span>20px</span></div>
+    </div>
+  </div></div>
+<p class="section">In the nav bar</p>
+<div class="navs">
+  <div class="nav-demo">
+    <img src="logo-cards.svg" width="28" height="28">
+    <span>PokéLeague</span>
+    <em>Original</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-cards-r1.svg" width="28" height="28">
+    <span>PokéLeague</span>
+    <em>R1 — Gradient + Ball</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-cards-r2.svg" width="28" height="28">
+    <span>PokéLeague</span>
+    <em>R2 — Blue Depth</em>
+  </div>
+  <div class="nav-demo">
+    <img src="logo-cards-r3.svg" width="28" height="28">
+    <span>PokéLeague</span>
+    <em>R3 — Elegant</em>
+  </div></div>
+</body>
+</html>

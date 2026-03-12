@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <defs>
+    <linearGradient id="r1band" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+  </defs>
+  <!-- Back card left -->
+  <rect x="20" y="22" width="52" height="68" rx="6" fill="#0F172A" stroke="#4B5563" stroke-width="1.5" transform="rotate(-12 50 56)"/>
+  <!-- Back card right -->
+  <rect x="20" y="22" width="52" height="68" rx="6" fill="#111827" stroke="#6B7280" stroke-width="1.5" transform="rotate(6 50 56)"/>
+  <!-- Main card body -->
+  <rect x="22" y="18" width="56" height="72" rx="7" fill="#1F2937" stroke="#FBBF24" stroke-width="2.5"/>
+  <!-- Gradient yellow top band -->
+  <rect x="22" y="18" width="56" height="32" rx="7" fill="url(#r1band)"/>
+  <rect x="22" y="36" width="56" height="14" fill="url(#r1band)"/>
+  <!-- Star — white, crisper -->
+  <polygon points="50,24 51.8,29.5 57.5,29.5 53,32.8 54.8,38.3 50,35 45.2,38.3 47,32.8 42.5,29.5 48.2,29.5"
+    fill="white" opacity="0.35"/>
+  <!-- Pokeball split on card -->
+  <circle cx="50" cy="55" r="12" fill="#1F2937" stroke="#FBBF24" stroke-width="3"/>
+  <path d="M38 55 A12 12 0 0 1 62 55 Z" fill="#FBBF24"/>
+  <rect x="38" y="52" width="24" height="6" fill="#1F2937"/>
+  <circle cx="50" cy="55" r="5" fill="#1F2937" stroke="#FBBF24" stroke-width="2.5"/>
+  <circle cx="50" cy="55" r="2" fill="#FBBF24"/>
+</svg>
