@@ -48,7 +48,7 @@ export default async function EventsPage() {
   const upcoming = (tournaments ?? []).filter(t => t.event_date >= now);
   const past = (tournaments ?? []).filter(t => t.event_date < now).reverse();
 
-  const totalEarned = Object.values(scoreMap).reduce((sum, p) => sum + (p ?? 0), 0);
+  const totalEarned = Object.values(scoreMap).reduce((sum: number, p) => sum + (p ?? 0), 0);
   const eventsScored = Object.keys(scoreMap).length;
 
   return (
