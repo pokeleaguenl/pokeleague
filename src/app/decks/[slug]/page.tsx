@@ -100,7 +100,7 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
             </div>
             <div className="text-center">
               <p className="text-xs text-gray-500 mb-1">Total Entries</p>
-              <p className="text-2xl font-black">{rk9.totalEntries}</p>
+              <p className="text-2xl font-black">{rk9.totalPlayers}</p>
             </div>
             <div className="text-center">
               <p className="text-xs text-gray-500 mb-1">Best Finish</p>
