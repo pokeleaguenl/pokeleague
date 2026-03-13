@@ -41,7 +41,6 @@ export async function GET(req: Request) {
       player_name: s.player_name,
       deck_name: s.archetype ?? "Unknown",
       placement: s.rank ?? 9999,
-      placement: s.rank,
       record: s.record,
       country: s.country,
     })),
