@@ -52,106 +52,45 @@ export async function calculateRK9Analytics(
   round?: number
 ): Promise<RK9Analytics | null> {
 
-  // Resolve tournament ID dynamically if not provided
-  if (!tournamentId) {
-    const { data: latestTournament } = await supabase
-      .from("tournaments")
-      .select("rk9_id")
-      .eq("status", "completed")
-      .order("event_date", { ascending: false })
-      .limit(1)
-      .maybeSingle();
-    if (!latestTournament?.rk9_id) return null;
-    tournamentId = latestTournament.rk9_id;
-  }
+  // Fetch all aliases for this archetype name to match variants
+  const { data: aliasRows } = await supabase
+    .from("fantasy_archetype_aliases")
+    .select("alias, fantasy_archetypes!inner(name)")
+    .eq("fantasy_archetypes.name", archetypeName);
 
-  // Resolve round dynamically if not provided
-  if (!round) {
-    const { data: roundData } = await supabase
-      .from("rk9_standings")
-      .select("round")
-      .eq("tournament_id", tournamentId)
-      .order("round", { ascending: false })
-      .limit(1)
-      .maybeSingle();
-    if (!roundData?.round) return null;
-    round = roundData.round;
-  }
-
-  // Try exact match first
-  let { data: standings, error: standingsError } = await supabase
+  // Build set of archetype names to match (canonical + any stored as exact archetype strings)
+  // We query rk9_standings directly by archetype name across ALL tournaments
+  let { data: standings } = await supabase
     .from("rk9_standings")
-    .select("player_name, rank, country, card_list, decklist_url, archetype")
-    .eq("tournament_id", tournamentId)
-    .eq("round", round)
+    .select("player_name, rank, country, card_list, decklist_url, archetype, tournament_id")
     .eq("archetype", archetypeName)
-    .order("rank", { ascending: true });
+    .not("rank", "is", null)
+    .order("rank", { ascending: true })
+    .limit(5000);
 
-  if (standingsError) {
-    console.error("[rk9Analytics] Error fetching standings:", standingsError);
-    return null;
-  }
-
-  // If no exact match, try to find variants
+  // If no exact match, try alias-based lookup
   if (!standings || standings.length === 0) {
-    console.log(`[rk9Analytics] No exact match for ${archetypeName}, searching for variants...`);
-    
-    // Find all variants that start with this archetype name
-    const { data: variants } = await supabase
+    const { data: aliasStandings } = await supabase
       .from("rk9_standings")
-      .select("archetype")
-      .ilike("archetype", `${archetypeName}%`)
-      .eq("tournament_id", tournamentId)
-      .eq("round", round);
-
-    if (!variants || variants.length === 0) {
-      console.log(`[rk9Analytics] No variants found for ${archetypeName}`);
-      return null;
-    }
-
-    // Count players for each variant to find most popular
-    const variantCounts = new Map<string, number>();
-    for (const v of variants) {
-      variantCounts.set(v.archetype, (variantCounts.get(v.archetype) || 0) + 1);
-    }
-
-    // Get most popular variant
-    const mostPopularVariant = Array.from(variantCounts.entries())
-      .sort((a, b) => b[1] - a[1])[0];
-
-    if (!mostPopularVariant) {
-      return null;
-    }
-
-    console.log(`[rk9Analytics] Using most popular variant: ${mostPopularVariant[0]} (${mostPopularVariant[1]} players)`);
-
-    // Fetch standings for the most popular variant
-    const { data: variantStandings } = await supabase
-      .from("rk9_standings")
-      .select("player_name, rank, country, card_list, decklist_url, archetype")
-      .eq("tournament_id", tournamentId)
-      .eq("round", round)
-      .eq("archetype", mostPopularVariant[0])
-      .order("rank", { ascending: true });
-
-    standings = variantStandings;
+      .select("player_name, rank, country, card_list, decklist_url, archetype, tournament_id")
+      .ilike("archetype", `${archetypeName.split(" /")[0]}%`)
+      .not("rank", "is", null)
+      .order("rank", { ascending: true })
+      .limit(5000);
+    standings = aliasStandings;
   }
 
-  if (!standings || standings.length === 0) {
-    return null;
-  }
+  if (!standings || standings.length === 0) return null;
 
-  // Determine if we're using a variant and what the actual name is
   const actualArchetypeName = standings[0]?.archetype || archetypeName;
   const isVariant = actualArchetypeName !== archetypeName;
 
-  // Get total player count for meta share calculation
+  // Get total player count across all tournaments for meta share
   const { count: totalPlayerCount } = await supabase
     .from("rk9_standings")
     .select("*", { count: 'exact', head: true })
-    .eq("tournament_id", tournamentId)
-    .eq("round", round)
-    .not("archetype", "is", null);
+    .not("archetype", "is", null)
+    .not("rank", "is", null);
 
   const totalPlayers = standings.length;
   const metaShare = totalPlayerCount 
