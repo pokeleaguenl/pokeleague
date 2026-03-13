@@ -28,7 +28,7 @@ export async function GET(req: Request) {
   // Fetch standings using rk9_id
   const { data: standings, count } = await supabase
     .from("rk9_standings")
-    .select("player_name, archetype, rank, record, country, decklist_url, card_list", { count: "exact" })
+    .select("player_name, archetype, rank, record, country", { count: "exact" })
     .eq("tournament_id", tournament.rk9_id)
     .order("rank", { ascending: true });
 
@@ -44,8 +44,6 @@ export async function GET(req: Request) {
       placement: s.rank,
       record: s.record,
       country: s.country,
-      decklist_url: s.decklist_url,
-      card_list: s.card_list,
     })),
   });
 }
