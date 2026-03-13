@@ -29,6 +29,7 @@ export async function GET(req: Request) {
   const { data: standings, count } = await supabase
     .from("rk9_standings")
     .select("player_name, archetype, rank, record, country", { count: "exact" })
+    .limit(10000)
     .eq("tournament_id", tournament.rk9_id)
     .order("rank", { ascending: true });
 
