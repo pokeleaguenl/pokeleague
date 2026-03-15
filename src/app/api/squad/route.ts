@@ -1,9 +1,11 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
+import { isSquadLocked } from "@/lib/fantasy/squadLock";
 
 export async function GET() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
+  
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { data, error } = await supabase
@@ -25,13 +27,35 @@ export async function GET() {
     .maybeSingle();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json(data);
+  
+  // Include lock status in response
+  const lockStatus = await isSquadLocked(supabase);
+  
+  return NextResponse.json({
+    squad: data,
+    lockStatus,
+  });
 }
 
 export async function POST(req: Request) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
+  
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  // Check if squads are locked
+  const lockStatus = await isSquadLocked(supabase);
+  
+  if (lockStatus.locked) {
+    return NextResponse.json(
+      { 
+        error: "Squad modifications are locked",
+        message: lockStatus.reason,
+        nextEvent: lockStatus.nextEvent,
+      },
+      { status: 403 }
+    );
+  }
 
   const body = await req.json();
   const {
@@ -73,5 +97,6 @@ export async function POST(req: Request) {
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
   return NextResponse.json(data);
 }

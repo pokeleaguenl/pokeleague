@@ -1,6 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import Playmat from "./playmat";
+import { isSquadLocked } from "@/lib/fantasy/squadLock";
+import LockCountdown from "./lock-countdown";
+import LockedBanner from "./locked-banner";
 
 export const dynamic = 'force-dynamic';
 
@@ -12,6 +15,9 @@ export default async function SquadPage() {
   await supabase.from("profiles").upsert({ id: user.id }, { onConflict: "id" });
 
   const today = new Date().toISOString().split("T")[0];
+
+  // Check lock status
+  const lockStatus = await isSquadLocked(supabase);
 
   const [{ data: rpcDecks }, { data: squadRaw }, { data: nextEvent }] = await Promise.all([
     supabase.rpc("get_deck_list_with_points"),
@@ -110,6 +116,26 @@ export default async function SquadPage() {
           </p>
         )}
       </div>
+
+      {/* Lock status banners */}
+      {lockStatus.locked && lockStatus.nextEvent && (
+        <div className="mb-4 px-2">
+          <LockedBanner 
+            eventName={lockStatus.nextEvent.name}
+            lockTime={lockStatus.nextEvent.lockTime.toISOString()}
+          />
+        </div>
+      )}
+
+      {!lockStatus.locked && lockStatus.nextEvent && (
+        <div className="mb-4 px-2">
+          <LockCountdown 
+            eventName={lockStatus.nextEvent.name}
+            lockTime={lockStatus.nextEvent.lockTime.toISOString()}
+          />
+        </div>
+      )}
+
       <Playmat
         allDecks={decks}
         initialSquad={initialSquad}
@@ -117,7 +143,7 @@ export default async function SquadPage() {
         variantsByDeckId={variantsByDeckId}
         stadiumEffects={stadiumEffects}
         nextEventName={nextEvent?.name ?? null}
-        locked={sq?.locked ?? false}
+        locked={lockStatus.locked}
       />
     </div>
   );
