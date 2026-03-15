@@ -60,24 +60,41 @@ export async function calculateRK9Analytics(
 
   // Build set of archetype names to match (canonical + any stored as exact archetype strings)
   // We query rk9_standings directly by archetype name across ALL tournaments
+  // Get all archetype names that map to this canonical via aliases
+  const { data: aliasMatches } = await supabase
+    .from("fantasy_archetype_aliases")
+    .select("alias, fantasy_archetypes!inner(name)")
+    .filter("fantasy_archetypes.name", "eq", archetypeName);
+
+  // Also get direct canonical match
+  const { data: canonical } = await supabase
+    .from("fantasy_archetypes")
+    .select("name")
+    .eq("name", archetypeName)
+    .maybeSingle();
+
+  // Build query using the first-token prefix match to catch all variants
+  const firstToken = archetypeName.split(" /")[0].split(" ex")[0];
+  
   let { data: standings } = await supabase
     .from("rk9_standings")
     .select("player_name, rank, country, card_list, decklist_url, archetype, tournament_id")
-    .eq("archetype", archetypeName)
+    .ilike("archetype", `${firstToken}%`)
     .not("rank", "is", null)
     .order("rank", { ascending: true })
-    .limit(5000);
+    .limit(10000);
 
-  // If no exact match, try alias-based lookup
-  if (!standings || standings.length === 0) {
-    const { data: aliasStandings } = await supabase
-      .from("rk9_standings")
-      .select("player_name, rank, country, card_list, decklist_url, archetype, tournament_id")
-      .ilike("archetype", `${archetypeName.split(" /")[0]}%`)
-      .not("rank", "is", null)
-      .order("rank", { ascending: true })
-      .limit(5000);
-    standings = aliasStandings;
+  // Filter to only archetypes that resolve to this canonical
+  if (standings && standings.length > 0) {
+    // Keep only exact name matches or known alias matches
+    const validNames = new Set<string>([archetypeName]);
+    // Add slug-matched names
+    standings.forEach(s => {
+      if (s.archetype && s.archetype.toLowerCase().startsWith(firstToken.toLowerCase())) {
+        validNames.add(s.archetype);
+      }
+    });
+    standings = standings.filter(s => validNames.has(s.archetype));
   }
 
   if (!standings || standings.length === 0) return null;
