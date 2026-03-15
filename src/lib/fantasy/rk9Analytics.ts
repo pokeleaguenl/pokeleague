@@ -52,13 +52,26 @@ export async function calculateRK9Analytics(
 ): Promise<RK9Analytics | null> {
 
   // Get the archetype by name
-  const { data: archetype } = await supabase
+  let { data: archetype } = await supabase
     .from("fantasy_archetypes")
-    .select("id, name")
+    .select("id, name, canonical_id")
     .eq("name", archetypeName)
     .maybeSingle();
 
   if (!archetype) return null;
+
+  // If this archetype has a canonical_id, use the canonical archetype instead
+  if (archetype.canonical_id) {
+    const { data: canonical } = await supabase
+      .from("fantasy_archetypes")
+      .select("id, name")
+      .eq("id", archetype.canonical_id)
+      .single();
+    
+    if (canonical) {
+      archetype = { ...canonical, canonical_id: null };
+    }
+  }
 
   // Fetch all aliases for this archetype
   const { data: aliases } = await supabase
