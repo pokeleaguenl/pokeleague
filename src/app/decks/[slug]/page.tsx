@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { calculateRK9Analytics } from "@/lib/fantasy/rk9Analytics";
 
+import TournamentBreakdown from "./tournament-breakdown";
 export const dynamic = 'force-dynamic';
 
 export default async function DeckAnalyticsPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -167,12 +168,8 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
               ))}
             </div>
           </section>
-
-          {/* Per-tournament breakdown — coming soon */}
-          <section className="rounded-xl border border-white/10 bg-gray-900/50 p-6 lg:col-span-2">
-            <h2 className="mb-4 text-base font-bold text-white">Tournament Breakdown</h2>
-            <p className="text-sm text-gray-500">Per-tournament breakdown coming soon as more event data is ingested.</p>
-          </section>
+          {/* Per-tournament breakdown */}
+          <TournamentBreakdown supabase={supabase} archetypeId={archetype.id} />
 
         </div>
       ) : (
