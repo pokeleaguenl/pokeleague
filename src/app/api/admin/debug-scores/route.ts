@@ -1,11 +1,16 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
+import { requireAdmin } from "@/lib/auth/admin";
 
 /**
  * GET /api/admin/debug-scores
  * Shows all scores in the database with their placement data
  */
 export async function GET() {
+  // Admin auth check
+  const adminUser = await requireAdmin();
+  if (adminUser instanceof NextResponse) return adminUser;
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   

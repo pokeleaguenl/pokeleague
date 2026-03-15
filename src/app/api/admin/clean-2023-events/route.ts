@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
+import { requireAdmin } from "@/lib/auth/admin";
 
 /**
  * DELETE /api/admin/clean-2023-events
@@ -7,6 +8,10 @@ import { NextResponse } from "next/server";
  * Requires authenticated user
  */
 export async function DELETE() {
+  // Admin auth check
+  const adminUser = await requireAdmin();
+  if (adminUser instanceof NextResponse) return adminUser;
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 

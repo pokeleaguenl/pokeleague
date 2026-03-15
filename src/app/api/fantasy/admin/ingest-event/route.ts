@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { convertStandingsToPayload } from "@/lib/fantasy/standingsMapper";
 import { processSnapshot } from "@/lib/fantasy/liveScoring";
 import type { StandingsEntry } from "@/lib/fantasy/types";
+import { requireAdmin } from "@/lib/auth/admin";
 
 /**
  * POST /api/fantasy/admin/ingest-event
@@ -19,6 +20,10 @@ import type { StandingsEntry } from "@/lib/fantasy/types";
  * Idempotent: if standings for this tournament already exist, skips unless force=true
  */
 export async function POST(req: Request) {
+  // Admin auth check
+  const adminUser = await requireAdmin();
+  if (adminUser instanceof NextResponse) return adminUser;
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   

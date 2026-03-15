@@ -1,8 +1,12 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import TournamentManager from "./tournament-manager";
+import { requireAdminPage } from "@/lib/auth/admin";
 
 export default async function AdminTournamentsPage() {
+  // Admin auth check
+  await requireAdminPage();
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/login");

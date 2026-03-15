@@ -2,8 +2,12 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { requireAdminPage } from "@/lib/auth/admin";
 
 export default async function AdminSquadsPage() {
+  // Admin auth check
+  await requireAdminPage();
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/login");

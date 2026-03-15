@@ -1,49 +1,29 @@
+import { NextRequest, NextResponse } from "next/server";
+import { requireAdmin } from "@/lib/auth/admin";
 import { createClient } from "@/lib/supabase/server";
-import { NextResponse } from "next/server";
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
+  // Check admin auth
+  const adminUser = await requireAdmin();
+  if (adminUser instanceof NextResponse) return adminUser;
+
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const url = new URL(req.url);
+  const tournamentId = url.searchParams.get("tournamentId");
 
-  const { searchParams } = new URL(req.url);
-  const tournament_id = parseInt(searchParams.get("tournament_id") ?? "");
-  if (!tournament_id) return NextResponse.json({ error: "Missing tournament_id" }, { status: 400 });
+  if (!tournamentId) {
+    return NextResponse.json({ error: "tournamentId required" }, { status: 400 });
+  }
 
-  // Get the rk9_id for this tournament
-  const { data: tournament } = await supabase
-    .from("tournaments")
-    .select("id, name, rk9_id")
-    .eq("id", tournament_id)
-    .maybeSingle();
-
-  if (!tournament) return NextResponse.json({ error: "Tournament not found" }, { status: 404 });
-  if (!tournament.rk9_id) return NextResponse.json({ 
-    error: "Tournament has no RK9 ID — cannot fetch standings",
-    tournament_id,
-    count: 0,
-    standings: [],
-  });
-
-  // Fetch standings using rk9_id
-  const { data: standings, count } = await supabase
+  const { data, error } = await supabase
     .from("rk9_standings")
-    .select("player_name, archetype, rank, record, country", { count: "exact" })
-    .limit(10000)
-    .eq("tournament_id", tournament.rk9_id)
+    .select("*")
+    .eq("tournament_id", tournamentId)
     .order("rank", { ascending: true });
 
-  return NextResponse.json({
-    tournament_id,
-    rk9_id: tournament.rk9_id,
-    tournament_name: tournament.name,
-    count: count ?? 0,
-    standings: (standings ?? []).map(s => ({
-      player_name: s.player_name,
-      deck_name: s.archetype ?? "Unknown",
-      placement: s.rank ?? 9999,
-      record: s.record,
-      country: s.country,
-    })),
-  });
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  return NextResponse.json({ standings: data });
 }

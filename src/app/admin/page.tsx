@@ -6,8 +6,12 @@ import EventsSyncButton from "./events-sync-button";
 import SyncVariantsButton from "./sync-variants-button";
 import SeedFantasyButton from "./seed-fantasy-button";
 import DeckTable from "./deck-table";
+import { requireAdminPage } from "@/lib/auth/admin";
 
 export default async function AdminPage() {
+  // Admin auth check
+  await requireAdminPage();
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/login");

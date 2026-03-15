@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
+import { requireAdmin } from "@/lib/auth/admin";
 
 /**
  * POST /api/admin/seed-fantasy
@@ -9,6 +10,10 @@ import { NextResponse } from "next/server";
  * Uses admin client for RLS-protected writes
  */
 export async function POST() {
+  // Admin auth check
+  const adminUser = await requireAdmin();
+  if (adminUser instanceof NextResponse) return adminUser;
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 

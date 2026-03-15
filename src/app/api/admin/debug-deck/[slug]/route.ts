@@ -1,11 +1,16 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
+import { requireAdmin } from "@/lib/auth/admin";
 
 /**
  * GET /api/admin/debug-deck/[slug]
  * Debug endpoint to check archetype lookup and score history
  */
 export async function GET(_: Request, { params }: { params: Promise<{ slug: string }> }) {
+  // Admin auth check
+  const adminUser = await requireAdmin();
+  if (adminUser instanceof NextResponse) return adminUser;
+
   const { slug } = await params;
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();

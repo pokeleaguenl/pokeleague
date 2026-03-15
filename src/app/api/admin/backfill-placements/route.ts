@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 import type { SnapshotPayload } from "@/lib/fantasy/types";
+import { requireAdmin } from "@/lib/auth/admin";
 
 /**
  * POST /api/admin/backfill-placements
@@ -9,6 +10,10 @@ import type { SnapshotPayload } from "@/lib/fantasy/types";
  * This fixes scores that were created before placement tracking was added
  */
 export async function POST() {
+  // Admin auth check
+  const adminUser = await requireAdmin();
+  if (adminUser instanceof NextResponse) return adminUser;
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 

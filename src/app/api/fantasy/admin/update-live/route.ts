@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { processSnapshot } from "@/lib/fantasy/liveScoring";
 import { convertStandingsToPayload } from "@/lib/fantasy/standingsMapper";
 import type { SnapshotPayload, StandingsEntry } from "@/lib/fantasy/types";
+import { requireAdmin } from "@/lib/auth/admin";
 
 /**
  * POST /api/fantasy/admin/update-live
@@ -17,6 +18,10 @@ import type { SnapshotPayload, StandingsEntry } from "@/lib/fantasy/types";
  * API reads only query pre-computed tables.
  */
 export async function POST(req: Request) {
+  // Admin auth check
+  const adminUser = await requireAdmin();
+  if (adminUser instanceof NextResponse) return adminUser;
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
