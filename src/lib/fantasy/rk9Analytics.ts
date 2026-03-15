@@ -42,8 +42,7 @@ export interface RK9Analytics {
 }
 
 /**
- * Calculate deck analytics from rk9_standings data
- * If no exact match found, looks for the most popular variant
+ * Calculate deck analytics from rk9_standings data using fantasy_archetype_aliases
  */
 export async function calculateRK9Analytics(
   supabase: SupabaseClient,
@@ -52,50 +51,33 @@ export async function calculateRK9Analytics(
   round?: number
 ): Promise<RK9Analytics | null> {
 
-  // Fetch all aliases for this archetype name to match variants
-  const { data: aliasRows } = await supabase
-    .from("fantasy_archetype_aliases")
-    .select("alias, fantasy_archetypes!inner(name)")
-    .eq("fantasy_archetypes.name", archetypeName);
-
-  // Build set of archetype names to match (canonical + any stored as exact archetype strings)
-  // We query rk9_standings directly by archetype name across ALL tournaments
-  // Get all archetype names that map to this canonical via aliases
-  const { data: aliasMatches } = await supabase
-    .from("fantasy_archetype_aliases")
-    .select("alias, fantasy_archetypes!inner(name)")
-    .filter("fantasy_archetypes.name", "eq", archetypeName);
-
-  // Also get direct canonical match
-  const { data: canonical } = await supabase
+  // Get the archetype by name
+  const { data: archetype } = await supabase
     .from("fantasy_archetypes")
-    .select("name")
+    .select("id, name")
     .eq("name", archetypeName)
     .maybeSingle();
 
-  // Build query using the first-token prefix match to catch all variants
-  const firstToken = archetypeName.split(" /")[0].split(" ex")[0];
-  
-  let { data: standings } = await supabase
+  if (!archetype) return null;
+
+  // Fetch all aliases for this archetype
+  const { data: aliases } = await supabase
+    .from("fantasy_archetype_aliases")
+    .select("alias")
+    .eq("archetype_id", archetype.id);
+
+  if (!aliases || aliases.length === 0) return null;
+
+  // Get standings matching any of the aliases
+  const aliasStrings = aliases.map(a => a.alias);
+
+  const { data: standings } = await supabase
     .from("rk9_standings")
     .select("player_name, rank, country, card_list, decklist_url, archetype, tournament_id")
-    .ilike("archetype", `${firstToken}%`)
+    .in("archetype", aliasStrings)
     .not("rank", "is", null)
     .order("rank", { ascending: true })
     .limit(10000);
-
-  // Filter to only archetypes that resolve to this canonical
-  if (standings && standings.length > 0) {
-    // Keep only exact name matches or known alias matches
-    const validNames = new Set<string>([archetypeName]);
-    // Add slug-matched names
-    standings.forEach(s => {
-      if (s.archetype && s.archetype.toLowerCase().startsWith(firstToken.toLowerCase())) {
-        validNames.add(s.archetype);
-      }
-    });
-    standings = standings.filter(s => validNames.has(s.archetype));
-  }
 
   if (!standings || standings.length === 0) return null;
 
