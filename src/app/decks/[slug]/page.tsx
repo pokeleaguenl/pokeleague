@@ -167,11 +167,7 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
                 </div>
               ))}
             </div>
-          </section>
-          {/* Per-tournament breakdown */}
-          <TournamentBreakdown supabase={supabase} archetypeId={archetype.id} />
-
-        </div>
+          </section></div>
       ) : (
         <div className="rounded-xl border border-gray-800 p-16 text-center">
           <p className="text-4xl mb-4">📊</p>
@@ -179,6 +175,9 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
           <p className="mt-2 text-sm text-gray-600">Data will appear once RK9 standings are ingested.</p>
         </div>
       )}
+
+      {/* Per-tournament breakdown - shown for all decks */}
+      <TournamentBreakdown supabase={supabase} archetypeId={archetype.id} />
     </div>
   );
 }
