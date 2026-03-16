@@ -6,6 +6,7 @@ import { calculateRK9Analytics } from "@/lib/fantasy/rk9Analytics";
 
 import TournamentBreakdown from "./tournament-breakdown";
 import DeckVariants from "./deck-variants";
+import { playerToSlug } from "@/lib/utils/playerSlug";
 export const dynamic = 'force-dynamic';
 
 export default async function DeckAnalyticsPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -159,10 +160,9 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
                     <span className={`text-sm font-black w-8 ${f.rank === 1 ? "text-yellow-400" : "text-gray-500"}`}>
                       #{f.rank}
                     </span>
-                    <div>
+                    <Link href={`/players/${playerToSlug(f.playerName)}`} className="hover:text-yellow-400 transition-colors">
                       <p className="text-sm font-medium">{f.playerName}</p>
-                      
-                    </div>
+                    </Link>
                   </div>
                   <span className="text-xs text-gray-500">{f.country}</span>
                 </div>
