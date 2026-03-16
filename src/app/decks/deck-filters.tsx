@@ -5,9 +5,9 @@ import Link from "next/link";
 import Image from "next/image";
 
 interface Deck {
-  id: number;
-  name: string;
-  slug: string;
+  deck_id: number;
+  deck_name: string;
+  archetype_slug: string;
   tier: string;
   meta_share: number;
   image_url: string | null;
@@ -38,7 +38,7 @@ export default function DeckFilters({ decks }: DeckFiltersProps) {
     // Search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      result = result.filter(d => d.name.toLowerCase().includes(query));
+      result = result.filter(d => d.deck_name.toLowerCase().includes(query));
     }
 
     // Tier filter
@@ -53,7 +53,7 @@ export default function DeckFilters({ decks }: DeckFiltersProps) {
       } else if (sortBy === "points") {
         return (b.total_points || 0) - (a.total_points || 0);
       } else {
-        return a.name.localeCompare(b.name);
+        return a.deck_name.localeCompare(b.deck_name);
       }
     });
 
@@ -181,8 +181,8 @@ export default function DeckFilters({ decks }: DeckFiltersProps) {
 
                     return (
                       <Link
-                        key={deck.id}
-                        href={`/decks/${deck.slug}`}
+                        key={deck.deck_id}
+                        href={`/decks/${deck.archetype_slug}`}
                         className={`group block rounded-xl border p-4 transition-all hover:scale-[1.02] ${cfg.bg} ${cfg.border} hover:border-yellow-400/50`}
                       >
                         <div className="flex items-start gap-3">
@@ -191,7 +191,7 @@ export default function DeckFilters({ decks }: DeckFiltersProps) {
                             <div className="flex-shrink-0">
                               <Image
                                 src={deck.image_url}
-                                alt={deck.name}
+                                alt={deck.deck_name}
                                 width={48}
                                 height={48}
                                 className="rounded-lg"
@@ -202,7 +202,7 @@ export default function DeckFilters({ decks }: DeckFiltersProps) {
                           {/* Deck info */}
                           <div className="flex-1 min-w-0">
                             <h3 className="font-bold text-white group-hover:text-yellow-400 transition-colors mb-1 truncate">
-                              {deck.name}
+                              {deck.deck_name}
                             </h3>
                             
                             <div className="flex items-center gap-3 text-xs text-gray-500">
