@@ -5,10 +5,9 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import Link from "next/link";
 
 interface Tournament {
-  id: string | number;
+  id: string;
   name: string;
   event_date: string;
-  rk9_id: string;
 }
 
 interface DeckData {
@@ -46,19 +45,18 @@ export default function MetaChart({ deckData, tournaments }: MetaChartProps) {
     );
   };
 
-  // Prepare chart data - USE RK9_ID for lookup
+  // Prepare chart data
   const chartData = useMemo(() => {
     return tournaments.map(tournament => {
       const dataPoint: any = {
         date: tournament.event_date,
-        name: tournament.name.replace(/Pokémon/g, '').replace(/Regional Championships|International Championships/g, '').replace(/2026/g, '').trim().substring(0, 15),
+        name: tournament.name.replace(/Pokémon/g, '').replace(/Regional Championships|International Championships/g, '').trim().substring(0, 20),
         fullName: tournament.name,
       };
 
       for (const deck of deckData) {
         if (selectedDecks.includes(deck.name)) {
-          // Use rk9_id to look up counts
-          dataPoint[deck.name] = deck.countsByTournament[tournament.rk9_id] || 0;
+          dataPoint[deck.name] = deck.countsByTournament[tournament.id] || 0;
         }
       }
 

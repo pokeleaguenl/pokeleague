@@ -15,11 +15,10 @@ export default async function MetaTimelinePage() {
     .order('meta_share', { ascending: false })
     .limit(8);
 
-  // Get all tournaments with rk9_id ordered by date
+  // Get all tournaments ordered by date
   const { data: tournaments } = await supabase
     .from('tournaments')
-    .select('id, name, event_date, rk9_id')
-    .not('rk9_id', 'is', null)
+    .select('id, name, event_date')
     .order('event_date', { ascending: true });
 
   // For each top deck, get entry counts per tournament
@@ -50,7 +49,7 @@ export default async function MetaTimelinePage() {
       .select('tournament_id')
       .in('archetype', aliasStrings);
 
-    // Count by tournament (using rk9_id as key)
+    // Count by tournament
     const countsByTournament: Record<string, number> = {};
     for (const s of standings || []) {
       if (!countsByTournament[s.tournament_id]) countsByTournament[s.tournament_id] = 0;
@@ -72,7 +71,7 @@ export default async function MetaTimelinePage() {
           Meta <span className="text-yellow-400">Timeline</span>
         </h1>
         <p className="text-gray-400">
-          Track deck popularity across {tournaments?.length || 0} tournaments
+          Track deck popularity across tournaments
         </p>
       </div>
 
