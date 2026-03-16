@@ -1,0 +1,947 @@
+
+Tournaments to scrape: 17 of 18
+  - 2026 Frankfurt Pokémon Regional Championships (2025-09-13)
+  - 2026 Monterrey Pokémon Regional Championships (2025-09-13)
+  - 2026 Pittsburgh Pokémon Regional Championships (2025-09-19)
+  - 2026 Milwaukee Pokémon Regional Championships (2025-10-10)
+  - 2026 Belo Horizonte Pokémon Regional Championships (2025-10-11)
+  - 2026 Lille Pokémon Regional Championships (2025-10-25)
+  - 2026 Brisbane Pokémon Regional Championships (2025-11-01)
+  - 2026 Gdańsk Pokémon Regional Championships (2025-11-01)
+  - 2026 Las Vegas Pokémon Regional Championships (2025-11-14)
+  - 2026 Latin America Pokémon International Championships (2025-11-21)
+  - 2026 Toronto Pokémon Regional Championships (2026-01-16)
+  - 2026 Mérida Pokémon Regional Championships (2026-01-24)
+  - 2026 Birmingham Pokémon Regional Championships (2026-01-24)
+  - 2026 Sydney Pokémon Regional Championships (2026-02-07)
+  - 2026 Santiago Pokémon Regional Championships (2026-02-07)
+  - 2026 Europe Pokémon International Championships (2026-02-13)
+  - 2026 Seattle Pokémon Regional Championships (2026-02-27)
+
+============================================================
+Tournament: 2026 Frankfurt Pokémon Regional Championships | 2025-09-13 | FR01mpvNDKVaPxTTkdam
+  Scraping roster...
+  Roster: 2823 players
+  Masters players: 2423
+  Scraping standings...
+  Final round: 18
+  Standings: 0 players
+  Processing 2423 players (2423 have decklists)...
+  Progress: 50/2423
+  Progress: 100/2423
+  Progress: 150/2423
+  Progress: 200/2423
+  Progress: 250/2423
+  Progress: 300/2423
+  Progress: 350/2423
+  Progress: 400/2423
+  Progress: 450/2423
+  Progress: 500/2423
+  Progress: 550/2423
+  Progress: 600/2423
+  Progress: 650/2423
+  Progress: 700/2423
+  Progress: 750/2423
+  Progress: 800/2423
+  Progress: 850/2423
+  Progress: 900/2423
+  Progress: 950/2423
+  Progress: 1000/2423
+  Progress: 1050/2423
+  Progress: 1100/2423
+  Progress: 1150/2423
+  Progress: 1200/2423
+  Progress: 1250/2423
+  Progress: 1300/2423
+  Progress: 1350/2423
+  Progress: 1400/2423
+  Progress: 1450/2423
+  Progress: 1500/2423
+  Progress: 1550/2423
+  Progress: 1600/2423
+  Progress: 1650/2423
+  Progress: 1700/2423
+  Progress: 1750/2423
+  Progress: 1800/2423
+  Progress: 1850/2423
+  Progress: 1900/2423
+  Progress: 1950/2423
+  Progress: 2000/2423
+  Progress: 2050/2423
+  Progress: 2100/2423
+  Progress: 2150/2423
+  Progress: 2200/2423
+  Progress: 2250/2423
+  Progress: 2300/2423
+  Progress: 2350/2423
+  Progress: 2400/2423
+  💾 Saved 2423 records to scripts/standings_FR01mpvNDKVaPxTTkdam.json
+  ✅ Ingested 2423 records
+
+============================================================
+Tournament: 2026 Monterrey Pokémon Regional Championships | 2025-09-13 | MT01mfOxRw9XtaFtElAm
+  Scraping roster...
+  Roster: 1773 players
+  Masters players: 1611
+  Scraping standings...
+  Final round: 16
+  Standings: 0 players
+  Processing 1611 players (1611 have decklists)...
+  Progress: 50/1611
+  Progress: 100/1611
+  Progress: 150/1611
+  Progress: 200/1611
+  Progress: 250/1611
+  Progress: 300/1611
+  Progress: 350/1611
+  Progress: 400/1611
+  Progress: 450/1611
+  Progress: 500/1611
+  Progress: 550/1611
+  Progress: 600/1611
+  Progress: 650/1611
+  Progress: 700/1611
+  Progress: 750/1611
+  Progress: 800/1611
+  Progress: 850/1611
+  Progress: 900/1611
+  Progress: 950/1611
+  Progress: 1000/1611
+  Progress: 1050/1611
+  Progress: 1100/1611
+  Progress: 1150/1611
+  Progress: 1200/1611
+  Progress: 1250/1611
+  Progress: 1300/1611
+  Progress: 1350/1611
+  Progress: 1400/1611
+  Progress: 1450/1611
+  Progress: 1500/1611
+  Progress: 1550/1611
+  Progress: 1600/1611
+  💾 Saved 1611 records to scripts/standings_MT01mfOxRw9XtaFtElAm.json
+  DB error batch 3: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 5: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 7: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 8: ON CONFLICT DO UPDATE command cannot affect row a second time
+  ✅ Ingested 1211 records
+
+============================================================
+Tournament: 2026 Pittsburgh Pokémon Regional Championships | 2025-09-19 | PT01klFH0Nj5f17R5myQ
+  Scraping roster...
+  Roster: 3237 players
+  Masters players: 2690
+  Scraping standings...
+  Final round: 18
+  Standings: 0 players
+  Processing 2690 players (2690 have decklists)...
+  Progress: 50/2690
+  Progress: 100/2690
+  Progress: 150/2690
+  Progress: 200/2690
+  ⚠ Failed Anthony Fowler: page.goto: Timeout 20000ms exceeded.
+Call log:
+[2m  - navigating to "https://rk9.gg/decklist/public/PT01klFH0Nj5f17R5myQ/fmuglkhnJlcubbVND2TM", waiting until "domcontentloaded"[22m
+
+  ⚠ Failed Anthony Romanello: page.goto: Timeout 20000ms exceeded.
+Call log:
+[2m  - navigating to "https://rk9.gg/decklist/public/PT01klFH0Nj5f17R5myQ/hNoTJhgw0Spv6xorfzN8", waiting until "domcontentloaded"[22m
+
+  ⚠ Failed Anthony Balko: page.goto: Timeout 20000ms exceeded.
+Call log:
+[2m  - navigating to "https://rk9.gg/decklist/public/PT01klFH0Nj5f17R5myQ/o5Rn5ylOxO8dtxd6hvQO", waiting until "domcontentloaded"[22m
+
+  Progress: 250/2690
+  Progress: 300/2690
+  Progress: 350/2690
+  Progress: 400/2690
+  Progress: 450/2690
+  Progress: 500/2690
+  Progress: 550/2690
+  Progress: 600/2690
+  Progress: 650/2690
+  Progress: 700/2690
+  Progress: 750/2690
+  Progress: 800/2690
+  Progress: 850/2690
+  Progress: 900/2690
+  Progress: 950/2690
+  Progress: 1000/2690
+  Progress: 1050/2690
+  Progress: 1100/2690
+  Progress: 1150/2690
+  Progress: 1200/2690
+  Progress: 1250/2690
+  Progress: 1300/2690
+  Progress: 1350/2690
+  Progress: 1400/2690
+  Progress: 1450/2690
+  Progress: 1500/2690
+  Progress: 1550/2690
+  Progress: 1600/2690
+  Progress: 1650/2690
+  Progress: 1700/2690
+  Progress: 1750/2690
+  Progress: 1800/2690
+  Progress: 1850/2690
+  Progress: 1900/2690
+  Progress: 1950/2690
+  Progress: 2000/2690
+  Progress: 2050/2690
+  Progress: 2100/2690
+  Progress: 2150/2690
+  Progress: 2200/2690
+  Progress: 2250/2690
+  Progress: 2300/2690
+  Progress: 2350/2690
+  Progress: 2400/2690
+  Progress: 2450/2690
+  Progress: 2500/2690
+  Progress: 2550/2690
+  Progress: 2600/2690
+  Progress: 2650/2690
+  💾 Saved 2690 records to scripts/standings_PT01klFH0Nj5f17R5myQ.json
+  DB error batch 2: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 11: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 13: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 23: ON CONFLICT DO UPDATE command cannot affect row a second time
+  ✅ Ingested 2290 records
+
+============================================================
+Tournament: 2026 Milwaukee Pokémon Regional Championships | 2025-10-10 | MK01mzXPKCuqXfZ1ay6j
+  Scraping roster...
+  Roster: 2757 players
+  Masters players: 2300
+  Scraping standings...
+  Final round: 18
+  Standings: 0 players
+  Processing 2300 players (2300 have decklists)...
+  Progress: 50/2300
+  Progress: 100/2300
+  Progress: 150/2300
+  Progress: 200/2300
+  Progress: 250/2300
+  Progress: 300/2300
+  Progress: 350/2300
+  Progress: 400/2300
+  Progress: 450/2300
+  Progress: 500/2300
+  Progress: 550/2300
+  Progress: 600/2300
+  Progress: 650/2300
+  Progress: 700/2300
+  Progress: 750/2300
+  Progress: 800/2300
+  Progress: 850/2300
+  Progress: 900/2300
+  Progress: 950/2300
+  Progress: 1000/2300
+  Progress: 1050/2300
+  Progress: 1100/2300
+  Progress: 1150/2300
+  Progress: 1200/2300
+  Progress: 1250/2300
+  Progress: 1300/2300
+  Progress: 1350/2300
+  Progress: 1400/2300
+  Progress: 1450/2300
+  Progress: 1500/2300
+  Progress: 1550/2300
+  Progress: 1600/2300
+  Progress: 1650/2300
+  Progress: 1700/2300
+  Progress: 1750/2300
+  Progress: 1800/2300
+  Progress: 1850/2300
+  Progress: 1900/2300
+  Progress: 1950/2300
+  Progress: 2000/2300
+  Progress: 2050/2300
+  Progress: 2100/2300
+  Progress: 2150/2300
+  Progress: 2200/2300
+  Progress: 2250/2300
+  Progress: 2300/2300
+  💾 Saved 2300 records to scripts/standings_MK01mzXPKCuqXfZ1ay6j.json
+  DB error batch 3: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 10: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 16: ON CONFLICT DO UPDATE command cannot affect row a second time
+  ✅ Ingested 2000 records
+
+============================================================
+Tournament: 2026 Belo Horizonte Pokémon Regional Championships | 2025-10-11 | BE01wYmCBW1HzjObcfgo
+  Scraping roster...
+  Roster: 1254 players
+  Masters players: 1111
+  Scraping standings...
+  Final round: 17
+  Standings: 0 players
+  Processing 1111 players (1111 have decklists)...
+  Progress: 50/1111
+  Progress: 100/1111
+  Progress: 150/1111
+  Progress: 200/1111
+  Progress: 250/1111
+  Progress: 300/1111
+  Progress: 350/1111
+  Progress: 400/1111
+  Progress: 450/1111
+  Progress: 500/1111
+  Progress: 550/1111
+  Progress: 600/1111
+  Progress: 650/1111
+  Progress: 700/1111
+  Progress: 750/1111
+  Progress: 800/1111
+  Progress: 850/1111
+  Progress: 900/1111
+  Progress: 950/1111
+  Progress: 1000/1111
+  Progress: 1050/1111
+  Progress: 1100/1111
+  💾 Saved 1111 records to scripts/standings_BE01wYmCBW1HzjObcfgo.json
+  DB error batch 3: ON CONFLICT DO UPDATE command cannot affect row a second time
+  ✅ Ingested 1011 records
+
+============================================================
+Tournament: 2026 Lille Pokémon Regional Championships | 2025-10-25 | LL01rJ9jmjd0vvZStqEI
+  Scraping roster...
+  Roster: 2412 players
+  Masters players: 2025
+  Scraping standings...
+  Final round: 17
+  Standings: 0 players
+  Processing 2025 players (2025 have decklists)...
+  Progress: 50/2025
+  Progress: 100/2025
+  Progress: 150/2025
+  Progress: 200/2025
+  Progress: 250/2025
+  Progress: 300/2025
+  Progress: 350/2025
+  Progress: 400/2025
+  Progress: 450/2025
+  Progress: 500/2025
+  Progress: 550/2025
+  Progress: 600/2025
+  Progress: 650/2025
+  Progress: 700/2025
+  Progress: 750/2025
+  Progress: 800/2025
+  Progress: 850/2025
+  Progress: 900/2025
+  Progress: 950/2025
+  Progress: 1000/2025
+  Progress: 1050/2025
+  Progress: 1100/2025
+  Progress: 1150/2025
+  Progress: 1200/2025
+  Progress: 1250/2025
+  Progress: 1300/2025
+  Progress: 1350/2025
+  Progress: 1400/2025
+  Progress: 1450/2025
+  Progress: 1500/2025
+  Progress: 1550/2025
+  Progress: 1600/2025
+  Progress: 1650/2025
+  Progress: 1700/2025
+  Progress: 1750/2025
+  Progress: 1800/2025
+  Progress: 1850/2025
+  Progress: 1900/2025
+  Progress: 1950/2025
+  Progress: 2000/2025
+  💾 Saved 2025 records to scripts/standings_LL01rJ9jmjd0vvZStqEI.json
+  ✅ Ingested 2025 records
+
+============================================================
+Tournament: 2026 Brisbane Pokémon Regional Championships | 2025-11-01 | BR01wWjeoRXmsLVtL56s
+  Scraping roster...
+  Roster: 736 players
+  Masters players: 615
+  Scraping standings...
+  Final round: 16
+  Standings: 0 players
+  Processing 615 players (615 have decklists)...
+  Progress: 50/615
+  Progress: 100/615
+  Progress: 150/615
+  Progress: 200/615
+  Progress: 250/615
+  Progress: 300/615
+  Progress: 350/615
+  Progress: 400/615
+  Progress: 450/615
+  Progress: 500/615
+  Progress: 550/615
+  Progress: 600/615
+  💾 Saved 615 records to scripts/standings_BR01wWjeoRXmsLVtL56s.json
+  ✅ Ingested 615 records
+
+============================================================
+Tournament: 2026 Gdańsk Pokémon Regional Championships | 2025-11-01 | GD01yAq3nBdy68dkmxVc
+  Scraping roster...
+  ❌ Error: page.goto: Timeout 30000ms exceeded.
+Call log:
+[2m  - navigating to "https://rk9.gg/roster/GD01yAq3nBdy68dkmxVc", waiting until "networkidle"[22m
+
+
+============================================================
+Tournament: 2026 Las Vegas Pokémon Regional Championships | 2025-11-14 | LV01YShqrqjMo62PxZPg
+  Scraping roster...
+  Roster: 3468 players
+  Masters players: 2911
+  Scraping standings...
+  Final round: 18
+  Standings: 0 players
+  Processing 2911 players (2911 have decklists)...
+  Progress: 50/2911
+  Progress: 100/2911
+  Progress: 150/2911
+  Progress: 200/2911
+  Progress: 250/2911
+  Progress: 300/2911
+  Progress: 350/2911
+  Progress: 400/2911
+  Progress: 450/2911
+  Progress: 500/2911
+  Progress: 550/2911
+  Progress: 600/2911
+  Progress: 650/2911
+  Progress: 700/2911
+  Progress: 750/2911
+  Progress: 800/2911
+  Progress: 850/2911
+  Progress: 900/2911
+  Progress: 950/2911
+  Progress: 1000/2911
+  Progress: 1050/2911
+  Progress: 1100/2911
+  Progress: 1150/2911
+  Progress: 1200/2911
+  Progress: 1250/2911
+  Progress: 1300/2911
+  Progress: 1350/2911
+  Progress: 1400/2911
+  Progress: 1450/2911
+  Progress: 1500/2911
+  Progress: 1550/2911
+  Progress: 1600/2911
+  Progress: 1650/2911
+  Progress: 1700/2911
+  Progress: 1750/2911
+  Progress: 1800/2911
+  Progress: 1850/2911
+  Progress: 1900/2911
+  Progress: 1950/2911
+  Progress: 2000/2911
+  Progress: 2050/2911
+  Progress: 2100/2911
+  Progress: 2150/2911
+  Progress: 2200/2911
+  Progress: 2250/2911
+  Progress: 2300/2911
+  Progress: 2350/2911
+  Progress: 2400/2911
+  Progress: 2450/2911
+  Progress: 2500/2911
+  Progress: 2550/2911
+  Progress: 2600/2911
+  Progress: 2650/2911
+  Progress: 2700/2911
+  Progress: 2750/2911
+  Progress: 2800/2911
+  Progress: 2850/2911
+  Progress: 2900/2911
+  💾 Saved 2911 records to scripts/standings_LV01YShqrqjMo62PxZPg.json
+  DB error batch 1: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 5: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 7: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 8: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 12: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 14: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 16: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 17: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 20: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 25: ON CONFLICT DO UPDATE command cannot affect row a second time
+  ✅ Ingested 1911 records
+
+============================================================
+Tournament: 2026 Latin America Pokémon International Championships | 2025-11-21 | LA0126uWiVw5bRySlkA2
+  Scraping roster...
+  Roster: 2453 players
+  Masters players: 2115
+  Scraping standings...
+  Final round: 18
+  Standings: 0 players
+  Processing 2115 players (2115 have decklists)...
+  Progress: 50/2115
+  Progress: 100/2115
+  Progress: 150/2115
+  Progress: 200/2115
+  Progress: 250/2115
+  Progress: 300/2115
+  Progress: 350/2115
+  Progress: 400/2115
+  Progress: 450/2115
+  Progress: 500/2115
+  Progress: 550/2115
+  Progress: 600/2115
+  Progress: 650/2115
+  Progress: 700/2115
+  Progress: 750/2115
+  Progress: 800/2115
+  Progress: 850/2115
+  Progress: 900/2115
+  Progress: 950/2115
+  Progress: 1000/2115
+  Progress: 1050/2115
+  Progress: 1100/2115
+  Progress: 1150/2115
+  Progress: 1200/2115
+  Progress: 1250/2115
+  Progress: 1300/2115
+  Progress: 1350/2115
+  Progress: 1400/2115
+  Progress: 1450/2115
+  Progress: 1500/2115
+  Progress: 1550/2115
+  Progress: 1600/2115
+  Progress: 1650/2115
+  Progress: 1700/2115
+  Progress: 1750/2115
+  Progress: 1800/2115
+  Progress: 1850/2115
+  Progress: 1900/2115
+  Progress: 1950/2115
+  Progress: 2000/2115
+  Progress: 2050/2115
+  Progress: 2100/2115
+  💾 Saved 2115 records to scripts/standings_LA0126uWiVw5bRySlkA2.json
+  DB error batch 6: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 8: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 9: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 13: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 14: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 17: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 19: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 20: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 21: ON CONFLICT DO UPDATE command cannot affect row a second time
+  ✅ Ingested 1215 records
+
+============================================================
+Tournament: 2026 Toronto Pokémon Regional Championships | 2026-01-16 | TO01yAfakDVFFDFAV2AS
+  Scraping roster...
+  Roster: 2734 players
+  Masters players: 2264
+  Scraping standings...
+  Final round: 18
+  Standings: 0 players
+  Processing 2264 players (2264 have decklists)...
+  Progress: 50/2264
+  Progress: 100/2264
+  Progress: 150/2264
+  Progress: 200/2264
+  Progress: 250/2264
+  Progress: 300/2264
+  Progress: 350/2264
+  Progress: 400/2264
+  Progress: 450/2264
+  Progress: 500/2264
+  Progress: 550/2264
+  Progress: 600/2264
+  Progress: 650/2264
+  Progress: 700/2264
+  Progress: 750/2264
+  Progress: 800/2264
+  Progress: 850/2264
+  Progress: 900/2264
+  Progress: 950/2264
+  Progress: 1000/2264
+  Progress: 1050/2264
+  Progress: 1100/2264
+  Progress: 1150/2264
+  Progress: 1200/2264
+  Progress: 1250/2264
+  Progress: 1300/2264
+  Progress: 1350/2264
+  Progress: 1400/2264
+  Progress: 1450/2264
+  Progress: 1500/2264
+  Progress: 1550/2264
+  Progress: 1600/2264
+  Progress: 1650/2264
+  Progress: 1700/2264
+  Progress: 1750/2264
+  Progress: 1800/2264
+  Progress: 1850/2264
+  Progress: 1900/2264
+  Progress: 1950/2264
+  Progress: 2000/2264
+  Progress: 2050/2264
+  Progress: 2100/2264
+  Progress: 2150/2264
+  Progress: 2200/2264
+  Progress: 2250/2264
+  💾 Saved 2264 records to scripts/standings_TO01yAfakDVFFDFAV2AS.json
+  DB error batch 10: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 16: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 19: ON CONFLICT DO UPDATE command cannot affect row a second time
+  ✅ Ingested 1964 records
+
+============================================================
+Tournament: 2026 Mérida Pokémon Regional Championships | 2026-01-24 | ME01wMEKNaLIfrdxmnhb
+  Scraping roster...
+  Roster: 1848 players
+  Masters players: 1680
+  Scraping standings...
+  Final round: 17
+  Standings: 0 players
+  Processing 1680 players (1680 have decklists)...
+  Progress: 50/1680
+  Progress: 100/1680
+  Progress: 150/1680
+  Progress: 200/1680
+  Progress: 250/1680
+  Progress: 300/1680
+  Progress: 350/1680
+  Progress: 400/1680
+  Progress: 450/1680
+  Progress: 500/1680
+  Progress: 550/1680
+  Progress: 600/1680
+  Progress: 650/1680
+  Progress: 700/1680
+  Progress: 750/1680
+  Progress: 800/1680
+  Progress: 850/1680
+  Progress: 900/1680
+  Progress: 950/1680
+  Progress: 1000/1680
+  Progress: 1050/1680
+  Progress: 1100/1680
+  Progress: 1150/1680
+  Progress: 1200/1680
+  Progress: 1250/1680
+  Progress: 1300/1680
+  Progress: 1350/1680
+  Progress: 1400/1680
+  Progress: 1450/1680
+  Progress: 1500/1680
+  Progress: 1550/1680
+  Progress: 1600/1680
+  Progress: 1650/1680
+  💾 Saved 1680 records to scripts/standings_ME01wMEKNaLIfrdxmnhb.json
+  DB error batch 5: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 11: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 12: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 13: ON CONFLICT DO UPDATE command cannot affect row a second time
+  ✅ Ingested 1280 records
+
+============================================================
+Tournament: 2026 Birmingham Pokémon Regional Championships | 2026-01-24 | BH01mjIWeSb7vxkM9Aer
+  Scraping roster...
+  Roster: 2858 players
+  Masters players: 2340
+  Scraping standings...
+  Final round: 18
+  Standings: 0 players
+  Processing 2340 players (2340 have decklists)...
+  Progress: 50/2340
+  Progress: 100/2340
+  Progress: 150/2340
+  Progress: 200/2340
+  Progress: 250/2340
+  Progress: 300/2340
+  Progress: 350/2340
+  Progress: 400/2340
+  Progress: 450/2340
+  Progress: 500/2340
+  Progress: 550/2340
+  Progress: 600/2340
+  Progress: 650/2340
+  Progress: 700/2340
+  Progress: 750/2340
+  Progress: 800/2340
+  Progress: 850/2340
+  Progress: 900/2340
+  Progress: 950/2340
+  Progress: 1000/2340
+  Progress: 1050/2340
+  Progress: 1100/2340
+  Progress: 1150/2340
+  Progress: 1200/2340
+  Progress: 1250/2340
+  Progress: 1300/2340
+  Progress: 1350/2340
+  Progress: 1400/2340
+  Progress: 1450/2340
+  Progress: 1500/2340
+  Progress: 1550/2340
+  Progress: 1600/2340
+  Progress: 1650/2340
+  Progress: 1700/2340
+  Progress: 1750/2340
+  Progress: 1800/2340
+  Progress: 1850/2340
+  Progress: 1900/2340
+  Progress: 1950/2340
+  Progress: 2000/2340
+  Progress: 2050/2340
+  Progress: 2100/2340
+  Progress: 2150/2340
+  Progress: 2200/2340
+  Progress: 2250/2340
+  Progress: 2300/2340
+  💾 Saved 2340 records to scripts/standings_BH01mjIWeSb7vxkM9Aer.json
+  DB error batch 2: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 3: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 13: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 15: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 19: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 22: ON CONFLICT DO UPDATE command cannot affect row a second time
+  ✅ Ingested 1740 records
+
+============================================================
+Tournament: 2026 Sydney Pokémon Regional Championships | 2026-02-07 | SY01X6aiblBgAp8tfhjx
+  Scraping roster...
+  Roster: 844 players
+  Masters players: 697
+  Scraping standings...
+  Final round: 16
+  Standings: 0 players
+  Processing 697 players (697 have decklists)...
+  Progress: 50/697
+  Progress: 100/697
+  Progress: 150/697
+  Progress: 200/697
+  Progress: 250/697
+  Progress: 300/697
+  Progress: 350/697
+  Progress: 400/697
+  Progress: 450/697
+  Progress: 500/697
+  Progress: 550/697
+  Progress: 600/697
+  Progress: 650/697
+  💾 Saved 697 records to scripts/standings_SY01X6aiblBgAp8tfhjx.json
+  ✅ Ingested 697 records
+
+============================================================
+Tournament: 2026 Santiago Pokémon Regional Championships | 2026-02-07 | ST01bmgM9jIqCvBYdzy3
+  Scraping roster...
+  Roster: 1870 players
+  Masters players: 1668
+  Scraping standings...
+  Final round: 17
+  Standings: 0 players
+  Processing 1668 players (1668 have decklists)...
+  Progress: 50/1668
+  Progress: 100/1668
+  Progress: 150/1668
+  Progress: 200/1668
+  Progress: 250/1668
+  Progress: 300/1668
+  Progress: 350/1668
+  Progress: 400/1668
+  Progress: 450/1668
+  Progress: 500/1668
+  Progress: 550/1668
+  Progress: 600/1668
+  Progress: 650/1668
+  Progress: 700/1668
+  Progress: 750/1668
+  Progress: 800/1668
+  Progress: 850/1668
+  Progress: 900/1668
+  Progress: 950/1668
+  Progress: 1000/1668
+  Progress: 1050/1668
+  Progress: 1100/1668
+  Progress: 1150/1668
+  Progress: 1200/1668
+  Progress: 1250/1668
+  Progress: 1300/1668
+  Progress: 1350/1668
+  Progress: 1400/1668
+  Progress: 1450/1668
+  Progress: 1500/1668
+  Progress: 1550/1668
+  Progress: 1600/1668
+  Progress: 1650/1668
+  💾 Saved 1668 records to scripts/standings_ST01bmgM9jIqCvBYdzy3.json
+  DB error batch 3: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 4: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 5: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 6: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 7: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 8: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 12: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 13: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 15: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 16: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 17: ON CONFLICT DO UPDATE command cannot affect row a second time
+  ✅ Ingested 600 records
+
+============================================================
+Tournament: 2026 Europe Pokémon International Championships | 2026-02-13 | EU01mU0Z1galE2FATDYs
+  Scraping roster...
+  Roster: 4898 players
+  Masters players: 4007
+  Scraping standings...
+  Final round: 18
+  Standings: 0 players
+  Processing 4007 players (4007 have decklists)...
+  Progress: 50/4007
+  Progress: 100/4007
+  Progress: 150/4007
+  Progress: 200/4007
+  Progress: 250/4007
+  Progress: 300/4007
+  Progress: 350/4007
+  Progress: 400/4007
+  Progress: 450/4007
+  Progress: 500/4007
+  Progress: 550/4007
+  Progress: 600/4007
+  Progress: 650/4007
+  Progress: 700/4007
+  Progress: 750/4007
+  Progress: 800/4007
+  Progress: 850/4007
+  Progress: 900/4007
+  Progress: 950/4007
+  Progress: 1000/4007
+  Progress: 1050/4007
+  Progress: 1100/4007
+  Progress: 1150/4007
+  Progress: 1200/4007
+  Progress: 1250/4007
+  Progress: 1300/4007
+  Progress: 1350/4007
+  Progress: 1400/4007
+  Progress: 1450/4007
+  Progress: 1500/4007
+  Progress: 1550/4007
+  Progress: 1600/4007
+  Progress: 1650/4007
+  Progress: 1700/4007
+  Progress: 1750/4007
+  Progress: 1800/4007
+  Progress: 1850/4007
+  Progress: 1900/4007
+  Progress: 1950/4007
+  Progress: 2000/4007
+  Progress: 2050/4007
+  Progress: 2100/4007
+  Progress: 2150/4007
+  Progress: 2200/4007
+  Progress: 2250/4007
+  Progress: 2300/4007
+  Progress: 2350/4007
+  Progress: 2400/4007
+  Progress: 2450/4007
+  Progress: 2500/4007
+  Progress: 2550/4007
+  Progress: 2600/4007
+  Progress: 2650/4007
+  Progress: 2700/4007
+  Progress: 2750/4007
+  Progress: 2800/4007
+  Progress: 2850/4007
+  Progress: 2900/4007
+  Progress: 2950/4007
+  Progress: 3000/4007
+  Progress: 3050/4007
+  Progress: 3100/4007
+  Progress: 3150/4007
+  Progress: 3200/4007
+  Progress: 3250/4007
+  Progress: 3300/4007
+  Progress: 3350/4007
+  Progress: 3400/4007
+  Progress: 3450/4007
+  Progress: 3500/4007
+  Progress: 3550/4007
+  Progress: 3600/4007
+  Progress: 3650/4007
+  Progress: 3700/4007
+  Progress: 3750/4007
+  Progress: 3800/4007
+  Progress: 3850/4007
+  Progress: 3900/4007
+  Progress: 3950/4007
+  Progress: 4000/4007
+  💾 Saved 4007 records to scripts/standings_EU01mU0Z1galE2FATDYs.json
+  DB error batch 6: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 9: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 17: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 37: ON CONFLICT DO UPDATE command cannot affect row a second time
+  ✅ Ingested 3607 records
+
+============================================================
+Tournament: 2026 Seattle Pokémon Regional Championships | 2026-02-27 | SE01gUuRn8bJqbH9Wnt1
+  Scraping roster...
+  Roster: 2712 players
+  Masters players: 2224
+  Scraping standings...
+  Final round: 18
+  Standings: 0 players
+  Processing 2224 players (2224 have decklists)...
+  Progress: 50/2224
+  Progress: 100/2224
+  Progress: 150/2224
+  Progress: 200/2224
+  Progress: 250/2224
+  Progress: 300/2224
+  Progress: 350/2224
+  Progress: 400/2224
+  Progress: 450/2224
+  Progress: 500/2224
+  Progress: 550/2224
+  Progress: 600/2224
+  Progress: 650/2224
+  Progress: 700/2224
+  Progress: 750/2224
+  Progress: 800/2224
+  Progress: 850/2224
+  Progress: 900/2224
+  Progress: 950/2224
+  Progress: 1000/2224
+  Progress: 1050/2224
+  Progress: 1100/2224
+  Progress: 1150/2224
+  Progress: 1200/2224
+  Progress: 1250/2224
+  Progress: 1300/2224
+  Progress: 1350/2224
+  Progress: 1400/2224
+  Progress: 1450/2224
+  Progress: 1500/2224
+  Progress: 1550/2224
+  Progress: 1600/2224
+  Progress: 1650/2224
+  Progress: 1700/2224
+  Progress: 1750/2224
+  Progress: 1800/2224
+  Progress: 1850/2224
+  Progress: 1900/2224
+  Progress: 1950/2224
+  Progress: 2000/2224
+  Progress: 2050/2224
+  Progress: 2100/2224
+  Progress: 2150/2224
+  Progress: 2200/2224
+  💾 Saved 2224 records to scripts/standings_SE01gUuRn8bJqbH9Wnt1.json
+  DB error batch 2: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 4: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 11: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 13: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 14: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 16: ON CONFLICT DO UPDATE command cannot affect row a second time
+  DB error batch 19: ON CONFLICT DO UPDATE command cannot affect row a second time
+  ✅ Ingested 1524 records
+
+
+All done!

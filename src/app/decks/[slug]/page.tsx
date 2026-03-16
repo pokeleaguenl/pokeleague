@@ -5,6 +5,7 @@ import Image from "next/image";
 import { calculateRK9Analytics } from "@/lib/fantasy/rk9Analytics";
 
 import TournamentBreakdown from "./tournament-breakdown";
+import DeckVariants from "./deck-variants";
 export const dynamic = 'force-dynamic';
 
 export default async function DeckAnalyticsPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -175,6 +176,9 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
           <p className="mt-2 text-sm text-gray-600">Data will appear once RK9 standings are ingested.</p>
         </div>
       )}
+
+      {/* Deck Variants */}
+      <DeckVariants archetypeId={archetype.id} />
 
       {/* Per-tournament breakdown - shown for all decks */}
       <TournamentBreakdown supabase={supabase} archetypeId={archetype.id} />
