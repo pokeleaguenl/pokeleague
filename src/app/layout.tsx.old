@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Nav from "@/components/nav";
 import "./globals.css";
-import "./mobile.css";
 
 export const metadata: Metadata = {
   title: "PokéLeague — Fantasy Pokémon TCG",
@@ -25,9 +24,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-      </head>
       <body className="bg-gray-950 text-gray-100 antialiased">
         <Nav />
         {children}
@@ -35,3 +31,4 @@ export default function RootLayout({
     </html>
   );
 }
+// Thu Mar 12 08:26:11 UTC 2026
