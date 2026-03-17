@@ -1,27 +1,22 @@
 import { createClient } from '@supabase/supabase-js';
+
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-// Check if fantasy_archetypes has any parent/canonical column already
-const { data } = await supabase
+console.log('\n=== Checking fantasy_archetypes Schema ===\n');
+
+const { data: sample } = await supabase
   .from('fantasy_archetypes')
   .select('*')
-  .limit(3);
-console.log('fantasy_archetypes columns:', Object.keys(data[0]));
+  .limit(1);
 
-// Check fantasy_archetype_aliases structure
-const { data: aliases } = await supabase
-  .from('fantasy_archetype_aliases')
-  .select('*')
-  .limit(10);
-console.log('\nAlias table sample:', aliases);
-console.log('Alias columns:', aliases?.length ? Object.keys(aliases[0]) : 'empty');
+if (sample && sample.length > 0) {
+  console.log('Columns in fantasy_archetypes:');
+  console.log(Object.keys(sample[0]));
+  console.log('\nSample record:');
+  console.log(JSON.stringify(sample[0], null, 2));
+}
 
-// Check decks table columns
-const { data: decks } = await supabase
-  .from('decks')
-  .select('*')
-  .limit(2);
-console.log('\nDecks columns:', Object.keys(decks[0]));
+process.exit(0);
