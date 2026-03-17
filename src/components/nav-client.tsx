@@ -1,4 +1,5 @@
 "use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -7,6 +8,8 @@ const mainLinks = [
   { href: "/dashboard",    icon: "🏠", label: "Home"        },
   { href: "/squad",        icon: "🎴", label: "Squad"       },
   { href: "/decks",        icon: "📊", label: "Decks"       },
+  { href: "/meta",         icon: "📈", label: "Meta"        },
+  { href: "/matchups",     icon: "⚔️", label: "Matchups"    },
   { href: "/leaderboard",  icon: "🏆", label: "Leaderboard" },
   { href: "/leagues",      icon: "🏅", label: "Leagues"     },
   { href: "/events",       icon: "📅", label: "Events"      },
@@ -14,10 +17,10 @@ const mainLinks = [
 
 export default function NavClient({ isLoggedIn }: { isLoggedIn: boolean }) {
   const pathname = usePathname();
+
   return (
     <nav className="sticky top-0 z-40 border-b border-white/5 bg-gray-950/95 backdrop-blur-md">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-2.5">
-
         {/* Logo */}
         <Link
           href={isLoggedIn ? "/dashboard" : "/"}
@@ -28,12 +31,12 @@ export default function NavClient({ isLoggedIn }: { isLoggedIn: boolean }) {
         </Link>
 
         {/* Main links */}
-        <div className="flex items-center gap-0.5">
-          {(isLoggedIn ? mainLinks : mainLinks.filter(l => l.href === "/decks" || l.href === "/leaderboard")).map(({ href, icon, label }) => {
+        <div className="flex items-center gap-0.5 overflow-x-auto">
+          {(isLoggedIn ? mainLinks : mainLinks.filter(l => l.href === "/decks" || l.href === "/meta" || l.href === "/matchups" || l.href === "/leaderboard")).map(({ href, icon, label }) => {
             const active = pathname === href || (href !== "/dashboard" && pathname.startsWith(href + "/"));
             return (
               <Link key={href} href={href}
-                className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm transition-colors
+                className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm transition-colors whitespace-nowrap
                   ${active
                     ? "bg-yellow-400/10 text-yellow-400 font-semibold"
                     : "text-gray-400 hover:bg-white/5 hover:text-white"
@@ -83,7 +86,6 @@ export default function NavClient({ isLoggedIn }: { isLoggedIn: boolean }) {
             </>
           )}
         </div>
-
       </div>
     </nav>
   );
