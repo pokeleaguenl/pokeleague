@@ -6,6 +6,8 @@ const CUTOFF_DATE = "2025-09-01";
 
 export const dynamic = 'force-dynamic';
 
+
+
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; border: string }> = {
   live:      { label: "● LIVE",     color: "text-green-400",  bg: "bg-green-400/10",  border: "border-green-400/30"  },
   completed: { label: "Completed",  color: "text-gray-500",   bg: "bg-gray-800",      border: "border-gray-700"      },
@@ -35,7 +37,7 @@ export default async function EventsPage() {
   const [{ data: tournaments }, { data: myScores }] = await Promise.all([
     supabase
       .from("tournaments")
-      .select("id, name, event_date, status, city, rk9_id")
+      .select("id, name, event_date, status, city")
       .gte("event_date", CUTOFF_DATE)
       .order("event_date", { ascending: true }),
     supabase
@@ -91,10 +93,8 @@ export default async function EventsPage() {
               const status = (t.status as string) || "upcoming";
               const cfg = STATUS_CONFIG[status] || STATUS_CONFIG.upcoming;
               const countdown = daysUntil(t.event_date);
-              const hasData = !!t.rk9_id;
-              
               return (
-                <Link key={t.id} href={hasData ? `/tournaments/${t.id}` : `/events/${t.id}`}
+                <Link key={t.id} href={"/events/" + t.id}
                   className={"group flex items-center justify-between rounded-xl border p-4 transition-all hover:border-yellow-400/40 " +
                     (isNext ? "border-yellow-400/30 bg-yellow-400/5" : "border-gray-800 bg-gray-900/20")}>
                   <div className="flex items-center gap-4 min-w-0">
@@ -140,10 +140,8 @@ export default async function EventsPage() {
           <div className="space-y-2">
             {past.map((t) => {
               const myPts = scoreMap[t.id];
-              const hasData = !!t.rk9_id;
-              
               return (
-                <Link key={t.id} href={hasData ? `/tournaments/${t.id}` : `/events/${t.id}`}
+                <Link key={t.id} href={"/events/" + t.id}
                   className="group flex items-center justify-between rounded-xl border border-gray-800 bg-gray-900/20 p-4 transition-all hover:border-gray-700">
                   <div className="flex items-center gap-4 min-w-0">
                     <div className="flex-shrink-0 w-12 text-center rounded-lg bg-gray-800/60 py-1.5">
@@ -159,7 +157,6 @@ export default async function EventsPage() {
                       <p className="text-xs text-gray-600">
                         {t.city ? t.city + " · " : ""}
                         {formatDate(t.event_date)}
-                        {hasData && <span className="ml-2 text-yellow-400">📊</span>}
                       </p>
                     </div>
                   </div>
