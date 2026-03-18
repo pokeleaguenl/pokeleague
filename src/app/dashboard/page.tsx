@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import LogoutButton from "./logout-button";
-import { PointsHistoryDebug as PointsHistory } from "@/components/points-history-debug";
+import { PointsHistory } from "@/components/points-history";
 
 export const dynamic = 'force-dynamic';
 
