@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import LogoutButton from "./logout-button";
+import { PointsHistoryDebug as PointsHistory } from "@/components/points-history-debug";
 
 export const dynamic = 'force-dynamic';
 
@@ -245,6 +246,12 @@ export default async function Dashboard() {
             <span className="text-xs text-gray-500 mt-0.5">{rank ? `You are #${rank} globally` : "See global rankings"}</span>
           </Link>
         </div>
+      </section>
+
+      {/* Points History */}
+      <section className="mb-4">
+        <h2 className="mb-3 text-xs font-bold uppercase tracking-widest text-gray-500">Tournament History</h2>
+        <PointsHistory userId={user.id} />
       </section>
 
       {/* Resources */}
