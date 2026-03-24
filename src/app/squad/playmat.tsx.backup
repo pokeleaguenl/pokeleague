@@ -66,7 +66,6 @@ interface Props {
   allDecks: Deck[];
   initialSquad: Partial<Squad>;
   initialVariants?: Partial<VariantMap>;
-  lastSaved: string | null;
   variantsByDeckId: Record<number, Variant[]>;
   stadiumEffects: StadiumEffects;
   nextEventName: string | null;
@@ -86,7 +85,6 @@ export default function Playmat({
   stadiumEffects: initialEffects,
   nextEventName,
   locked: initialLocked,
-  lastSaved,
 }: Props) {
   const emptySquad: Squad = {
     active: null,
@@ -333,29 +331,6 @@ export default function Playmat({
 
         {/* Stadium Effects */}
         <div className="rounded-xl border border-white/10 bg-black/20 p-3 backdrop-blur-sm">
-        {/* UNSAVED CHANGES WARNING */}
-        {unsaved && !locked && (
-          <div className="rounded-xl border-2 border-orange-400 bg-orange-400/10 p-4 backdrop-blur-sm">
-            <div className="flex items-start gap-3">
-              <span className="text-2xl">⚠️</span>
-              <div className="flex-1">
-                <h3 className="font-bold text-orange-400 mb-1">Unsaved Changes</h3>
-                <p className="text-sm text-orange-200/90 mb-2">
-                  Your squad changes have NOT been saved yet.
-                </p>
-                <p className="text-xs text-orange-300/70">
-                  <strong>Important:</strong> Only your SAVED squad counts for tournament scoring. Click "Save" below to lock in your changes.
-                </p>
-                {lastSaved && (
-                  <p className="text-xs text-orange-300/60 mt-2">
-                    Last saved: {lastSaved}
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-
           <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-gray-500">🏟 Stadium Effects — 1 per event, 1 per season each</p>
           <div className="flex gap-2">
             {/* x3 effect */}

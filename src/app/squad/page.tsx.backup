@@ -103,14 +103,6 @@ export default async function SquadPage() {
     eventEffect: sq.event_effect ?? null,
   } : { x3Used: false, handBoostUsed: false, eventEffect: null };
 
-  const lastSaved = sq?.updated_at ? new Date(sq.updated_at).toLocaleString("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit"
-  }) : null;
-
   return (
     <div className="mx-auto max-w-xl px-2 py-4">
       <div className="mb-4 px-2">
@@ -152,7 +144,6 @@ export default async function SquadPage() {
         stadiumEffects={stadiumEffects}
         nextEventName={nextEvent?.name ?? null}
         locked={lockStatus.locked}
-        lastSaved={lastSaved}
       />
     </div>
   );
