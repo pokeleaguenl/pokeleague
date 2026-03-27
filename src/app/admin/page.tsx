@@ -5,6 +5,7 @@ import SyncButton from "./sync-button";
 import EventsSyncButton from "./events-sync-button";
 import SyncVariantsButton from "./sync-variants-button";
 import SeedFantasyButton from "./seed-fantasy-button";
+import IngestEventButton from "./ingest-event-button";
 import DeckTable from "./deck-table";
 import { requireAdminPage } from "@/lib/auth/admin";
 
@@ -25,6 +26,7 @@ export default async function AdminPage() {
     { count: squadCount },
     { count: tournamentCount },
     { data: recentTournaments },
+    { data: allTournamentsForIngest },
     { count: standingsCount },
     { count: aliasCount },
     { count: archetypeCount },
@@ -38,6 +40,7 @@ export default async function AdminPage() {
     supabase.from("squads").select("*", { count: "exact", head: true }),
     supabase.from("tournaments").select("*", { count: "exact", head: true }),
     supabase.from("tournaments").select("id, name, event_date, status").order("event_date", { ascending: false }).limit(5),
+    supabase.from("tournaments").select("id, name, event_date, rk9_id").order("event_date", { ascending: false }),
     supabase.from("rk9_standings").select("*", { count: "exact", head: true }),
     supabase.from("fantasy_archetype_aliases").select("*", { count: "exact", head: true }),
     supabase.from("fantasy_archetypes").select("*", { count: "exact", head: true }),
@@ -264,6 +267,7 @@ export default async function AdminPage() {
           <EventsSyncButton />
           <SyncVariantsButton />
           <SeedFantasyButton />
+          <IngestEventButton tournaments={allTournamentsForIngest ?? []} />
         </div>
       </section>
 
