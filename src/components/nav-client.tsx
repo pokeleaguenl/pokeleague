@@ -21,6 +21,7 @@ const competeLinks = [
   { href: "/leaderboard", label: "Leaderboard" },
   { href: "/leagues", label: "Leagues" },
   { href: "/events", label: "Events" },
+  { href: "/rules", label: "How it Works" },
 ];
 
 // Simple SVG icons
