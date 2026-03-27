@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import TournamentMetaChart from "./tournament-meta-chart";
 
 interface TournamentStat {
   tournamentName: string;
@@ -15,56 +16,60 @@ async function getTournamentBreakdown(
   supabase: SupabaseClient,
   archetypeId: number
 ): Promise<TournamentStat[]> {
-  // Get all aliases for this archetype
+  // 1. Aliases for this archetype
   const { data: aliases } = await supabase
-    .from('fantasy_archetype_aliases')
-    .select('alias')
-    .eq('archetype_id', archetypeId);
+    .from("fantasy_archetype_aliases")
+    .select("alias")
+    .eq("archetype_id", archetypeId);
 
   if (!aliases || aliases.length === 0) return [];
-
   const aliasStrings = aliases.map(a => a.alias);
 
-  // Get all standings for this archetype
+  // 2. All standings for this archetype
   const { data: standings } = await supabase
-    .from('rk9_standings')
-    .select('tournament_id, rank')
-    .in('archetype', aliasStrings)
-    .not('rank', 'is', null);
+    .from("rk9_standings")
+    .select("tournament_id, rank")
+    .in("archetype", aliasStrings)
+    .not("rank", "is", null);
 
   if (!standings || standings.length === 0) return [];
 
-  // Group by tournament
-  const byTournament: Record<string, typeof standings> = {};
+  // Group by tournament_id
+  const byTournament: Record<string, number[]> = {};
   for (const s of standings) {
-    if (!byTournament[s.tournament_id]) {
-      byTournament[s.tournament_id] = [];
-    }
-    byTournament[s.tournament_id].push(s);
+    if (!byTournament[s.tournament_id]) byTournament[s.tournament_id] = [];
+    byTournament[s.tournament_id].push(s.rank);
   }
 
-  // Get tournament info and total player counts
+  const tournamentIds = Object.keys(byTournament);
+
+  // 3. Batch-fetch tournament info + all player counts (2 queries, not N×2)
+  const [{ data: tournaments }, { data: allStandings }] = await Promise.all([
+    supabase
+      .from("tournaments")
+      .select("rk9_id, name, event_date")
+      .in("rk9_id", tournamentIds),
+    supabase
+      .from("rk9_standings")
+      .select("tournament_id")
+      .in("tournament_id", tournamentIds)
+      .not("rank", "is", null),
+  ]);
+
+  // Build lookup maps in-memory
+  const tournamentMap = new Map((tournaments ?? []).map(t => [t.rk9_id, t]));
+  const playerCountMap: Record<string, number> = {};
+  for (const row of allStandings ?? []) {
+    playerCountMap[row.tournament_id] = (playerCountMap[row.tournament_id] || 0) + 1;
+  }
+
   const results: TournamentStat[] = [];
-
-  for (const [tournamentId, tournamentStandings] of Object.entries(byTournament)) {
-    // Get tournament details
-    const { data: tournament } = await supabase
-      .from('tournaments')
-      .select('name, event_date')
-      .eq('rk9_id', tournamentId)
-      .single();
-
+  for (const [tournamentId, ranks] of Object.entries(byTournament)) {
+    const tournament = tournamentMap.get(tournamentId);
     if (!tournament) continue;
 
-    // Get total players in this tournament
-    const { count: totalPlayers } = await supabase
-      .from('rk9_standings')
-      .select('*', { count: 'exact', head: true })
-      .eq('tournament_id', tournamentId)
-      .not('rank', 'is', null);
-
-    const entries = tournamentStandings.length;
-    const ranks = tournamentStandings.map(s => s.rank);
+    const totalPlayers = playerCountMap[tournamentId] || 0;
+    const entries = ranks.length;
     const bestRank = Math.min(...ranks);
     const top8 = ranks.filter(r => r <= 8).length;
     const top16 = ranks.filter(r => r <= 16).length;
@@ -83,7 +88,6 @@ async function getTournamentBreakdown(
     });
   }
 
-  // Sort by event date descending (most recent first)
   results.sort((a, b) => {
     if (!a.eventDate) return 1;
     if (!b.eventDate) return -1;
@@ -104,7 +108,7 @@ export default async function TournamentBreakdown({
 
   if (breakdown.length === 0) {
     return (
-      <section className="rounded-xl border border-white/10 bg-gray-900/50 p-6 lg:col-span-2">
+      <section className="rounded-xl border border-white/10 bg-gray-900/50 p-6 lg:col-span-2 mt-6">
         <h2 className="mb-4 text-base font-bold text-white">Tournament Breakdown</h2>
         <p className="text-sm text-gray-500">No tournament data available yet.</p>
       </section>
@@ -112,51 +116,55 @@ export default async function TournamentBreakdown({
   }
 
   return (
-    <section className="rounded-xl border border-white/10 bg-gray-900/50 p-6 lg:col-span-2">
-      <h2 className="mb-4 text-base font-bold text-white">
-        Tournament Breakdown
-        <span className="ml-2 text-sm font-normal text-gray-500">({breakdown.length} tournaments)</span>
-      </h2>
+    <>
+      <TournamentMetaChart breakdown={breakdown} />
 
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-white/5 text-left">
-              <th className="pb-3 font-medium text-gray-400">Tournament</th>
-              <th className="pb-3 font-medium text-gray-400 text-right">Entries</th>
-              <th className="pb-3 font-medium text-gray-400 text-right">Meta %</th>
-              <th className="pb-3 font-medium text-gray-400 text-right">Best</th>
-              <th className="pb-3 font-medium text-gray-400 text-right">T8</th>
-              <th className="pb-3 font-medium text-gray-400 text-right">T16</th>
-              <th className="pb-3 font-medium text-gray-400 text-right">T32</th>
-            </tr>
-          </thead>
-          <tbody>
-            {breakdown.map((stat, i) => (
-              <tr key={i} className="border-b border-white/5 hover:bg-white/5">
-                <td className="py-3">
-                  <div className="font-medium">{stat.tournamentName}</div>
-                  {stat.eventDate && (
-                    <div className="text-xs text-gray-500">{stat.eventDate}</div>
-                  )}
-                </td>
-                <td className="py-3 text-right">{stat.entries}</td>
-                <td className="py-3 text-right text-gray-400">{stat.metaShare}%</td>
-                <td className={`py-3 text-right font-bold ${
-                  stat.bestRank === 1 ? 'text-yellow-400' :
-                  stat.bestRank <= 8 ? 'text-orange-400' :
-                  stat.bestRank <= 32 ? 'text-blue-400' : 'text-gray-400'
-                }`}>
-                  #{stat.bestRank}
-                </td>
-                <td className="py-3 text-right text-gray-400">{stat.top8}</td>
-                <td className="py-3 text-right text-gray-400">{stat.top16}</td>
-                <td className="py-3 text-right text-gray-400">{stat.top32}</td>
+      <section className="rounded-xl border border-white/10 bg-gray-900/50 p-6 lg:col-span-2 mt-6">
+        <h2 className="mb-4 text-base font-bold text-white">
+          Tournament Breakdown
+          <span className="ml-2 text-sm font-normal text-gray-500">({breakdown.length} tournaments)</span>
+        </h2>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-white/5 text-left">
+                <th className="pb-3 font-medium text-gray-400">Tournament</th>
+                <th className="pb-3 font-medium text-gray-400 text-right">Entries</th>
+                <th className="pb-3 font-medium text-gray-400 text-right">Meta %</th>
+                <th className="pb-3 font-medium text-gray-400 text-right">Best</th>
+                <th className="pb-3 font-medium text-gray-400 text-right">T8</th>
+                <th className="pb-3 font-medium text-gray-400 text-right">T16</th>
+                <th className="pb-3 font-medium text-gray-400 text-right">T32</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </section>
+            </thead>
+            <tbody>
+              {breakdown.map((stat, i) => (
+                <tr key={i} className="border-b border-white/5 hover:bg-white/5">
+                  <td className="py-3">
+                    <div className="font-medium">{stat.tournamentName}</div>
+                    {stat.eventDate && (
+                      <div className="text-xs text-gray-500">{stat.eventDate}</div>
+                    )}
+                  </td>
+                  <td className="py-3 text-right">{stat.entries}</td>
+                  <td className="py-3 text-right text-gray-400">{stat.metaShare}%</td>
+                  <td className={`py-3 text-right font-bold ${
+                    stat.bestRank === 1 ? "text-yellow-400" :
+                    stat.bestRank <= 8 ? "text-orange-400" :
+                    stat.bestRank <= 32 ? "text-blue-400" : "text-gray-400"
+                  }`}>
+                    #{stat.bestRank}
+                  </td>
+                  <td className="py-3 text-right text-gray-400">{stat.top8 || "—"}</td>
+                  <td className="py-3 text-right text-gray-400">{stat.top16 || "—"}</td>
+                  <td className="py-3 text-right text-gray-400">{stat.top32 || "—"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </>
   );
 }

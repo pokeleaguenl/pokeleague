@@ -6,6 +6,7 @@ import { calculateRK9Analytics } from "@/lib/fantasy/rk9Analytics";
 
 import TournamentBreakdown from "./tournament-breakdown";
 import DeckVariants from "./deck-variants";
+import PlacementChart from "./placement-chart";
 import { playerToSlug } from "@/lib/utils/playerSlug";
 export const dynamic = 'force-dynamic';
 
@@ -126,29 +127,8 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
       {rk9 ? (
         <div className="grid gap-6 lg:grid-cols-2">
 
-          {/* Conversion Rates */}
-          <section className="rounded-xl border border-white/10 bg-gray-900/50 p-6">
-            <h2 className="mb-4 text-base font-bold text-white">Placement Conversion</h2>
-            <p className="text-xs text-gray-500 mb-4">% of entries finishing in each bracket — across all tracked tournaments</p>
-            <div className="space-y-3">
-              {[
-                { label: "Top 8",  pct: rk9.top8Conversion,  count: rk9.placementBreakdown.top8,  color: "bg-yellow-400" },
-                { label: "Top 16", pct: rk9.top16Conversion, count: rk9.placementBreakdown.top16, color: "bg-orange-400" },
-                { label: "Top 32", pct: rk9.top32Conversion, count: rk9.placementBreakdown.top32, color: "bg-blue-400" },
-                { label: "Top 64", pct: rk9.top64Conversion, count: rk9.placementBreakdown.top64, color: "bg-gray-500" },
-              ].map(({ label, pct, count, color }) => (
-                <div key={label}>
-                  <div className="flex justify-between text-sm mb-1">
-                    <span className="text-gray-400">{label}</span>
-                    <span className="font-bold">{pct}% <span className="text-gray-600 font-normal">({count})</span></span>
-                  </div>
-                  <div className="h-1.5 rounded-full bg-white/5">
-                    <div className={`h-1.5 rounded-full ${color} transition-all`} style={{width: `${Math.min(pct * 2, 100)}%`}} />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
+          {/* Placement Distribution Chart */}
+          <PlacementChart data={rk9} />
 
           {/* Top Finishers */}
           <section className="rounded-xl border border-white/10 bg-gray-900/50 p-6">

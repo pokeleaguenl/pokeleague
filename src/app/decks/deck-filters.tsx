@@ -199,10 +199,17 @@ export default function DeckFilters({ decks }: DeckFiltersProps) {
 
                           {/* Deck info */}
                           <div className="flex-1 min-w-0">
-                            <h3 className="font-bold text-white group-hover:text-yellow-400 transition-colors mb-1 truncate">
-                              {deck.deck_name}
-                            </h3>
-                            
+                            <div className="flex items-center gap-2 mb-1">
+                              <h3 className="font-bold text-white group-hover:text-yellow-400 transition-colors truncate">
+                                {deck.deck_name}
+                              </h3>
+                              {deck.tier === "S" && (
+                                <span className="shrink-0 rounded-md bg-red-400/15 border border-red-400/30 px-1.5 py-0.5 text-[9px] font-black text-red-400 uppercase tracking-wide">
+                                  Hot
+                                </span>
+                              )}
+                            </div>
+
                             <div className="flex items-center gap-3 text-xs text-gray-500">
                               <span>{deck.meta_share?.toFixed(2)}% meta</span>
                               <span>•</span>

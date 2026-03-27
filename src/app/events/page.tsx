@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import EventCountdown from "@/components/event-countdown";
 
+// Season start — show events from Sept 2025 onwards (2025-26 season)
 const CUTOFF_DATE = "2025-09-01";
 
 export const dynamic = 'force-dynamic';
@@ -33,13 +34,25 @@ export default async function EventsPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/login");
 
-  const [{ data: tournaments }, { data: myScores }] = await Promise.all([
+  const [{ data: tournaments }, { data: myScores }, { data: recentWinners }] = await Promise.all([
     supabase.from("tournaments").select("id, name, event_date, status, city, rk9_id")
       .gte("event_date", CUTOFF_DATE).order("event_date", { ascending: true }),
     supabase.from("league_scores").select("tournament_id, points_earned").eq("user_id", user.id),
+    // Get winner archetype from last 4 completed tournaments with RK9 data
+    supabase.from("rk9_standings")
+      .select("archetype, tournament_id")
+      .eq("rank", 1)
+      .not("archetype", "is", null)
+      .limit(4),
   ]);
 
   const scoreMap: Record<string, number> = Object.fromEntries((myScores ?? []).map(s => [s.tournament_id, (s.points_earned as number) ?? 0]));
+
+  // Map tournament_id → name for winner display
+  const tournamentNameMap: Record<string, string> = {};
+  for (const t of tournaments ?? []) {
+    if (t.rk9_id) tournamentNameMap[t.rk9_id] = t.name;
+  }
 
   const now = new Date().toISOString().split("T")[0];
   const upcoming = (tournaments ?? []).filter(t => t.event_date >= now);
@@ -87,6 +100,30 @@ export default async function EventsPage() {
           <p className="text-[10px] text-gray-500 mt-0.5 uppercase tracking-wider">Total events</p>
         </div>
       </div>
+
+      {/* Recent Champions */}
+      {recentWinners && recentWinners.length > 0 && (
+        <div className="mb-8">
+          <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-3">Recent Champions</p>
+          <div className="flex gap-2 flex-wrap">
+            {recentWinners.map((w, i) => {
+              const tName = tournamentNameMap[w.tournament_id];
+              const shortTName = tName
+                ? tName.replace("Regional Championships", "Regionals").replace("Regional Championship", "Regionals").split(" ").slice(0, 2).join(" ")
+                : null;
+              return (
+                <div key={i} className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-xs ${i === 0 ? "border-yellow-400/40 bg-yellow-400/5" : "border-white/5 bg-white/3"}`}>
+                  <span className={i === 0 ? "text-yellow-400" : "text-gray-500"}>🏆</span>
+                  <div>
+                    <p className={`font-bold ${i === 0 ? "text-white" : "text-gray-400"}`}>{w.archetype}</p>
+                    {shortTName && <p className="text-[10px] text-gray-600">{shortTName}</p>}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Upcoming — skip the first (already shown as hero) */}
       {upcoming.length > 1 && (
