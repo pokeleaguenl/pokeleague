@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import Image from "next/image";
 import Link from "next/link";
+import RivalTracker, { RivalPinButton } from "./rival-tracker";
 
 export const dynamic = 'force-dynamic';
 
@@ -61,6 +62,14 @@ export default async function Leaderboard() {
         </h1>
         <p className="mt-1 text-sm text-gray-500">Season 1 global rankings · {ranked.length} trainer{ranked.length !== 1 ? "s" : ""}</p>
       </div>
+
+      {/* Rival tracker — client component, reads localStorage */}
+      <RivalTracker players={ranked.map((s, i) => ({
+        userId: s.user_id,
+        displayName: (profileMap.get(s.user_id) as Profile | undefined)?.display_name ?? (profileMap.get(s.user_id) as Profile | undefined)?.username ?? "Anonymous",
+        points: s.total_points,
+        rank: i + 1,
+      }))} />
 
       {myRank >= 0 && (
         <div className="mb-8 flex items-center justify-between rounded-2xl border border-yellow-400/20 bg-yellow-400/5 px-5 py-4">
@@ -188,6 +197,9 @@ export default async function Leaderboard() {
                           <p className={`text-xl font-black ${isPodium ? pod!.ptColor : "text-yellow-400"}`}>{squad.total_points}</p>
                           <p className="text-[10px] text-gray-600">pts</p>
                         </div>
+                        {!isMe && (
+                          <RivalPinButton userId={squad.user_id} displayName={name} />
+                        )}
                         {profileHref && (
                           <Link href={profileHref} className="rounded-lg border border-gray-700 px-2.5 py-1.5 text-xs text-gray-500 hover:border-yellow-400/50 hover:text-yellow-400 transition-colors">→</Link>
                         )}

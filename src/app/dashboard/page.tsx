@@ -6,6 +6,8 @@ import LogoutButton from "./logout-button";
 import { PointsHistory } from "@/components/points-history";
 import EventCountdown from "@/components/event-countdown";
 import PredictionWidget from "@/components/prediction-widget";
+import OnboardingBanner from "@/components/onboarding-banner";
+import { getTournamentTier, TIER_META } from "@/lib/tournament-tier";
 
 export const dynamic = 'force-dynamic';
 
@@ -89,8 +91,15 @@ export default async function Dashboard() {
 
   const rankLabel = rank === 1 ? "🥇 #1" : rank === 2 ? "🥈 #2" : rank === 3 ? "🥉 #3" : rank ? `#${rank}` : "—";
 
+  const isNewUser = filledSlots === 0 && (profile?.total_points ?? 0) === 0;
+  const upcomingTier = upcoming ? getTournamentTier(upcoming.name) : null;
+  const upcomingTierMeta = upcomingTier ? TIER_META[upcomingTier] : null;
+
   return (
     <div className="mx-auto max-w-2xl px-4 py-6 space-y-5">
+
+      {/* Onboarding for new users */}
+      {isNewUser && <OnboardingBanner />}
 
       {/* Header */}
       <div className="flex items-start justify-between">
@@ -125,11 +134,18 @@ export default async function Dashboard() {
 
       {/* Next event — HERO */}
       {upcoming ? (
-        <EventCountdown
-          eventDate={upcoming.event_date}
-          eventName={upcoming.name}
-          eventId={upcoming.id}
-        />
+        <div>
+          {upcomingTierMeta && upcomingTier !== "challenge" && (
+            <div className={`mb-1.5 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[10px] font-bold ${upcomingTierMeta.text} ${upcomingTierMeta.bg} ${upcomingTierMeta.border}`}>
+              {upcomingTierMeta.icon} {upcomingTierMeta.label}
+            </div>
+          )}
+          <EventCountdown
+            eventDate={upcoming.event_date}
+            eventName={upcoming.name}
+            eventId={upcoming.id}
+          />
+        </div>
       ) : (
         <div className="rounded-2xl border border-dashed border-gray-800 p-5 text-center">
           <p className="text-gray-500 text-sm">No upcoming events scheduled</p>
@@ -148,6 +164,29 @@ export default async function Dashboard() {
             <p className="text-[10px] text-gray-600">points earned</p>
           </div>
         </div>
+      )}
+
+      {/* Meta Watch — top S/A tier decks as hot picks */}
+      {topDecks && topDecks.filter(d => d.tier === "S").length > 0 && (
+        <section className="rounded-2xl border border-white/8 bg-gray-900/30 p-4">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <span className="text-base">🔥</span>
+              <h2 className="text-sm font-black uppercase tracking-widest text-gray-400">Meta Watch</h2>
+            </div>
+            <Link href="/decks" className="text-xs text-yellow-400 hover:underline">Full meta →</Link>
+          </div>
+          <div className="flex gap-2 flex-wrap">
+            {topDecks.filter(d => d.tier === "S").slice(0, 5).map(d => (
+              <Link key={d.id} href={`/decks/${encodeURIComponent(d.name.toLowerCase().replace(/ /g, "-"))}`}
+                className="flex items-center gap-2 rounded-xl border border-red-400/20 bg-red-400/5 px-3 py-2 text-xs hover:border-red-400/40 transition-colors">
+                {d.image_url && <Image src={d.image_url} alt={d.name} width={20} height={20} className="object-contain shrink-0" />}
+                <span className="font-semibold text-gray-200">{d.name}</span>
+                <span className="rounded bg-red-400/20 px-1.5 py-0.5 text-[9px] font-black text-red-400">S</span>
+              </Link>
+            ))}
+          </div>
+        </section>
       )}
 
       {/* Prediction widget */}

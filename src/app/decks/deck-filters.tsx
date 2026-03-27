@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import DeckImage from "@/components/ui/DeckImage";
+import { getEnergyMeta } from "@/lib/deck-energy";
 
 interface Deck {
   deck_id: number;
@@ -178,12 +179,13 @@ export default function DeckFilters({ decks }: DeckFiltersProps) {
                 <div className="grid gap-3 sm:grid-cols-2">
                   {tierDecks.map((deck) => {
                     const metaPct = ((deck.meta_share ?? 0) / maxMeta) * 100;
+                    const energy = getEnergyMeta(deck.archetype_slug);
 
                     return (
                       <Link
                         key={deck.deck_id}
                         href={`/decks/${deck.archetype_slug}`}
-                        className={`group block rounded-xl border p-4 transition-all hover:scale-[1.02] ${cfg.bg} ${cfg.border} hover:border-yellow-400/50`}
+                        className={`group block rounded-xl border p-4 transition-all hover:scale-[1.02] ${energy.bg} ${energy.border} hover:border-yellow-400/50`}
                       >
                         <div className="flex items-start gap-3">
                           {/* Deck image */}
@@ -219,10 +221,14 @@ export default function DeckFilters({ decks }: DeckFiltersProps) {
                             {/* Meta bar */}
                             <div className="mt-2 h-1 w-full rounded-full bg-white/5">
                               <div
-                                className={`h-full rounded-full ${cfg.dot}`}
-                                style={{ width: `${Math.min(metaPct, 100)}%` }}
+                                className={`h-full rounded-full`}
+                                style={{ width: `${Math.min(metaPct, 100)}%`, background: `var(--energy-color, #6b7280)` }}
                               />
                             </div>
+                            {/* Energy badge */}
+                            <span className={`mt-1.5 inline-flex items-center gap-0.5 text-[9px] font-semibold ${energy.text}`}>
+                              {energy.emoji} {energy.label}
+                            </span>
                           </div>
                         </div>
                       </Link>
@@ -235,7 +241,9 @@ export default function DeckFilters({ decks }: DeckFiltersProps) {
         </div>
       ) : (
         <div className="text-center py-16 rounded-xl border border-dashed border-gray-800">
-          <p className="text-4xl mb-4">🔍</p>
+          <div className="text-5xl mb-4">
+            <span className="animate-pokeball inline-block">⚪</span>
+          </div>
           <p className="text-xl font-bold mb-2">No decks found</p>
           <p className="text-gray-500">Try adjusting your search or filters</p>
         </div>

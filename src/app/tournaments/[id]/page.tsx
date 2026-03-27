@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { playerToSlug } from "@/lib/utils/playerSlug";
 import MetaBreakdownChart from "./meta-breakdown-chart";
+import StandingsTable from "./standings-table";
 
 export const dynamic = 'force-dynamic';
 
@@ -146,34 +147,8 @@ export default async function TournamentDetailPage({ params }: { params: Promise
             </div>
           </div>
 
-          {/* Full Standings Toggle */}
-          <details className="rounded-xl border border-white/10 bg-gray-900/50 p-6">
-            <summary className="cursor-pointer text-sm font-bold text-gray-400 uppercase tracking-wide hover:text-white transition-colors">
-              View All Standings ({standings?.length || 0} players)
-            </summary>
-            <div className="mt-4 space-y-1 max-h-96 overflow-y-auto">
-              {standings?.map((player) => (
-                <div 
-                  key={player.rank} 
-                  className="flex items-center justify-between px-3 py-2 hover:bg-white/5 rounded transition-colors text-sm"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="text-gray-500 w-12">#{player.rank}</span>
-                    <Link 
-                      href={`/players/${playerToSlug(player.player_name)}`}
-                      className="hover:text-yellow-400 transition-colors"
-                    >
-                      {player.player_name}
-                    </Link>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <span className="text-gray-600 text-xs">{player.archetype}</span>
-                    <span className="text-gray-600 text-xs w-8">{player.country}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </details>
+          {/* Full Standings — proper paginated table */}
+          <StandingsTable standings={standings ?? []} />
         </div>
 
         {/* Sidebar - Right Column (1/3) */}

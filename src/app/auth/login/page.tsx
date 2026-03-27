@@ -22,7 +22,7 @@ export default function Login() {
       setError(error.message);
       setLoading(false);
     } else {
-      router.push("/squad");
+      router.push("/dashboard");
       router.refresh();
     }
   }
@@ -81,12 +81,25 @@ export default function Login() {
           </div>
         </div>
 
-        <p className="mt-6 text-center text-sm text-gray-500">
-          No account?{" "}
-          <Link href="/auth/signup" className="text-yellow-400 hover:underline font-medium">
-            Sign up free
+        {/* Discord coming soon */}
+        <div className="mt-4 rounded-xl border border-white/8 bg-gray-900/40 px-4 py-3 text-center">
+          <p className="text-xs text-gray-500">
+            <span className="mr-1.5">💬</span>
+            Discord sign-in <span className="rounded bg-gray-800 px-1.5 py-0.5 text-[10px] font-bold text-gray-500 ml-1">Coming soon</span>
+          </p>
+        </div>
+
+        <div className="mt-4 flex items-center justify-between text-sm">
+          <p className="text-gray-500">
+            No account?{" "}
+            <Link href="/auth/signup" className="text-yellow-400 hover:underline font-medium">
+              Sign up free
+            </Link>
+          </p>
+          <Link href="/auth/reset-password" className="text-xs text-gray-600 hover:text-gray-400 transition-colors">
+            Forgot password?
           </Link>
-        </p>
+        </div>
       </div>
     </div>
   );

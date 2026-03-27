@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Nav from "@/components/nav";
+import Footer from "@/components/footer";
+import BottomNav from "@/components/bottom-nav";
 import { ToastProvider } from "@/components/toast";
 import "./globals.css";
 import "./mobile.css";
@@ -33,6 +35,8 @@ export default function RootLayout({
         <ToastProvider>
           <Nav />
           {children}
+          <Footer />
+          <BottomNav />
         </ToastProvider>
       </body>
     </html>

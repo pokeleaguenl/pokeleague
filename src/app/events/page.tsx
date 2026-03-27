@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import EventCountdown from "@/components/event-countdown";
+import { getTournamentTier, TIER_META } from "@/lib/tournament-tier";
 
 // Season start — show events from Sept 2025 onwards (2025-26 season)
 const CUTOFF_DATE = "2025-09-01";
@@ -137,10 +138,12 @@ export default async function EventsPage() {
               const cfg = STATUS_CONFIG[status] || STATUS_CONFIG.upcoming;
               const countdown = daysUntil(t.event_date);
               const hasData = !!t.rk9_id;
+              const tier = getTournamentTier(t.name);
+              const tierMeta = TIER_META[tier];
 
               return (
                 <Link key={t.id} href={hasData ? `/tournaments/${t.id}` : `/events/${t.id}`}
-                  className="group flex items-center justify-between rounded-xl border border-gray-800 bg-gray-900/20 p-4 transition-all hover:border-yellow-400/30 hover:bg-gray-900/40">
+                  className={`group flex items-center justify-between rounded-xl border ${tier === "worlds" ? "border-yellow-400/30" : tier === "international" ? "border-purple-500/20" : "border-gray-800"} bg-gray-900/20 p-4 transition-all hover:border-yellow-400/30 hover:bg-gray-900/40`}>
                   <div className="flex items-center gap-4 min-w-0">
                     <div className="flex-shrink-0 w-12 text-center rounded-xl bg-gray-800/60 py-1.5">
                       <p className="text-xs font-bold text-gray-500">
@@ -157,8 +160,8 @@ export default async function EventsPage() {
                   </div>
                   <div className="flex flex-shrink-0 items-center gap-2 ml-3">
                     {countdown && <span className="text-xs text-gray-600">{countdown}</span>}
-                    <span className={`text-[10px] font-bold rounded-full px-2 py-0.5 border ${cfg.color} ${cfg.bg} ${cfg.border}`}>
-                      {cfg.label}
+                    <span className={`text-[10px] font-bold rounded-full px-2 py-0.5 border ${tierMeta.text} ${tierMeta.bg} ${tierMeta.border}`}>
+                      {tierMeta.icon} {tierMeta.label}
                     </span>
                   </div>
                 </Link>

@@ -8,6 +8,7 @@ import TournamentBreakdown from "./tournament-breakdown";
 import DeckVariants from "./deck-variants";
 import PlacementChart from "./placement-chart";
 import { playerToSlug } from "@/lib/utils/playerSlug";
+import { getEnergyMeta } from "@/lib/deck-energy";
 export const dynamic = 'force-dynamic';
 
 export default async function DeckAnalyticsPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -46,15 +47,24 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
     D: "text-blue-400 bg-blue-400/10 border-blue-400/30",
   };
   const tierClass = deck?.tier ? (tierColors[deck.tier] || "text-gray-400 bg-gray-400/10 border-gray-400/30") : "";
+  const energy = getEnergyMeta(slug);
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-10">
-      <Link href="/decks" className="mb-6 inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-white transition-colors">
-        ← All Decks
-      </Link>
+      <div className="mb-6 flex items-center justify-between">
+        <Link href="/decks" className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-white transition-colors">
+          ← All Decks
+        </Link>
+        {deck && !deck.hidden && (
+          <Link href={`/squad?pick=${deck.id}`}
+            className="inline-flex items-center gap-2 rounded-xl bg-yellow-400 px-4 py-2 text-sm font-bold text-gray-900 hover:bg-yellow-300 transition-colors shadow-lg shadow-yellow-400/20">
+            ⚔️ Add to Squad
+          </Link>
+        )}
+      </div>
 
       {/* Header */}
-      <div className="mb-8 rounded-2xl border border-white/10 bg-gray-900/60 p-6 backdrop-blur-sm">
+      <div className={`mb-8 rounded-2xl border ${energy.border} bg-gray-900/60 p-6 backdrop-blur-sm`} style={{ boxShadow: `0 0 40px -10px var(--tw-shadow-color)` }}>
         <div className="flex items-start gap-5">
           {/* Images */}
           <div className="flex items-center flex-shrink-0">
@@ -93,6 +103,9 @@ export default async function DeckAnalyticsPage({ params }: { params: Promise<{ 
                   {rk9.totalPlayers} entries tracked
                 </span>
               )}
+              <span className={`inline-flex items-center gap-1 rounded-lg border px-2.5 py-0.5 text-xs font-semibold ${energy.border} ${energy.bg} ${energy.text}`}>
+                {energy.emoji} {energy.label}
+              </span>
             </div>
           </div>
         </div>
