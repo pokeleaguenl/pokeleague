@@ -38,16 +38,47 @@ export async function convertStandingsToPayload(
     byAlias.set((al.alias as string).toLowerCase(), al.archetype_id as number);
   }
 
+  // Build a reverse id→archetype map for alias resolution
+  const byId = new Map<number, { id: number; slug: string }>();
+  for (const a of archetypesRaw ?? []) byId.set(a.id as number, { id: a.id as number, slug: a.slug as string });
+
   function resolveInMemory(deckName: string): { id: number; slug: string } | null {
     const slug = normalizeSlug(deckName);
+
+    // 1. Exact slug match
     if (bySlug.has(slug)) return bySlug.get(slug)!;
+
+    // 2. Case-insensitive name match
     if (byName.has(deckName.toLowerCase())) return byName.get(deckName.toLowerCase())!;
-    // alias lookup
+
+    // 3. Alias lookup (normalised slug or lowercase raw)
     const archId = byAlias.get(slug) ?? byAlias.get(deckName.toLowerCase());
     if (archId) {
-      const found = [...bySlug.values()].find(a => a.id === archId);
+      const found = byId.get(archId);
       if (found) return found;
     }
+
+    // 4. Combo name fallback — "Grimmsnarl / Froslass" → try "Grimmsnarl"
+    if (deckName.includes(" / ")) {
+      const firstCard = deckName.split(" / ")[0].trim();
+      const result = resolveInMemory(firstCard);
+      if (result) return result;
+    }
+
+    // 5. Hyphenated slug fallback — "okidogi-twm" → try "okidogi"
+    if (slug.includes("-") && !deckName.includes(" / ")) {
+      const firstSegment = slug.split("-")[0];
+      if (firstSegment.length >= 4) { // avoid false positives on short prefixes
+        if (bySlug.has(firstSegment)) return bySlug.get(firstSegment)!;
+        // Check aliases too
+        const fallbackId = byAlias.get(firstSegment);
+        if (fallbackId) {
+          const found = byId.get(fallbackId);
+          if (found) return found;
+        }
+      }
+    }
+
     return null;
   }
 

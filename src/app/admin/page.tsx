@@ -6,6 +6,7 @@ import EventsSyncButton from "./events-sync-button";
 import SyncVariantsButton from "./sync-variants-button";
 import SeedFantasyButton from "./seed-fantasy-button";
 import IngestEventButton from "./ingest-event-button";
+import AliasManager from "./alias-manager";
 import DeckTable from "./deck-table";
 import { requireAdminPage } from "@/lib/auth/admin";
 
@@ -268,6 +269,7 @@ export default async function AdminPage() {
           <SyncVariantsButton />
           <SeedFantasyButton />
           <IngestEventButton tournaments={allTournamentsForIngest ?? []} />
+          <AliasManager />
         </div>
       </section>
 
