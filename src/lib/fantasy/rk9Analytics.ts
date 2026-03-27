@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { fetchAll } from "@/lib/supabase/fetchAll";
 
 export interface RK9Analytics {
   // Metadata
@@ -94,13 +95,17 @@ export async function calculateRK9Analytics(
   // Get standings matching any of the aliases
   const aliasStrings = aliases.map(a => a.alias);
 
-  const { data: standings } = await supabase
-    .from("rk9_standings")
-    .select("player_name, rank, country, card_list, decklist_url, archetype, tournament_id")
-    .in("archetype", aliasStrings)
-    .not("rank", "is", null)
-    .order("rank", { ascending: true })
-    .limit(10000);
+  let standings: { player_name: string; rank: number; country: string; card_list: string; decklist_url: string; archetype: string; tournament_id: string }[] = [];
+  try {
+    standings = await fetchAll(
+      supabase
+        .from("rk9_standings")
+        .select("player_name, rank, country, card_list, decklist_url, archetype, tournament_id")
+        .in("archetype", aliasStrings)
+        .not("rank", "is", null)
+        .order("rank", { ascending: true })
+    );
+  } catch { standings = []; }
 
   if (!standings || standings.length === 0) return null;
 

@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { convertStandingsToPayload } from "@/lib/fantasy/standingsMapper";
 import { processSnapshot } from "@/lib/fantasy/liveScoring";
 import { computeEventStatus } from "@/lib/fantasy/eventStatus";
+import { fetchAll } from "@/lib/supabase/fetchAll";
 import type { StandingsEntry } from "@/lib/fantasy/types";
 import { requireAdmin } from "@/lib/auth/admin";
 
@@ -66,13 +67,21 @@ export async function POST(req: Request) {
       .maybeSingle();
 
     if (tournamentMeta?.rk9_id) {
-      const { data: rk9Rows, error: rk9Error } = await supabase
-        .from("rk9_standings")
-        .select("player_name, rank, archetype")
-        .eq("tournament_id", tournamentMeta.rk9_id)
-        .not("rank", "is", null)
-        .not("archetype", "is", null)
-        .order("rank", { ascending: true });
+      let rk9Rows: { player_name: string; rank: number; archetype: string }[] = [];
+      let rk9Error: Error | null = null;
+      try {
+        rk9Rows = await fetchAll(
+          supabase
+            .from("rk9_standings")
+            .select("player_name, rank, archetype")
+            .eq("tournament_id", tournamentMeta.rk9_id)
+            .not("rank", "is", null)
+            .not("archetype", "is", null)
+            .order("rank", { ascending: true })
+        );
+      } catch (e) {
+        rk9Error = e as Error;
+      }
 
       if (rk9Error) {
         log.push(`❌ rk9_standings fetch error: ${rk9Error.message}`);

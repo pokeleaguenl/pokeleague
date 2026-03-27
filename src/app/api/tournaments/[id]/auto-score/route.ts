@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
+import { fetchAll } from "@/lib/supabase/fetchAll";
 
 export async function POST(_: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -16,12 +17,15 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
   if (!tournament) return NextResponse.json({ error: "Tournament not found" }, { status: 404 });
   if (!tournament.rk9_id) return NextResponse.json({ error: "No RK9 ID on this tournament" }, { status: 400 });
 
-  // Get RK9 standings
-  const { data: standings } = await supabase
-    .from("rk9_standings")
-    .select("player_name, archetype, rank, win_rate, wins, losses")
-    .eq("tournament_id", tournament.rk9_id)
-    .not("archetype", "is", null);
+  // Get all RK9 standings (paginated — tournaments can have 2000+ players)
+  const standings = await fetchAll<{ player_name: string; archetype: string; rank: number; win_rate: number | null; wins: number | null; losses: number | null }>(
+    supabase
+      .from("rk9_standings")
+      .select("player_name, archetype, rank, win_rate, wins, losses")
+      .eq("tournament_id", tournament.rk9_id)
+      .not("archetype", "is", null)
+      .order("rank", { ascending: true })
+  ).catch(() => null);
 
   if (!standings || standings.length === 0)
     return NextResponse.json({ error: "No RK9 standings found for this tournament" }, { status: 400 });

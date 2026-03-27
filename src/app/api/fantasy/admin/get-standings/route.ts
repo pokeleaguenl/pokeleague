@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/auth/admin";
 import { createClient } from "@/lib/supabase/server";
+import { fetchAll } from "@/lib/supabase/fetchAll";
 
 export async function GET(req: NextRequest) {
   // Check admin auth
@@ -15,14 +16,17 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "tournamentId required" }, { status: 400 });
   }
 
-  const { data, error } = await supabase
-    .from("rk9_standings")
-    .select("*")
-    .eq("tournament_id", tournamentId)
-    .order("rank", { ascending: true });
-
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  let data;
+  try {
+    data = await fetchAll(
+      supabase
+        .from("rk9_standings")
+        .select("*")
+        .eq("tournament_id", tournamentId)
+        .order("rank", { ascending: true })
+    );
+  } catch (err) {
+    return NextResponse.json({ error: String(err) }, { status: 500 });
   }
 
   return NextResponse.json({ standings: data });
