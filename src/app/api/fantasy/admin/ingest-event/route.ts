@@ -1,3 +1,5 @@
+export const maxDuration = 60; // 60s — large tournaments can take a while
+
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";

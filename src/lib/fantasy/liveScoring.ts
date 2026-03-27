@@ -237,9 +237,9 @@ export async function processSnapshot(
 
   await upsertTeamScores(supabase, teamScores);
 
-  for (const ach of achievementQueue) {
+  if (achievementQueue.length > 0) {
     await supabase.from("player_achievements")
-      .upsert(ach, { onConflict: "user_id,achievement_id" });
+      .upsert(achievementQueue, { onConflict: "user_id,achievement_id" });
   }
 
   return { archetypesScored: archetypeScores.length, teamsScored: teamScores.length, warnings };
