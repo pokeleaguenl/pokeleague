@@ -116,11 +116,11 @@ export default async function SquadPage() {
   }) : null;
 
   return (
-    <div className="mx-auto max-w-xl px-2 py-4">
-      <div className="mb-4 px-2">
+    <div className="mx-auto max-w-2xl px-3 py-4">
+      <div className="mb-4 px-1">
         <h1 className="text-2xl font-bold">My <span className="text-yellow-400">Squad</span></h1>
         <p className="text-xs text-gray-400 mt-1">
-          Pick 1 Active (2×) + 5 Bench + 4 Hand within 200pts. Use Stadium Effects to boost your score.
+          1 Active (2×) · 5 Bench (1×) · 4 Reserve · 200pt budget. Use Stadium Effects to boost your score.
         </p>
         {nextEvent && (
           <p className="text-xs text-yellow-400/70 mt-0.5">
