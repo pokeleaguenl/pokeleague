@@ -81,32 +81,33 @@ export default async function SquadPage() {
     hand_4: sq ? norm(sq.hand4) : null,
   };
 
+  const sv = (v: unknown) => (typeof v === "string" ? v : null);
   const initialVariants = sq ? {
-    active: sq.active_variant ?? null,
-    bench_1: sq.bench_1_variant ?? null,
-    bench_2: sq.bench_2_variant ?? null,
-    bench_3: sq.bench_3_variant ?? null,
-    bench_4: sq.bench_4_variant ?? null,
-    bench_5: sq.bench_5_variant ?? null,
-    hand_1: sq.hand_1_variant ?? null,
-    hand_2: sq.hand_2_variant ?? null,
-    hand_3: sq.hand_3_variant ?? null,
-    hand_4: sq.hand_4_variant ?? null,
+    active: sv(sq.active_variant),
+    bench_1: sv(sq.bench_1_variant),
+    bench_2: sv(sq.bench_2_variant),
+    bench_3: sv(sq.bench_3_variant),
+    bench_4: sv(sq.bench_4_variant),
+    bench_5: sv(sq.bench_5_variant),
+    hand_1: sv(sq.hand_1_variant),
+    hand_2: sv(sq.hand_2_variant),
+    hand_3: sv(sq.hand_3_variant),
+    hand_4: sv(sq.hand_4_variant),
   } : {};
 
-  const variantsByDeckId: Record<number, { id: number; deck_id: number; name: string }[]> = {};
+  const variantsByDeckId: Record<number, { id: number; deck_id: number; name: string; limitless_value: string }[]> = {};
   for (const v of allVariants) {
     if (!variantsByDeckId[v.deck_id]) variantsByDeckId[v.deck_id] = [];
     variantsByDeckId[v.deck_id].push(v);
   }
 
   const stadiumEffects = sq ? {
-    x3Used: sq.x3_effect_used ?? false,
-    handBoostUsed: sq.hand_boost_used ?? false,
-    eventEffect: sq.event_effect ?? null,
+    x3Used: (sq.x3_effect_used as boolean) ?? false,
+    handBoostUsed: (sq.hand_boost_used as boolean) ?? false,
+    eventEffect: (sq.event_effect as string) ?? null,
   } : { x3Used: false, handBoostUsed: false, eventEffect: null };
 
-  const lastSaved = sq?.updated_at ? new Date(sq.updated_at).toLocaleString("en-GB", {
+  const lastSaved = sq?.updated_at ? new Date(sq.updated_at as string).toLocaleString("en-GB", {
     day: "numeric",
     month: "short",
     year: "numeric",
