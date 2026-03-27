@@ -17,6 +17,7 @@ interface IngestResult {
   archetypes?: number;
   teams?: number;
   warnings?: number;
+  unmatched?: string[];
 }
 
 export default function IngestEventButton({ tournaments }: { tournaments: Tournament[] }) {
@@ -39,20 +40,21 @@ export default function IngestEventButton({ tournaments }: { tournaments: Tourna
     });
     const data = await res.json();
 
-    if (res.ok) {
-      return {
-        id, name, status: "ok",
-        message: data.message,
-        archetypes: data.archetypes_scored,
-        teams: data.teams_scored,
-        warnings: data.scoring_warnings ?? 0,
-      };
-    } else if (res.status === 200 && data.ok === false) {
-      // Already ingested, skipped
-      return { id, name, status: "skipped", message: data.message };
-    } else {
-      return { id, name, status: "error", message: data.error ?? "Unknown error" };
+    if (!res.ok) {
+      return { id, name, status: "error", message: data.error ?? `HTTP ${res.status}` };
     }
+    if (data.ok === false) {
+      // Already ingested — snapshot exists
+      return { id, name, status: "skipped", message: data.message };
+    }
+    return {
+      id, name, status: "ok",
+      message: data.message,
+      archetypes: data.archetypes_scored,
+      teams: data.teams_scored,
+      warnings: data.scoring_warnings ?? 0,
+      unmatched: data.unmatched_decks ?? [],
+    };
   }
 
   async function handleIngestOne() {
@@ -167,20 +169,27 @@ export default function IngestEventButton({ tournaments }: { tournaments: Tourna
 
         {/* Ingest All results table */}
         {allResults.length > 0 && (
-          <div className="space-y-1 max-h-64 overflow-y-auto">
+          <div className="space-y-1 max-h-72 overflow-y-auto">
             {allResults.map(r => (
-              <div key={r.id} className="flex items-center justify-between rounded-lg bg-black/20 px-3 py-1.5 text-xs">
-                <span className="text-gray-300 truncate flex-1 mr-2">{r.name}</span>
-                <span className={
-                  r.status === "ok" ? "text-green-400 shrink-0" :
-                  r.status === "skipped" ? "text-gray-500 shrink-0" :
-                  "text-red-400 shrink-0"
-                }>
-                  {r.status === "ok"
-                    ? `✅ ${r.archetypes} archetypes · ${r.teams} squads${r.warnings ? ` · ⚠️${r.warnings}` : ""}`
-                    : r.status === "skipped" ? "⏭ skipped"
-                    : `❌ ${r.message}`}
-                </span>
+              <div key={r.id} className="rounded-lg bg-black/20 px-3 py-1.5 text-xs">
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-300 truncate flex-1 mr-2">{r.name}</span>
+                  <span className={
+                    r.status === "ok" ? "text-green-400 shrink-0" :
+                    r.status === "skipped" ? "text-gray-500 shrink-0" :
+                    "text-red-400 shrink-0"
+                  }>
+                    {r.status === "ok"
+                      ? `✅ ${r.archetypes} archetypes · ${r.teams} squads${r.warnings ? ` · ⚠️${r.warnings} warnings` : ""}`
+                      : r.status === "skipped" ? "⏭ already ingested"
+                      : `❌ ${r.message}`}
+                  </span>
+                </div>
+                {r.status === "ok" && r.unmatched && r.unmatched.length > 0 && (
+                  <p className="mt-0.5 text-orange-400/70 text-[10px]">
+                    Unmatched: {r.unmatched.slice(0, 8).join(", ")}{r.unmatched.length > 8 ? ` +${r.unmatched.length - 8} more` : ""}
+                  </p>
+                )}
               </div>
             ))}
           </div>
