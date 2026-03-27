@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/auth/admin";
+import { computeEventStatus } from "@/lib/fantasy/eventStatus";
 
 /**
  * POST /api/admin/seed-fantasy
@@ -91,61 +92,108 @@ export async function POST() {
   log.push(`✅ Archetypes: ${archetypesCreated} created, ${archetypesSkipped} skipped`);
 
   // ============================================================
-  // PART 2: Seed common aliases for archetypes
+  // PART 2: Auto-generate aliases for ALL archetypes
   // ============================================================
   log.push("\n=== Seeding Aliases ===");
 
-  // First, list all existing archetype slugs for debugging
   const { data: allArchetypes } = await supabase
     .from("fantasy_archetypes")
-    .select("slug, name")
+    .select("id, slug, name")
     .order("name");
-  
-  if (allArchetypes && allArchetypes.length > 0) {
-    log.push(`Found ${allArchetypes.length} existing archetypes:`);
-    allArchetypes.slice(0, 10).forEach(a => {
-      log.push(`  - ${a.slug} (${a.name})`);
-    });
-    if (allArchetypes.length > 10) {
-      log.push(`  ... and ${allArchetypes.length - 10} more`);
-    }
+
+  if (!allArchetypes || allArchetypes.length === 0) {
+    log.push("⚠️  No archetypes found — skipping alias generation");
   }
 
-  const aliasMap: Record<string, string[]> = {
-    "charizard-ex": ["charizard", "zard", "char"],
-    "pidgeot-ex": ["pidgeot", "pidg"],
-    "pikachu-ex": ["pikachu", "pika"],
-    "lugia-vstar": ["lugia"],
+  log.push(`Generating aliases for ${allArchetypes?.length ?? 0} archetypes...`);
+
+  // Supplemental short-form aliases for well-known decks (additive on top of auto-gen)
+  const supplementalAliases: Record<string, string[]> = {
+    "charizard-ex": ["zard", "char"],
+    "pidgeot-ex": ["pidg"],
+    "pikachu-ex": ["pika"],
+    "regidrago-vstar": ["drago"],
+    "roaring-moon-ex": ["moon"],
+    "raging-bolt-ex": ["bolt"],
+    "snorlax-stall": ["stall"],
     "miraidon-ex": ["miraidon"],
-    "raging-bolt-ex": ["raging-bolt", "bolt"],
-    "regidrago-vstar": ["regidrago", "drago"],
-    "roaring-moon-ex": ["roaring-moon", "moon"],
-    "snorlax-stall": ["snorlax", "stall"],
+    "lugia-vstar": ["lugia"],
+    "gardevoir-ex": ["gardy", "garde"],
+    "iron-valiant-ex": ["valiant"],
+    "gholdengo-ex": ["gholdy"],
+    "dragapult-ex": ["dragapult"],
+    "klawf": ["klawf-stall"],
+    "lost-zone-toolbox": ["lost-box", "lostbox", "lz-toolbox"],
+    "palkia-vstar": ["palkia"],
+    "origin-forme-palkia-vstar": ["palkia", "origin-palkia"],
   };
 
+  // Suffixes to strip when generating bare-word aliases
+  const STRIP_SUFFIXES = [" ex", " vstar", " vmax", " v", " gx", " stall", "-ex", "-vstar", "-vmax", "-v", "-gx"];
+
+  function generateAliases(slug: string, name: string): string[] {
+    const generated = new Set<string>();
+    const slugify = (s: string) =>
+      s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
+    // The slug itself (always exact match via slug column, but add as alias too for alias-path lookups)
+    generated.add(slug);
+
+    // If name has " / " (multi-pokemon), add each part as its own slug
+    if (name.includes(" / ")) {
+      const parts = name.split(" / ");
+      for (const part of parts) {
+        const partSlug = slugify(part);
+        generated.add(partSlug);
+        // Also strip suffixes from each part
+        for (const suffix of STRIP_SUFFIXES) {
+          if (partSlug.endsWith(suffix.toLowerCase().replace(/[^a-z0-9]+/g, "-"))) {
+            const stripped = partSlug.slice(0, partSlug.length - suffix.replace(/[^a-z0-9]+/g, "-").length - 1);
+            if (stripped.length > 2) generated.add(stripped);
+          }
+          const namePart = part.toLowerCase();
+          if (namePart.endsWith(suffix.toLowerCase())) {
+            const bare = slugify(namePart.slice(0, namePart.length - suffix.length));
+            if (bare.length > 2) generated.add(bare);
+          }
+        }
+      }
+    }
+
+    // Strip common suffixes from the full name
+    let stripped = name.toLowerCase();
+    for (const suffix of STRIP_SUFFIXES) {
+      if (stripped.endsWith(suffix.toLowerCase())) {
+        const bare = slugify(stripped.slice(0, stripped.length - suffix.length));
+        if (bare.length > 2) generated.add(bare);
+        stripped = stripped.slice(0, stripped.length - suffix.length);
+        break;
+      }
+    }
+
+    // If first word of name is a Pokemon, add it as alias (only if > 3 chars to avoid noise)
+    const firstWord = slugify(name.split(/\s+/)[0]);
+    if (firstWord.length > 3) generated.add(firstWord);
+
+    // Remove the slug from generated (it's already the primary key, alias would be redundant
+    // but is harmless — keep it for alias-path lookup coverage)
+    return Array.from(generated).filter(a => a.length > 1);
+  }
+
   let aliasesCreated = 0;
-  let aliasesSkipped = 0;
+  const archetypesWithNoAliases: string[] = [];
 
-  for (const [slug, aliases] of Object.entries(aliasMap)) {
-    const { data: archetype, error: lookupError } = await supabase
-      .from("fantasy_archetypes")
-      .select("id")
-      .eq("slug", slug)
-      .maybeSingle();
+  for (const archetype of allArchetypes ?? []) {
+    const autoAliases = generateAliases(archetype.slug, archetype.name);
+    const extra = supplementalAliases[archetype.slug] ?? [];
+    const allAliases = Array.from(new Set([...autoAliases, ...extra]));
 
-    if (lookupError) {
-      log.push(`❌ Error looking up archetype ${slug}: ${lookupError.message}`);
-      console.error(`[seed-fantasy] Archetype lookup error for ${slug}:`, lookupError);
+    if (allAliases.length === 0) {
+      archetypesWithNoAliases.push(archetype.slug);
       continue;
     }
 
-    if (!archetype) {
-      log.push(`⚠️  Skipping aliases for unknown archetype: ${slug}`);
-      continue;
-    }
-
-    // Batch upsert all aliases for this archetype
-    const aliasRecords = aliases.map(alias => ({
+    const aliasRecords = allAliases.map(alias => ({
       alias,
       archetype_id: archetype.id,
     }));
@@ -156,19 +204,16 @@ export async function POST() {
       .select();
 
     if (error) {
-      log.push(`❌ Failed to upsert aliases for ${slug}: ${error.message}`);
-      log.push(`   Attempted records: ${JSON.stringify(aliasRecords)}`);
-      console.error(`[seed-fantasy] Alias upsert error for ${slug}:`, error.message);
+      log.push(`❌ Failed aliases for ${archetype.slug}: ${error.message}`);
     } else {
-      const count = upserted?.length || 0;
-      aliasesCreated += count;
-      if (count > 0) {
-        log.push(`✅ Upserted ${count} aliases for ${slug}: ${aliases.join(", ")}`);
-      }
+      aliasesCreated += upserted?.length ?? 0;
     }
   }
 
-  log.push(`✅ Aliases: ${aliasesCreated} created/updated, ${aliasesSkipped} skipped`);
+  log.push(`✅ Aliases: ${aliasesCreated} upserted across ${allArchetypes?.length ?? 0} archetypes`);
+  if (archetypesWithNoAliases.length > 0) {
+    log.push(`⚠️  ${archetypesWithNoAliases.length} archetypes generated no aliases: ${archetypesWithNoAliases.join(", ")}`);
+  }
 
   // ============================================================
   // PART 3: Seed fantasy_events from tournaments
@@ -200,15 +245,8 @@ export async function POST() {
       continue;
     }
 
-    const now = new Date().toISOString().split("T")[0];
-    const eventDate = tournament.event_date || now;
-    
-    let status: "upcoming" | "live" | "completed" = "upcoming";
-    if (eventDate < now) {
-      status = "completed";
-    } else if (eventDate === now) {
-      status = "live";
-    }
+    const eventDate = tournament.event_date ?? new Date().toISOString().split("T")[0];
+    const status = computeEventStatus(eventDate);
 
     const { error } = await adminClient
       .from("fantasy_events")

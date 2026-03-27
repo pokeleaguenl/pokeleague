@@ -52,32 +52,42 @@ export async function calculateRK9Analytics(
 ): Promise<RK9Analytics | null> {
 
   // Get the archetype by name
-  let { data: archetype } = await supabase
+  const { data: archetype, error: archetypeError } = await supabase
     .from("fantasy_archetypes")
     .select("id, name, canonical_id")
     .eq("name", archetypeName)
     .maybeSingle();
 
+  if (archetypeError) {
+    console.warn("[rk9Analytics] archetype lookup failed:", archetypeError.message);
+  }
   if (!archetype) return null;
+
+  let resolvedArchetype = archetype;
 
   // If this archetype has a canonical_id, use the canonical archetype instead
   if (archetype.canonical_id) {
-    const { data: canonical } = await supabase
+    const { data: canonical, error: canonicalError } = await supabase
       .from("fantasy_archetypes")
       .select("id, name")
       .eq("id", archetype.canonical_id)
       .single();
-    
+
+    if (canonicalError) {
+      console.warn("[rk9Analytics] canonical_id lookup failed:", canonicalError.message);
+    }
     if (canonical) {
-      archetype = { ...canonical, canonical_id: null };
+      resolvedArchetype = { ...canonical, canonical_id: null };
     }
   }
 
-  // Fetch all aliases for this archetype
+  const resolvedId = resolvedArchetype.id;
+
+  // Fetch all aliases for this archetype (use resolved canonical id)
   const { data: aliases } = await supabase
     .from("fantasy_archetype_aliases")
     .select("alias")
-    .eq("archetype_id", archetype.id);
+    .eq("archetype_id", resolvedId);
 
   if (!aliases || aliases.length === 0) return null;
 
@@ -110,9 +120,9 @@ export async function calculateRK9Analytics(
     : 0;
 
   // Calculate rank stats
-  const ranks = standings.map(s => s.rank);
-  const bestRank = Math.min(...ranks);
-  const avgRank = Math.round(ranks.reduce((sum, r) => sum + r, 0) / ranks.length);
+  const ranks = standings.map(s => s.rank).filter((r): r is number => r != null);
+  const bestRank = ranks.length > 0 ? Math.min(...ranks) : 0;
+  const avgRank = ranks.length > 0 ? Math.round(ranks.reduce((sum, r) => sum + r, 0) / ranks.length) : 0;
 
   // Placement breakdown
   const placementBreakdown = {

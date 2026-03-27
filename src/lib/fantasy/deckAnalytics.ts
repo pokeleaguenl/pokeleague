@@ -59,12 +59,16 @@ export async function calculateDeckAnalytics(
 ): Promise<DeckAnalytics> {
   
   // Fetch variant archetype IDs that roll up to this canonical
-  const { data: variants } = await supabase
+  const { data: variants, error: variantsError } = await supabase
     .from("fantasy_archetypes")
     .select("id")
     .eq("canonical_id", archetypeId);
 
-  const allArchetypeIds = [archetypeId, ...(variants?.map(v => v.id) || [])];
+  if (variantsError) {
+    console.warn("[deckAnalytics] canonical_id query failed (column may not exist yet):", variantsError.message);
+  }
+
+  const allArchetypeIds = [archetypeId, ...(variants?.map(v => v.id) ?? [])];
 
   // Fetch all scores for this archetype AND its variants
   const { data: scores, error: scoresError } = await supabase

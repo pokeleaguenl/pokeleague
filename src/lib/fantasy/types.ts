@@ -37,7 +37,10 @@ export interface StandingsEntry {
 export interface ArchetypeResult {
   archetype_slug: string;
   archetype_name: string;
-  placement?: number;
+  variant_name?: string;    // Which variant placed (e.g. "Charizard ex / Pidgeot ex")
+  placement?: number;       // Best single placement (legacy; prefer count fields for scoring)
+  top32_count: number;      // Number of players who made top 32
+  top8_count: number;       // Number of players who made top 8
   made_day2: boolean;
   top8: boolean;
   won: boolean;
@@ -69,7 +72,9 @@ export interface TeamScoreBreakdown {
 export interface SlotScore {
   slot: string; // "active" | "bench_1" | ...
   archetype_slug: string | null;
+  variant_name?: string | null;  // Which variant was matched for this slot
   base_points: number;
   multiplier: number;
   final_points: number;
+  warning?: string;              // Set if deck couldn't be matched
 }

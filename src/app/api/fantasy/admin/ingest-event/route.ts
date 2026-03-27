@@ -3,6 +3,7 @@ import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 import { convertStandingsToPayload } from "@/lib/fantasy/standingsMapper";
 import { processSnapshot } from "@/lib/fantasy/liveScoring";
+import { computeEventStatus } from "@/lib/fantasy/eventStatus";
 import type { StandingsEntry } from "@/lib/fantasy/types";
 import { requireAdmin } from "@/lib/auth/admin";
 
@@ -37,7 +38,7 @@ export async function POST(req: Request) {
   );
 
   const body = await req.json();
-  const { tournament_id, standings, force = false } = body as {
+  const { tournament_id, standings: bodyStandings, force = false } = body as {
     tournament_id: number;
     standings?: StandingsEntry[];
     force?: boolean;
@@ -47,13 +48,55 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "tournament_id required" }, { status: 400 });
   }
 
-  if (!standings || standings.length === 0) {
-    return NextResponse.json({ 
-      error: "standings array required (future versions may auto-fetch from external sources)" 
-    }, { status: 400 });
-  }
-
   const log: string[] = [];
+
+  // ============================================================
+  // AUTO-FETCH: If no standings provided, try rk9_standings table
+  // ============================================================
+  let standings: StandingsEntry[] = bodyStandings ?? [];
+
+  if (!standings || standings.length === 0) {
+    log.push("No standings in request body — attempting auto-fetch from rk9_standings...");
+
+    // Look up the rk9_id for this tournament
+    const { data: tournamentMeta } = await supabase
+      .from("tournaments")
+      .select("rk9_id")
+      .eq("id", tournament_id)
+      .maybeSingle();
+
+    if (tournamentMeta?.rk9_id) {
+      const { data: rk9Rows, error: rk9Error } = await supabase
+        .from("rk9_standings")
+        .select("player_name, rank, archetype")
+        .eq("tournament_id", tournamentMeta.rk9_id)
+        .not("rank", "is", null)
+        .not("archetype", "is", null)
+        .order("rank", { ascending: true });
+
+      if (rk9Error) {
+        log.push(`❌ rk9_standings fetch error: ${rk9Error.message}`);
+      } else if (rk9Rows && rk9Rows.length > 0) {
+        standings = rk9Rows.map(r => ({
+          player_name: r.player_name ?? "Unknown",
+          deck_name: r.archetype ?? "Unknown",
+          placement: r.rank ?? 9999,
+        }));
+        log.push(`✅ Auto-fetched ${standings.length} standings from rk9_standings (rk9_id=${tournamentMeta.rk9_id})`);
+      } else {
+        log.push(`⚠️  No rows found in rk9_standings for rk9_id=${tournamentMeta.rk9_id}`);
+      }
+    } else {
+      log.push("⚠️  Tournament has no rk9_id — cannot auto-fetch");
+    }
+
+    if (standings.length === 0) {
+      return NextResponse.json({
+        error: "No standings available. Provide a standings array in the request body, or ensure rk9_standings data exists for this tournament.",
+        log,
+      }, { status: 400 });
+    }
+  }
 
   // ============================================================
   // STEP 1: Ensure fantasy_events row exists
@@ -62,7 +105,7 @@ export async function POST(req: Request) {
 
   const { data: tournament, error: tournamentError } = await supabase
     .from("tournaments")
-    .select("id, name, event_date, status")
+    .select("id, name, event_date, end_date, status")
     .eq("id", tournament_id)
     .maybeSingle();
 
@@ -81,15 +124,8 @@ export async function POST(req: Request) {
 
   if (!fantasyEvent) {
     // Create fantasy_event
-    const now = new Date().toISOString().split("T")[0];
-    const eventDate = tournament.event_date || now;
-    
-    let status: "upcoming" | "live" | "completed" = "upcoming";
-    if (eventDate < now) {
-      status = "completed";
-    } else if (eventDate === now) {
-      status = "live";
-    }
+    const eventDate = tournament.event_date ?? new Date().toISOString().split("T")[0];
+    const status = computeEventStatus(eventDate, tournament.end_date);
 
     const { data: created, error: createError } = await adminClient
       .from("fantasy_events")
@@ -193,6 +229,11 @@ export async function POST(req: Request) {
   const result = await processSnapshot(supabase, fantasyEvent.id, payload);
 
   log.push(`✅ Scored ${result.archetypesScored} archetypes, ${result.teamsScored} teams`);
+  if (result.warnings.length > 0) {
+    log.push(`⚠️  Scoring warnings (${result.warnings.length}):`);
+    result.warnings.slice(0, 20).forEach(w => log.push(`   ${w}`));
+    if (result.warnings.length > 20) log.push(`   ... and ${result.warnings.length - 20} more`);
+  }
 
   // ============================================================
   // STEP 6: Track ingestion
@@ -223,6 +264,7 @@ export async function POST(req: Request) {
     archetypes_scored: result.archetypesScored,
     teams_scored: result.teamsScored,
     unmatched_decks: unmatchedDecks,
+    scoring_warnings: result.warnings.length,
     log,
   });
 }

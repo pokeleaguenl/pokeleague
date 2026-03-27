@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import Image from "next/image";
+import DeckImage from "@/components/ui/DeckImage";
 
 interface Deck {
   deck_id: number;
@@ -187,17 +187,15 @@ export default function DeckFilters({ decks }: DeckFiltersProps) {
                       >
                         <div className="flex items-start gap-3">
                           {/* Deck image */}
-                          {deck.image_url && (
-                            <div className="flex-shrink-0">
-                              <Image
-                                src={deck.image_url}
-                                alt={deck.deck_name}
-                                width={48}
-                                height={48}
-                                className="rounded-lg"
-                              />
-                            </div>
-                          )}
+                          <div className="flex-shrink-0">
+                            <DeckImage
+                              src={deck.image_url}
+                              alt={deck.deck_name}
+                              width={48}
+                              height={48}
+                              className="rounded-lg"
+                            />
+                          </div>
 
                           {/* Deck info */}
                           <div className="flex-1 min-w-0">

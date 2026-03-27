@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { fetchRK9Events } from "@/lib/rk9";
+import { computeEventStatus } from "@/lib/fantasy/eventStatus";
 import { NextResponse } from "next/server";
 
 /**
@@ -36,7 +37,7 @@ export async function POST() {
             end_date: event.endDate,
             city: event.city,
             format: "STANDARD",
-            status: event.upcoming ? "upcoming" : "completed",
+            status: computeEventStatus(event.startDate, event.endDate),
             rk9_id: event.rk9Id,
             rk9_url: event.rk9Url,
           },

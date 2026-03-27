@@ -133,10 +133,16 @@ export async function convertStandingsToPayload(
 
     const bestPlacement = stats.placements.length > 0 ? Math.min(...stats.placements) : 0;
 
+    // Extract variant_name from the deck name if it contains " / " (e.g. "Charizard ex / Pidgeot ex")
+    const variantName = stats.name.includes(" / ") ? stats.name : undefined;
+
     return {
       archetype_slug: stats.slug,
       archetype_name: stats.name,
+      variant_name: variantName,
       placement: bestPlacement,
+      top32_count: stats.day2Count,
+      top8_count: stats.topCount,
       made_day2: stats.day2Count > 0,
       top8: stats.topCount > 0,
       won: stats.wonCount > 0,
