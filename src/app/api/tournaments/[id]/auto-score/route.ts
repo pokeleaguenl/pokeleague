@@ -3,13 +3,16 @@ import { NextResponse } from "next/server";
 
 export async function POST(_: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const numId = parseInt(id);
+  if (Number.isNaN(numId)) return NextResponse.json({ error: "Invalid tournament ID" }, { status: 400 });
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   // Get tournament
   const { data: tournament } = await supabase
-    .from("tournaments").select("*").eq("id", id).single();
+    .from("tournaments").select("*").eq("id", numId).single();
   if (!tournament) return NextResponse.json({ error: "Tournament not found" }, { status: 404 });
   if (!tournament.rk9_id) return NextResponse.json({ error: "No RK9 ID on this tournament" }, { status: 400 });
 
@@ -117,9 +120,10 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
   }
 
   // Upsert tournament_results
+  const upsertErrors: string[] = [];
   for (const r of results) {
-    await supabase.from("tournament_results").upsert({
-      tournament_id: parseInt(id),
+    const { error: upsertError } = await supabase.from("tournament_results").upsert({
+      tournament_id: numId,
       deck_id: r.deck_id,
       made_day2: r.made_day2,
       top8: r.top8,
@@ -128,18 +132,20 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
       had_win: r.had_win,
       base_points: r.base_points,
     }, { onConflict: "tournament_id,deck_id" });
+    if (upsertError) upsertErrors.push(`${r.deck_name}: ${upsertError.message}`);
   }
 
   // Update tournament status to completed
   await supabase.from("tournaments")
     .update({ status: "completed" })
-    .eq("id", id);
+    .eq("id", numId);
 
   return NextResponse.json({
-    ok: true,
-    scored: results.length,
+    ok: upsertErrors.length === 0,
+    scored: results.length - upsertErrors.length,
     unmatched: unmatched.length,
     unmatched_list: unmatched.slice(0, 20),
+    upsert_errors: upsertErrors.length > 0 ? upsertErrors : undefined,
     results: results.map(r => ({ deck: r.deck_name, pts: r.base_points, top8: r.top8, won: r.won })),
   });
 }

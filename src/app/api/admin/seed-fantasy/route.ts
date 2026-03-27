@@ -40,7 +40,6 @@ export async function POST() {
   }
 
   const adminClient = createAdminClient(supabaseUrl, serviceRoleKey);
-  console.log("[seed-fantasy] Admin client created with service role key");
 
   const log: string[] = [];
 
@@ -128,9 +127,6 @@ export async function POST() {
   let aliasesSkipped = 0;
 
   for (const [slug, aliases] of Object.entries(aliasMap)) {
-    // Debug: Check archetype lookup
-    console.log(`[seed-fantasy] Looking up archetype: ${slug}`);
-    
     const { data: archetype, error: lookupError } = await supabase
       .from("fantasy_archetypes")
       .select("id")
@@ -145,11 +141,8 @@ export async function POST() {
 
     if (!archetype) {
       log.push(`⚠️  Skipping aliases for unknown archetype: ${slug}`);
-      console.log(`[seed-fantasy] Archetype not found: ${slug}`);
       continue;
     }
-
-    console.log(`[seed-fantasy] Found archetype: ${slug} → id=${archetype.id}`);
 
     // Batch upsert all aliases for this archetype
     const aliasRecords = aliases.map(alias => ({
@@ -157,35 +150,18 @@ export async function POST() {
       archetype_id: archetype.id,
     }));
 
-    console.log(`[seed-fantasy] Upserting ${aliasRecords.length} aliases for ${slug}:`, aliasRecords);
-
     const { data: upserted, error } = await adminClient
       .from("fantasy_archetype_aliases")
       .upsert(aliasRecords, { onConflict: "alias" })
       .select();
 
     if (error) {
-      const errorDetails = {
-        message: error.message,
-        code: error.code,
-        details: error.details || 'none',
-        hint: error.hint || 'none',
-      };
-      const errorMsg = `❌ Failed to upsert aliases for ${slug}: ${JSON.stringify(errorDetails)}`;
-      log.push(errorMsg);
+      log.push(`❌ Failed to upsert aliases for ${slug}: ${error.message}`);
       log.push(`   Attempted records: ${JSON.stringify(aliasRecords)}`);
-      console.error(`[seed-fantasy] Alias upsert error for ${slug}:`, {
-        error,
-        message: error.message,
-        code: error.code,
-        details: error.details,
-        hint: error.hint,
-        aliasRecords,
-      });
+      console.error(`[seed-fantasy] Alias upsert error for ${slug}:`, error.message);
     } else {
       const count = upserted?.length || 0;
       aliasesCreated += count;
-      console.log(`[seed-fantasy] Successfully upserted ${count} aliases for ${slug}`);
       if (count > 0) {
         log.push(`✅ Upserted ${count} aliases for ${slug}: ${aliases.join(", ")}`);
       }

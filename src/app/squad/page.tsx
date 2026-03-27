@@ -19,7 +19,7 @@ export default async function SquadPage() {
   // Check lock status
   const lockStatus = await isSquadLocked(supabase);
 
-  const [{ data: rpcDecks }, { data: squadRaw }, { data: nextEvent }] = await Promise.all([
+  const [{ data: rpcDecks, error: rpcError }, { data: squadRaw }, { data: nextEvent }] = await Promise.all([
     supabase.rpc("get_deck_list_with_points"),
     supabase.from("squads")
       .select(`
@@ -45,6 +45,10 @@ export default async function SquadPage() {
       .maybeSingle(),
   ]);
 
+  if (rpcError) {
+    console.error("[squad/page] Failed to load decks:", rpcError.message);
+  }
+
   // Map RPC results to Deck shape
   const decks = (rpcDecks ?? []).map((d: Record<string, unknown>) => ({
     id: d.deck_id as number,
@@ -60,8 +64,8 @@ export default async function SquadPage() {
   const variantResult = await supabase.from("deck_variants").select("*");
   const allVariants = variantResult.data ?? [];
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const sq = squadRaw as any;
+  type SquadRow = Record<string, unknown>;
+  const sq = squadRaw as SquadRow | null;
   const norm = (val: unknown) => (Array.isArray(val) ? val[0] ?? null : val ?? null);
 
   const initialSquad = {
@@ -90,8 +94,7 @@ export default async function SquadPage() {
     hand_4: sq.hand_4_variant ?? null,
   } : {};
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const variantsByDeckId: Record<number, any[]> = {};
+  const variantsByDeckId: Record<number, { id: number; deck_id: number; name: string }[]> = {};
   for (const v of allVariants) {
     if (!variantsByDeckId[v.deck_id]) variantsByDeckId[v.deck_id] = [];
     variantsByDeckId[v.deck_id].push(v);

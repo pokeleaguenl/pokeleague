@@ -77,23 +77,19 @@ export async function calculateDeckAnalytics(
     console.error("[deckAnalytics] Error fetching scores:", scoresError);
   }
 
-  console.log(`[deckAnalytics] Found ${scores?.length || 0} scores for archetype ${archetypeId}`);
-  if (scores && scores.length > 0) {
-    console.log("[deckAnalytics] Sample score:", scores[0]);
-  }
+  type ScoreRow = { event: unknown; points?: number; placement?: number; win_rate?: number };
 
   // Deduplicate by event - keep best placement (highest points) per event
   const eventMap = new Map<number, { eventName: string; eventDate: string; placement: number; points: number }>();
-  for (const s of (scores || [])) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const event = (s as any).event;
-    const eventData = Array.isArray(event) ? event[0] : event;
+  for (const s of (scores || []) as ScoreRow[]) {
+    const event = s.event;
+    const eventData = (Array.isArray(event) ? event[0] : event) as { id?: number; name?: string; event_date?: string } | null;
     const eventId = eventData?.id;
     if (!eventId) continue;
 
     const existing = eventMap.get(eventId);
-    const points = (s as any).points || 0;
-    const placement = (s as any).placement || 0;
+    const points = s.points || 0;
+    const placement = s.placement || 0;
 
     if (!existing || points > existing.points) {
       eventMap.set(eventId, {
@@ -108,14 +104,14 @@ export async function calculateDeckAnalytics(
     .sort((a, b) => b.points - a.points);
 
   // Total fantasy points
-  const fantasyPoints = scores?.reduce((sum, s) => sum + (s.points || 0), 0) || 0;
+  const fantasyPoints = scores?.reduce((sum, s) => sum + ((s as ScoreRow).points || 0), 0) || 0;
 
   // Points per event
   const eventCount = eventMap.size || 0;
   const pointsPerEvent = eventCount > 0 ? Math.round(fantasyPoints / eventCount) : 0;
 
   // Recent form (last 3 events)
-  const recentForm = scores?.slice(0, 3).reduce((sum, s) => sum + (s.points || 0), 0) || 0;
+  const recentForm = scores?.slice(0, 3).reduce((sum, s) => sum + ((s as ScoreRow).points || 0), 0) || 0;
 
   // Placement breakdown
   const placementBreakdown = {
@@ -128,8 +124,7 @@ export async function calculateDeckAnalytics(
   };
 
   scores?.forEach(s => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const placement = (s as any).placement;
+    const placement = (s as ScoreRow).placement;
     if (!placement || placement === 0) return; // Skip if no placement data
     
     if (placement <= 64) placementBreakdown.top64++;
@@ -139,8 +134,6 @@ export async function calculateDeckAnalytics(
     if (placement <= 4) placementBreakdown.finals++;
     if (placement === 1) placementBreakdown.wins++;
   });
-
-  console.log("[deckAnalytics] Placement breakdown:", placementBreakdown);
 
   // Conversion rates
   const top32Conversion = eventCount > 0 
@@ -176,13 +169,21 @@ export async function calculateDeckAnalytics(
     description: efficiencyDescription,
   };
 
+  // Calculate average win rate from scores that have win_rate data
+  const winRates = (scores || [])
+    .map(s => (s as ScoreRow).win_rate)
+    .filter((r): r is number => typeof r === "number" && r > 0);
+  const winRate = winRates.length > 0
+    ? parseFloat((winRates.reduce((a, b) => a + b, 0) / winRates.length).toFixed(2))
+    : null;
+
   return {
     fantasyPoints,
     pointsPerEvent,
     recentForm,
     metaShare,
     metaRank: 0, // Will be set by caller after sorting all decks
-    winRate: null, // TODO: Calculate from W/L data if available
+    winRate,
     day2Conversion,
     top32Conversion,
     tournamentResults,

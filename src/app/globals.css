@@ -4,6 +4,40 @@
   --yellow: #facc15;
 }
 
+/* Toast slide-in */
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(1rem) scale(0.95); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+.animate-toast-in {
+  animation: toast-in 0.2s ease-out forwards;
+}
+
+/* Deck slot snap-in */
+@keyframes slot-pop {
+  0%   { transform: scale(0.85); opacity: 0; }
+  70%  { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.animate-slot-pop {
+  animation: slot-pop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Pulse glow on save success */
+@keyframes save-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+  50%       { box-shadow: 0 0 12px 4px rgba(74, 222, 128, 0.3); }
+}
+.animate-save-glow {
+  animation: save-glow 0.6s ease-out;
+}
+
+/* Shimmer for skeleton loading */
+@keyframes shimmer-load {
+  from { background-position: -200% 0; }
+  to   { background-position: 200% 0; }
+}
+
 * {
   -webkit-tap-highlight-color: transparent;
 }

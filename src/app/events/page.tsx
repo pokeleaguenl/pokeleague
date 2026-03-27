@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import EventCountdown from "@/components/event-countdown";
 
 const CUTOFF_DATE = "2025-09-01";
 
@@ -33,15 +34,9 @@ export default async function EventsPage() {
   if (!user) redirect("/auth/login");
 
   const [{ data: tournaments }, { data: myScores }] = await Promise.all([
-    supabase
-      .from("tournaments")
-      .select("id, name, event_date, status, city, rk9_id")
-      .gte("event_date", CUTOFF_DATE)
-      .order("event_date", { ascending: true }),
-    supabase
-      .from("league_scores")
-      .select("tournament_id, points_earned")
-      .eq("user_id", user.id),
+    supabase.from("tournaments").select("id, name, event_date, status, city, rk9_id")
+      .gte("event_date", CUTOFF_DATE).order("event_date", { ascending: true }),
+    supabase.from("league_scores").select("tournament_id, points_earned").eq("user_id", user.id),
   ]);
 
   const scoreMap: Record<string, number> = Object.fromEntries((myScores ?? []).map(s => [s.tournament_id, (s.points_earned as number) ?? 0]));
@@ -49,78 +44,83 @@ export default async function EventsPage() {
   const now = new Date().toISOString().split("T")[0];
   const upcoming = (tournaments ?? []).filter(t => t.event_date >= now);
   const past = (tournaments ?? []).filter(t => t.event_date < now).reverse();
+  const nextEvent = upcoming[0];
 
   const totalEarned = Object.values(scoreMap).reduce((sum: number, p) => sum + (p ?? 0), 0);
   const eventsScored = Object.keys(scoreMap).length;
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-10">
+
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-black mb-1">
+        <h1 className="text-4xl font-black tracking-tight mb-1">
           Events & <span className="text-yellow-400">Schedule</span>
         </h1>
         <p className="text-sm text-gray-500">2025–2026 Pokémon TCG season</p>
       </div>
 
-      {/* My season summary */}
+      {/* Next event — hero countdown */}
+      {nextEvent && (
+        <div className="mb-8">
+          <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-3">Next Event</p>
+          <EventCountdown
+            eventDate={nextEvent.event_date}
+            eventName={nextEvent.name}
+            eventId={nextEvent.id}
+          />
+        </div>
+      )}
+
+      {/* Season summary — compact, below the hero */}
       <div className="mb-8 grid grid-cols-3 gap-3">
-        <div className="rounded-xl border border-yellow-400/20 bg-yellow-400/5 p-4 text-center">
+        <div className="rounded-xl border border-yellow-400/20 bg-yellow-400/5 p-3 text-center">
           <p className="text-2xl font-black text-yellow-400">{totalEarned}</p>
-          <p className="text-xs text-gray-500 mt-0.5">Points earned</p>
+          <p className="text-[10px] text-gray-500 mt-0.5 uppercase tracking-wider">Points earned</p>
         </div>
-        <div className="rounded-xl border border-gray-800 bg-gray-900/40 p-4 text-center">
+        <div className="rounded-xl border border-gray-800 bg-gray-900/40 p-3 text-center">
           <p className="text-2xl font-black text-white">{eventsScored}</p>
-          <p className="text-xs text-gray-500 mt-0.5">Events scored</p>
+          <p className="text-[10px] text-gray-500 mt-0.5 uppercase tracking-wider">Events scored</p>
         </div>
-        <div className="rounded-xl border border-gray-800 bg-gray-900/40 p-4 text-center">
+        <div className="rounded-xl border border-gray-800 bg-gray-900/40 p-3 text-center">
           <p className="text-2xl font-black text-white">{(tournaments ?? []).length}</p>
-          <p className="text-xs text-gray-500 mt-0.5">Total events</p>
+          <p className="text-[10px] text-gray-500 mt-0.5 uppercase tracking-wider">Total events</p>
         </div>
       </div>
 
-      {/* Upcoming */}
-      {upcoming.length > 0 && (
+      {/* Upcoming — skip the first (already shown as hero) */}
+      {upcoming.length > 1 && (
         <section className="mb-10">
-          <h2 className="mb-4 text-xs font-bold uppercase tracking-widest text-gray-500">
-            Upcoming · {upcoming.length} events
+          <h2 className="mb-4 text-xs font-black uppercase tracking-widest text-gray-500">
+            Also Upcoming · {upcoming.length - 1} events
           </h2>
           <div className="space-y-2">
-            {upcoming.map((t, i) => {
-              const isNext = i === 0;
+            {upcoming.slice(1).map((t) => {
               const status = (t.status as string) || "upcoming";
               const cfg = STATUS_CONFIG[status] || STATUS_CONFIG.upcoming;
               const countdown = daysUntil(t.event_date);
               const hasData = !!t.rk9_id;
-              
+
               return (
                 <Link key={t.id} href={hasData ? `/tournaments/${t.id}` : `/events/${t.id}`}
-                  className={"group flex items-center justify-between rounded-xl border p-4 transition-all hover:border-yellow-400/40 " +
-                    (isNext ? "border-yellow-400/30 bg-yellow-400/5" : "border-gray-800 bg-gray-900/20")}>
+                  className="group flex items-center justify-between rounded-xl border border-gray-800 bg-gray-900/20 p-4 transition-all hover:border-yellow-400/30 hover:bg-gray-900/40">
                   <div className="flex items-center gap-4 min-w-0">
-                    {/* Date block */}
-                    <div className={"flex-shrink-0 w-12 text-center rounded-lg py-1.5 " + (isNext ? "bg-yellow-400/10" : "bg-gray-800/60")}>
-                      <p className={"text-xs font-bold " + (isNext ? "text-yellow-400" : "text-gray-500")}>
+                    <div className="flex-shrink-0 w-12 text-center rounded-xl bg-gray-800/60 py-1.5">
+                      <p className="text-xs font-bold text-gray-500">
                         {new Date(t.event_date + "T00:00:00Z").toLocaleDateString("en-GB", { month: "short", timeZone: "UTC" }).toUpperCase()}
                       </p>
-                      <p className={"text-lg font-black leading-tight " + (isNext ? "text-yellow-300" : "text-gray-300")}>
+                      <p className="text-xl font-black leading-tight text-gray-300">
                         {new Date(t.event_date + "T00:00:00Z").getUTCDate()}
                       </p>
                     </div>
                     <div className="min-w-0">
-                      {isNext && <p className="text-[10px] font-bold uppercase tracking-widest text-yellow-400 mb-0.5">Next Event</p>}
                       <p className="font-bold text-sm truncate">{t.name}</p>
-                      <p className="text-xs text-gray-500">
-                        {t.city ? t.city + " · " : ""}
-                        {formatDate(t.event_date)}
-                      </p>
+                      <p className="text-xs text-gray-500">{t.city ? t.city + " · " : ""}{formatDate(t.event_date)}</p>
                     </div>
                   </div>
                   <div className="flex flex-shrink-0 items-center gap-2 ml-3">
-                    {countdown && (
-                      <span className="text-xs text-gray-600">{countdown}</span>
-                    )}
-                    <span className={"text-[10px] font-bold rounded-full px-2 py-0.5 border " + cfg.color + " " + cfg.bg + " " + cfg.border}>
+                    {countdown && <span className="text-xs text-gray-600">{countdown}</span>}
+                    <span className={`text-[10px] font-bold rounded-full px-2 py-0.5 border ${cfg.color} ${cfg.bg} ${cfg.border}`}>
                       {cfg.label}
                     </span>
                   </div>
@@ -131,47 +131,45 @@ export default async function EventsPage() {
         </section>
       )}
 
-      {/* Past */}
+      {/* Past events */}
       {past.length > 0 && (
         <section>
-          <h2 className="mb-4 text-xs font-bold uppercase tracking-widest text-gray-500">
+          <h2 className="mb-4 text-xs font-black uppercase tracking-widest text-gray-500">
             Past Events · {past.length} completed
           </h2>
           <div className="space-y-2">
             {past.map((t) => {
               const myPts = scoreMap[t.id];
               const hasData = !!t.rk9_id;
-              
+
               return (
                 <Link key={t.id} href={hasData ? `/tournaments/${t.id}` : `/events/${t.id}`}
                   className="group flex items-center justify-between rounded-xl border border-gray-800 bg-gray-900/20 p-4 transition-all hover:border-gray-700">
                   <div className="flex items-center gap-4 min-w-0">
-                    <div className="flex-shrink-0 w-12 text-center rounded-lg bg-gray-800/60 py-1.5">
+                    <div className="flex-shrink-0 w-12 text-center rounded-xl bg-gray-800/40 py-1.5">
                       <p className="text-xs font-bold text-gray-600">
                         {new Date(t.event_date + "T00:00:00Z").toLocaleDateString("en-GB", { month: "short", timeZone: "UTC" }).toUpperCase()}
                       </p>
-                      <p className="text-lg font-black leading-tight text-gray-400">
+                      <p className="text-xl font-black leading-tight text-gray-500">
                         {new Date(t.event_date + "T00:00:00Z").getUTCDate()}
                       </p>
                     </div>
                     <div className="min-w-0">
                       <p className="font-bold text-sm truncate text-gray-300 group-hover:text-white transition-colors">{t.name}</p>
                       <p className="text-xs text-gray-600">
-                        {t.city ? t.city + " · " : ""}
-                        {formatDate(t.event_date)}
-                        {hasData && <span className="ml-2 text-yellow-400">📊</span>}
+                        {t.city ? t.city + " · " : ""}{formatDate(t.event_date)}
+                        {hasData && <span className="ml-2 text-yellow-400/70">📊 Data</span>}
                       </p>
                     </div>
                   </div>
                   <div className="flex flex-shrink-0 items-center gap-2 ml-3">
-                    {myPts != null && (
-                      <span className="text-xs font-bold text-yellow-400 bg-yellow-400/10 border border-yellow-400/20 rounded-full px-2 py-0.5">
+                    {myPts != null ? (
+                      <span className="text-sm font-black text-yellow-400 bg-yellow-400/10 border border-yellow-400/20 rounded-xl px-3 py-1">
                         +{myPts}pts
                       </span>
+                    ) : (
+                      <span className="text-[10px] font-bold rounded-full px-2 py-0.5 border text-gray-600 bg-gray-800 border-gray-700">Done</span>
                     )}
-                    <span className="text-[10px] font-bold rounded-full px-2 py-0.5 border text-gray-500 bg-gray-800 border-gray-700">
-                      Done
-                    </span>
                   </div>
                 </Link>
               );
@@ -181,7 +179,7 @@ export default async function EventsPage() {
       )}
 
       {(!tournaments || tournaments.length === 0) && (
-        <div className="rounded-xl border border-dashed border-gray-800 p-12 text-center text-gray-600">
+        <div className="rounded-2xl border border-dashed border-gray-800 p-16 text-center text-gray-600">
           <p className="text-3xl mb-3">📅</p>
           <p className="font-medium">No events scheduled yet.</p>
           <p className="text-sm mt-1">Check back soon or sync from admin.</p>

@@ -47,8 +47,7 @@ export async function resolveDeckNameToArchetype(
     .maybeSingle();
 
   if (aliasMatch && aliasMatch.archetype) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const arch = Array.isArray(aliasMatch.archetype) ? aliasMatch.archetype[0] : aliasMatch.archetype as any;
+    const arch = (Array.isArray(aliasMatch.archetype) ? aliasMatch.archetype[0] : aliasMatch.archetype) as { id: number; slug: string };
     return { id: arch.id, slug: arch.slug };
   }
 
@@ -132,7 +131,7 @@ export async function convertStandingsToPayload(
         ? stats.winRates.reduce((a, b) => a + b, 0) / stats.winRates.length
         : 0;
 
-    const bestPlacement = Math.min(...stats.placements);
+    const bestPlacement = stats.placements.length > 0 ? Math.min(...stats.placements) : 0;
 
     return {
       archetype_slug: stats.slug,

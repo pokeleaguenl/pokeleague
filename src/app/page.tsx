@@ -1,8 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
+import EventCountdown from "@/components/event-countdown";
 
-/* ── Animated card sprite ── */
+const tierBorder: Record<string, string> = {
+  S: "border-yellow-400/60", A: "border-purple-500/60",
+  B: "border-blue-500/60", C: "border-green-600/60", D: "border-gray-600/40",
+};
+
 function DeckCard({ name, tier, cost, img, delay = "0s" }: { name: string; tier: string; cost: number; img: string; delay?: string }) {
   const tierColor: Record<string, string> = {
     S: "from-yellow-400/30 to-yellow-600/10 border-yellow-400/60",
@@ -23,22 +28,23 @@ function DeckCard({ name, tier, cost, img, delay = "0s" }: { name: string; tier:
   );
 }
 
-/* ── Scoring pill ── */
-function ScorePill({ icon, label, pts }: { icon: string; label: string; pts: string }) {
-  return (
-    <div className="flex items-center justify-between rounded-lg border border-white/10 bg-white/5 px-3 py-2 backdrop-blur-sm">
-      <div className="flex items-center gap-2">
-        <span className="text-base">{icon}</span>
-        <span className="text-xs text-gray-300">{label}</span>
-      </div>
-      <span className="text-xs font-bold text-yellow-400">{pts}</span>
-    </div>
-  );
-}
-
 export default async function Home() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
+
+  const [{ data: topProfiles }, { data: topSquads }, { data: nextEvent }] = await Promise.all([
+    supabase.from("profiles").select("id, display_name, username, total_points").order("total_points", { ascending: false }).limit(4),
+    supabase.from("squads").select(`
+      user_id, total_points,
+      active_deck:decks!squads_active_deck_id_fkey(id,name,tier,image_url)
+    `).order("total_points", { ascending: false }).limit(4),
+    supabase.from("tournaments").select("id, name, event_date")
+      .gte("event_date", new Date().toISOString().split("T")[0])
+      .order("event_date").limit(1).maybeSingle(),
+  ]);
+
+  const medals = ["🥇", "🥈", "🥉", ""];
+  const norm = (v: unknown) => (Array.isArray(v) ? (v as unknown[])[0] ?? null : v ?? null) as { name: string; tier: string; image_url: string | null } | null;
 
   return (
     <main className="relative overflow-hidden bg-gray-950">
@@ -60,29 +66,20 @@ export default async function Home() {
         }
       `}</style>
 
-      {/* Background glow blobs */}
+      {/* Background glows */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -top-40 left-1/2 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-yellow-400/5 blur-3xl" />
         <div className="absolute top-[60vh] -left-40 h-[400px] w-[400px] rounded-full bg-purple-600/8 blur-3xl" />
-        <div className="absolute top-[80vh] -right-20 h-[300px] w-[300px] rounded-full bg-blue-600/8 blur-3xl" />
         <div className="absolute inset-0 opacity-[0.03]"
           style={{ backgroundImage: "radial-gradient(circle, #fff 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
       </div>
 
       {/* ── Hero ── */}
-      <section className="relative mx-auto flex min-h-[92vh] max-w-5xl flex-col items-center justify-center px-6 text-center">
-        {/* Logo mark */}
+      <section className="relative mx-auto flex min-h-[88vh] max-w-5xl flex-col items-center justify-center px-6 text-center">
         <div className="mb-6 flex flex-col items-center gap-4">
           <div className="relative">
             <div className="absolute inset-0 rounded-2xl bg-yellow-400/20 blur-2xl scale-150" />
-            <Image
-              src="/logo.svg"
-              alt="PokéLeague"
-              width={96}
-              height={96}
-              className="relative rounded-2xl drop-shadow-2xl"
-              priority
-            />
+            <Image src="/logo.svg" alt="PokéLeague" width={88} height={88} className="relative rounded-2xl drop-shadow-2xl" priority />
           </div>
           <div className="inline-flex items-center gap-2 rounded-full border border-yellow-400/30 bg-yellow-400/10 px-4 py-1.5 text-xs font-semibold text-yellow-300">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-yellow-400" />
@@ -97,35 +94,31 @@ export default async function Home() {
         </h1>
 
         <p className="mt-6 max-w-lg text-lg text-gray-400 leading-relaxed">
-          Pick your squad of real tournament decks. Earn points when they perform at live Regionals, Internationals and beyond.
+          Pick your squad of real tournament decks. Earn points when they perform at live Regionals.
         </p>
 
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           {user ? (
-            <Link href="/squad"
-              className="rounded-xl bg-yellow-400 px-8 py-3.5 text-sm font-bold text-gray-900 hover:bg-yellow-300 transition-colors shadow-lg shadow-yellow-400/20">
+            <Link href="/squad" className="rounded-xl bg-yellow-400 px-8 py-3.5 text-sm font-bold text-gray-900 hover:bg-yellow-300 transition-colors shadow-lg shadow-yellow-400/20">
               Build Your Squad →
             </Link>
           ) : (
             <>
-              <Link href="/auth/signup"
-                className="rounded-xl bg-yellow-400 px-8 py-3.5 text-sm font-bold text-gray-900 hover:bg-yellow-300 transition-colors shadow-lg shadow-yellow-400/20">
+              <Link href="/auth/signup" className="rounded-xl bg-yellow-400 px-8 py-3.5 text-sm font-bold text-gray-900 hover:bg-yellow-300 transition-colors shadow-lg shadow-yellow-400/20">
                 Play for free →
               </Link>
-              <Link href="/auth/login"
-                className="rounded-xl border border-gray-700 px-6 py-3.5 text-sm font-semibold text-gray-300 hover:border-gray-500 hover:text-white transition-colors">
+              <Link href="/auth/login" className="rounded-xl border border-gray-700 px-6 py-3.5 text-sm font-semibold text-gray-300 hover:border-gray-500 hover:text-white transition-colors">
                 Log in
               </Link>
             </>
           )}
-          <Link href="/decks"
-            className="rounded-xl border border-gray-800 px-6 py-3.5 text-sm text-gray-400 hover:text-white transition-colors">
+          <Link href="/decks" className="rounded-xl border border-gray-800 px-6 py-3.5 text-sm text-gray-400 hover:text-white transition-colors">
             Browse decks
           </Link>
         </div>
 
         {/* Floating deck cards */}
-        <div className="mt-16 flex flex-wrap items-end justify-center gap-3">
+        <div className="mt-14 flex flex-wrap items-end justify-center gap-3">
           <DeckCard name="Charizard ex" tier="S" cost={50} img="https://r2.limitlesstcg.net/pokemon/gen9/charizard.png" delay="0s" />
           <DeckCard name="Dragapult ex" tier="S" cost={50} img="https://r2.limitlesstcg.net/pokemon/gen9/dragapult.png" delay="0.6s" />
           <DeckCard name="Gardevoir ex" tier="S" cost={50} img="https://r2.limitlesstcg.net/pokemon/gen9/gardevoir.png" delay="1.2s" />
@@ -133,50 +126,83 @@ export default async function Home() {
           <DeckCard name="Grimmsnarl ex" tier="A" cost={39} img="https://r2.limitlesstcg.net/pokemon/gen9/grimmsnarl.png" delay="2.4s" />
         </div>
 
-        {/* Scroll hint */}
         <div className="absolute bottom-8 flex flex-col items-center gap-1 text-gray-600">
           <span className="text-xs">scroll</span>
           <span className="animate-bounce text-sm">↓</span>
         </div>
       </section>
 
-      {/* ── How It Works ── */}
-      <section className="relative mx-auto max-w-5xl px-6 py-24">
-        <div className="mb-16 text-center">
-          <h2 className="text-4xl font-black tracking-tight">How it works</h2>
-          <p className="mt-3 text-gray-500">Three steps to compete</p>
-        </div>
+      {/* ── Live section: Next Event + Standings ── */}
+      <section className="relative mx-auto max-w-4xl px-6 py-16">
+        <div className="grid gap-6 md:grid-cols-2">
 
-        <div className="grid gap-6 sm:grid-cols-3">
+          {/* Next event countdown */}
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-3">Next Event</p>
+            {nextEvent ? (
+              <EventCountdown
+                eventDate={nextEvent.event_date}
+                eventName={nextEvent.name}
+                eventId={nextEvent.id}
+              />
+            ) : (
+              <div className="rounded-2xl border border-dashed border-gray-800 p-8 text-center text-gray-600">
+                <p className="text-sm">No upcoming events</p>
+              </div>
+            )}
+          </div>
+
+          {/* Live standings */}
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-3">Current Standings</p>
+            <div className="rounded-2xl border border-gray-800 bg-gray-900/30 overflow-hidden">
+              {(topSquads ?? []).length === 0 ? (
+                <div className="p-8 text-center text-gray-600 text-sm">No rankings yet — be the first!</div>
+              ) : (
+                <div>
+                  {(topSquads ?? []).map((squad, i) => {
+                    const profile = (topProfiles ?? []).find((p: { id: string }) => p.id === squad.user_id);
+                    const activeDeck = norm(squad.active_deck);
+                    const name = profile?.display_name ?? profile?.username ?? "Trainer";
+                    return (
+                      <div key={squad.user_id} className={`flex items-center gap-3 px-4 py-3 ${i < 3 ? "border-b border-white/5" : ""}`}>
+                        <span className="w-6 text-center text-sm shrink-0">{medals[i] || `#${i + 1}`}</span>
+                        {activeDeck?.image_url && (
+                          <div className={`shrink-0 rounded-lg border ${tierBorder[activeDeck.tier] || "border-gray-700"} bg-black/20 p-1`}>
+                            <Image src={activeDeck.image_url} alt={activeDeck.name} width={24} height={24} className="object-contain" />
+                          </div>
+                        )}
+                        <span className="flex-1 font-semibold text-sm truncate">{name}</span>
+                        <span className="font-black text-yellow-400 shrink-0">{squad.total_points}pts</span>
+                      </div>
+                    );
+                  })}
+                  <div className="px-4 py-2.5 border-t border-white/5">
+                    <Link href="/leaderboard" className="text-xs text-gray-500 hover:text-yellow-400 transition-colors">
+                      Full leaderboard →
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── How It Works ── */}
+      <section className="relative mx-auto max-w-4xl px-6 py-16">
+        <div className="mb-10 text-center">
+          <h2 className="text-4xl font-black tracking-tight">How it works</h2>
+          <p className="mt-2 text-gray-500">Three steps to compete</p>
+        </div>
+        <div className="grid gap-5 sm:grid-cols-3">
           {[
-            {
-              step: "01",
-              icon: "🎴",
-              title: "Build your squad",
-              desc: "Pick 10 decks within a 200pt budget. 1 Active (2×), 5 Bench (1×), 4 Hand (0× unless boosted).",
-              color: "border-yellow-400/20 bg-yellow-400/5",
-              accent: "text-yellow-400",
-            },
-            {
-              step: "02",
-              icon: "⚡",
-              title: "Tournaments score live",
-              desc: "Points auto-calculate from real RK9 standings after every Regional and International.",
-              color: "border-purple-500/20 bg-purple-500/5",
-              accent: "text-purple-400",
-            },
-            {
-              step: "03",
-              icon: "🏆",
-              title: "Climb the league",
-              desc: "Compete in leagues with friends or globally. Use Stadium Effects to swing big moments.",
-              color: "border-blue-500/20 bg-blue-500/5",
-              accent: "text-blue-400",
-            },
+            { step: "01", title: "Build your squad", desc: "Pick 10 decks within a 200pt budget. 1 Active (2×), 5 Bench (1×), 4 Reserve.", color: "border-yellow-400/20 bg-yellow-400/5", accent: "text-yellow-400" },
+            { step: "02", title: "Tournaments score live", desc: "Points auto-calculate from real RK9 standings after every Regional.", color: "border-purple-500/20 bg-purple-500/5", accent: "text-purple-400" },
+            { step: "03", title: "Climb the league", desc: "Compete globally. Use Stadium Effects to swing big moments.", color: "border-blue-500/20 bg-blue-500/5", accent: "text-blue-400" },
           ].map((s) => (
             <div key={s.step} className={`rounded-2xl border p-6 ${s.color}`}>
-              <div className={`mb-4 text-xs font-black tracking-widest ${s.accent}`}>{s.step}</div>
-              <div className="mb-3 text-3xl">{s.icon}</div>
+              <div className={`mb-3 text-xs font-black tracking-widest ${s.accent}`}>{s.step}</div>
               <h3 className="mb-2 text-lg font-bold">{s.title}</h3>
               <p className="text-sm text-gray-400 leading-relaxed">{s.desc}</p>
             </div>
@@ -184,73 +210,51 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ── Scoring preview ── */}
-      <section className="relative mx-auto max-w-3xl px-6 py-16">
-        <div className="rounded-2xl border border-white/8 bg-white/3 p-8 backdrop-blur-sm">
-          <div className="mb-6 flex items-center justify-between">
+      {/* ── Scoring ── */}
+      <section className="relative mx-auto max-w-2xl px-6 py-8">
+        <div className="rounded-2xl border border-white/8 bg-white/3 p-7 backdrop-blur-sm">
+          <div className="mb-5 flex items-center justify-between">
             <h2 className="text-2xl font-black">Scoring system</h2>
             <Link href="/how-to-score" className="text-xs text-yellow-400 hover:underline">Full rules →</Link>
           </div>
           <div className="grid gap-2 sm:grid-cols-2">
-            <ScorePill icon="📅" label="Made Day 2" pts="+3 pts" />
-            <ScorePill icon="🏅" label="Top 8 finish" pts="+10 pts" />
-            <ScorePill icon="🏆" label="Tournament win" pts="+25 pts" />
-            <ScorePill icon="📈" label="60%+ win rate" pts="+20 pts" />
-            <ScorePill icon="⭐" label="Active deck bonus" pts="2× pts" />
-            <ScorePill icon="⚡" label="Stadium Effect (×3)" pts="3× pts" />
-          </div>
-          <div className="mt-4 rounded-xl border border-yellow-400/20 bg-yellow-400/5 px-4 py-3">
-            <p className="text-xs text-gray-300">
-              <span className="font-bold text-yellow-400">Example:</span> Your Active deck wins a Regional → Day 2 (3) + Top 8 (10) + Win (25) = <span className="font-bold text-white">38pts × 2 = 76pts</span>
-            </p>
+            {[
+              { label: "Made Day 2", pts: "+3 pts" },
+              { label: "Top 8 finish", pts: "+10 pts" },
+              { label: "Tournament win", pts: "+25 pts" },
+              { label: "60%+ win rate", pts: "+20 pts" },
+              { label: "Active deck bonus", pts: "2× pts" },
+              { label: "Stadium Effect (×3)", pts: "3× pts" },
+            ].map((item) => (
+              <div key={item.label} className="flex items-center justify-between rounded-xl border border-white/8 bg-white/4 px-3 py-2">
+                <span className="text-sm text-gray-300">{item.label}</span>
+                <span className="text-sm font-bold text-yellow-400">{item.pts}</span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* ── CTA ── */}
-      <section className="relative mx-auto max-w-2xl px-6 py-24 text-center">
+      <section className="relative mx-auto max-w-2xl px-6 py-20 text-center">
         <h2 className="text-4xl font-black tracking-tight">Ready to play?</h2>
-        <p className="mt-4 text-gray-400">Free to play. No cards needed. Just pick your meta calls and compete.</p>
-        <div className="mt-8 flex flex-wrap justify-center gap-3">
+        <p className="mt-3 text-gray-400">Free to play. No cards needed. Just pick your meta calls.</p>
+        <div className="mt-7 flex flex-wrap justify-center gap-3">
           {user ? (
-            <Link href="/squad"
-              className="rounded-xl bg-yellow-400 px-8 py-3.5 text-sm font-bold text-gray-900 hover:bg-yellow-300 transition-colors shadow-lg shadow-yellow-400/20">
+            <Link href="/squad" className="rounded-xl bg-yellow-400 px-8 py-3.5 text-sm font-bold text-gray-900 hover:bg-yellow-300 transition-colors shadow-lg shadow-yellow-400/20">
               Go to my squad →
             </Link>
           ) : (
-            <Link href="/auth/signup"
-              className="rounded-xl bg-yellow-400 px-8 py-3.5 text-sm font-bold text-gray-900 hover:bg-yellow-300 transition-colors shadow-lg shadow-yellow-400/20">
+            <Link href="/auth/signup" className="rounded-xl bg-yellow-400 px-8 py-3.5 text-sm font-bold text-gray-900 hover:bg-yellow-300 transition-colors shadow-lg shadow-yellow-400/20">
               Create free account →
             </Link>
           )}
-          <Link href="/decks"
-            className="rounded-xl border border-gray-700 px-6 py-3.5 text-sm text-gray-300 hover:text-white transition-colors">
+          <Link href="/decks" className="rounded-xl border border-gray-700 px-6 py-3.5 text-sm text-gray-300 hover:text-white transition-colors">
             View deck list
           </Link>
         </div>
       </section>
 
-      {/* ── FAQ ── */}
-      <section className="relative mx-auto max-w-2xl px-6 pb-24">
-        <h2 className="mb-8 text-center text-3xl font-black">FAQ</h2>
-        <div className="space-y-3">
-          {[
-            { q: "Do I need to own physical cards?", a: "Nope — everything is virtual. Pick decks from the meta list and earn points based on real tournament results." },
-            { q: "When are points calculated?", a: "Automatically after each tournament completes, using RK9.gg standings data. Usually within 24 hours." },
-            { q: "Can I change my squad?", a: "Yes, until the lock-in deadline before each event. After locking, your squad is frozen for that tournament." },
-            { q: "Is it free?", a: "Yes. PokéLeague is free to play. Cosmetics may come later but gameplay will always be free." },
-          ].map((f) => (
-            <details key={f.q} className="group rounded-xl border border-gray-800 bg-gray-900/30 p-4 hover:border-gray-700 transition-colors">
-              <summary className="cursor-pointer font-semibold text-sm group-open:text-yellow-400 transition-colors">
-                {f.q}
-              </summary>
-              <p className="mt-2 text-sm text-gray-400 leading-relaxed">{f.a}</p>
-            </details>
-          ))}
-        </div>
-      </section>
-
-      {/* Footer */}
       <footer className="border-t border-gray-800/50 py-8 text-center text-xs text-gray-600">
         © {new Date().getFullYear()} PokéLeague · Not affiliated with The Pokémon Company
       </footer>

@@ -5,6 +5,8 @@ import Image from "next/image";
 import DeckBrowser from "./deck-browser";
 import VariantPicker, { type Variant } from "./variant-picker";
 import { THEMES, DEFAULT_THEME, type Theme } from "@/lib/themes";
+import { SQUAD_BUDGET } from "@/lib/constants";
+import { useToast } from "@/components/toast";
 
 export interface Deck {
   id: number;
@@ -37,13 +39,13 @@ const BENCH_SLOTS: SlotDef[] = [
   { key: "bench_5", label: "Bench 5", zone: "bench" },
 ];
 const HAND_SLOTS: SlotDef[] = [
-  { key: "hand_1", label: "Hand 1", zone: "hand" },
-  { key: "hand_2", label: "Hand 2", zone: "hand" },
-  { key: "hand_3", label: "Hand 3", zone: "hand" },
-  { key: "hand_4", label: "Hand 4", zone: "hand" },
+  { key: "hand_1", label: "Reserve 1", zone: "hand" },
+  { key: "hand_2", label: "Reserve 2", zone: "hand" },
+  { key: "hand_3", label: "Reserve 3", zone: "hand" },
+  { key: "hand_4", label: "Reserve 4", zone: "hand" },
 ];
 
-const BUDGET = 200;
+const BUDGET = SQUAD_BUDGET;
 
 type Squad = Record<SlotKey, Deck | null>;
 type VariantMap = Record<SlotKey, string | null>;
@@ -99,6 +101,7 @@ export default function Playmat({
     hand_1: null, hand_2: null, hand_3: null, hand_4: null,
   };
 
+  const toast = useToast();
   const [squad, setSquad] = useState<Squad>({ ...emptySquad, ...initialSquad });
   const [variants, setVariants] = useState<VariantMap>({ ...emptyVariants, ...initialVariants });
   const [effects, setEffects] = useState<StadiumEffects>(initialEffects);
@@ -108,6 +111,7 @@ export default function Playmat({
   const [variantSlot, setVariantSlot] = useState<SlotKey | null>(null);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [saveError, setSaveError] = useState(false);
   const [unsaved, setUnsaved] = useState(false);
   const [showLockConfirm, setShowLockConfirm] = useState(false);
   const [theme, setTheme] = useState<Theme>(DEFAULT_THEME);
@@ -202,6 +206,7 @@ export default function Playmat({
 
   const handleSave = async () => {
     setSaving(true);
+    setSaveError(false);
     const body = {
       active_deck_id: squad.active?.id ?? null,
       bench_1: squad.bench_1?.id ?? null,
@@ -225,11 +230,20 @@ export default function Playmat({
       hand_4_variant: variants.hand_4,
       event_effect: effects.eventEffect,
     };
-    await fetch("/api/squad", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-    setSaving(false);
-    setSaved(true);
-    setUnsaved(false);
-    setTimeout(() => setSaved(false), 2000);
+    try {
+      const res = await fetch("/api/squad", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      if (!res.ok) throw new Error("Save failed");
+      setSaved(true);
+      setUnsaved(false);
+      toast("Squad saved!", "success");
+      setTimeout(() => setSaved(false), 2000);
+    } catch {
+      setSaveError(true);
+      toast("Save failed — try again", "error");
+      setTimeout(() => setSaveError(false), 3000);
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleLock = async () => {
@@ -262,6 +276,22 @@ export default function Playmat({
         style={{ backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px)", backgroundSize: "32px 32px" }} />
 
       <div className="relative z-10 flex flex-col gap-5">
+        {/* Sticky unsaved changes warning */}
+        {unsaved && !locked && (
+          <div className="rounded-xl border-2 border-orange-400 bg-orange-400/10 p-3 backdrop-blur-sm">
+            <div className="flex items-center gap-3">
+              <span className="text-xl shrink-0">⚠️</span>
+              <div className="flex-1 min-w-0">
+                <p className="font-bold text-orange-400 text-sm">Unsaved Changes</p>
+                <p className="text-xs text-orange-200/80">
+                  Only your <strong>saved</strong> squad counts for scoring. Click "Save" below.
+                  {lastSaved && <span className="text-orange-300/60"> · Last saved: {lastSaved}</span>}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Header: theme + budget */}
         <div className="flex items-center justify-between">
           <button onClick={() => setShowThemePicker((v) => !v)}
@@ -333,29 +363,6 @@ export default function Playmat({
 
         {/* Stadium Effects */}
         <div className="rounded-xl border border-white/10 bg-black/20 p-3 backdrop-blur-sm">
-        {/* UNSAVED CHANGES WARNING */}
-        {unsaved && !locked && (
-          <div className="rounded-xl border-2 border-orange-400 bg-orange-400/10 p-4 backdrop-blur-sm">
-            <div className="flex items-start gap-3">
-              <span className="text-2xl">⚠️</span>
-              <div className="flex-1">
-                <h3 className="font-bold text-orange-400 mb-1">Unsaved Changes</h3>
-                <p className="text-sm text-orange-200/90 mb-2">
-                  Your squad changes have NOT been saved yet.
-                </p>
-                <p className="text-xs text-orange-300/70">
-                  <strong>Important:</strong> Only your SAVED squad counts for tournament scoring. Click "Save" below to lock in your changes.
-                </p>
-                {lastSaved && (
-                  <p className="text-xs text-orange-300/60 mt-2">
-                    Last saved: {lastSaved}
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-
           <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-gray-500">🏟 Stadium Effects — 1 per event, 1 per season each</p>
           <div className="flex gap-2">
             {/* x3 effect */}
@@ -385,7 +392,7 @@ export default function Playmat({
                     : "border-white/10 text-gray-300 hover:border-blue-400/40 hover:text-blue-300"}`}
             >
               {effects.handBoostUsed ? "🃏 Hand Boost Used" : effects.eventEffect === "hand_boost" ? "🃏 Hand Boost Active!" : "🃏 Hand Boost"}
-              {!effects.handBoostUsed && <span className="block text-[9px] text-gray-500 font-normal">Hand scores 1× this event</span>}
+              {!effects.handBoostUsed && <span className="block text-[9px] text-gray-500 font-normal">Reserve scores 1× this event</span>}
             </button>
           </div>
           {effects.eventEffect && !locked && (
@@ -395,11 +402,14 @@ export default function Playmat({
           )}
         </div>
 
-        {/* Hand Zone */}
+        {/* Reserve Zone */}
         <div className="flex items-center gap-3">
           <div className="h-px flex-1 bg-white/10" />
-          <span className={`text-xs uppercase tracking-widest ${handBoosted ? "text-blue-400 font-semibold" : "text-gray-600"}`}>
-            Hand — {handBoosted ? "1× (Boosted!)" : "0pts"}
+          <span
+            className={`text-xs uppercase tracking-widest cursor-help ${handBoosted ? "text-blue-400 font-semibold" : "text-gray-600"}`}
+            title="Reserve decks score 0pts normally. Use the Hand Boost Stadium Effect to activate them at 1× for one event."
+          >
+            Reserve{handBoosted ? " — 1× (Boosted!)" : ""}
           </span>
           <div className="h-px flex-1 bg-white/10" />
         </div>
@@ -433,8 +443,8 @@ export default function Playmat({
           </div>
           <div className="flex gap-2">
             <button onClick={handleSave} disabled={saving || locked}
-              className={`rounded-lg px-4 py-2 text-sm font-medium text-white border hover:bg-black/40 disabled:opacity-30 backdrop-blur-sm ${unsaved && !locked ? "border-orange-400/50 bg-orange-400/10" : "bg-black/30 border-white/10"}`}>
-              {saving ? "Saving..." : saved ? "✅ Saved" : unsaved ? "● Save" : "Save"}
+              className={`rounded-lg px-4 py-2 text-sm font-medium text-white border hover:bg-black/40 disabled:opacity-30 backdrop-blur-sm ${saveError ? "border-red-400/50 bg-red-400/10" : unsaved && !locked ? "border-orange-400/50 bg-orange-400/10" : "bg-black/30 border-white/10"}`}>
+              {saving ? "Saving..." : saveError ? "❌ Error" : saved ? "✅ Saved" : unsaved ? "● Save" : "Save"}
             </button>
             <button onClick={handleLock}
               className={`rounded-lg px-4 py-2 text-sm font-semibold transition-colors ${
@@ -529,7 +539,8 @@ function DeckSlot({
       className={`relative flex flex-col items-center justify-center rounded-xl border-2 ${border} backdrop-blur-sm transition-all
         ${deck ? "bg-black/30" : theme.cardBg}
         ${isActive ? "h-44 w-36" : isHand ? "h-24 w-full" : "h-28 w-full"}
-        ${!locked && !deck && canAdd ? "cursor-pointer hover:border-white/30 hover:scale-105" : ""}
+        ${!locked && !deck && canAdd ? "cursor-pointer hover:border-white/40 hover:scale-105 hover:shadow-lg" : ""}
+        ${!locked && deck ? "hover:scale-[1.03] hover:shadow-md cursor-pointer" : ""}
         ${handDimmed ? "opacity-60" : ""}
       `}
       onClick={deck ? undefined : onOpen}
@@ -540,7 +551,7 @@ function DeckSlot({
           {isActive && (
             <div className={`absolute inset-0 rounded-xl opacity-20 bg-gradient-to-b ${theme.overlay}`} />
           )}
-          <div className={`relative z-10 flex items-center justify-center ${isActive ? "w-20 h-20" : isHand ? "w-10 h-10" : "w-12 h-12"}`}>
+          <div className={`relative z-10 flex items-center justify-center animate-slot-pop ${isActive ? "w-20 h-20" : isHand ? "w-10 h-10" : "w-12 h-12"}`}>
             {deck.image_url && (
               <Image src={deck.image_url} alt={deck.name}
                 width={isActive ? 64 : isHand ? 28 : 40}

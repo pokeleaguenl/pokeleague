@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Nav from "@/components/nav";
+import { ToastProvider } from "@/components/toast";
 import "./globals.css";
 import "./mobile.css";
 
@@ -29,8 +30,10 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
       </head>
       <body className="bg-gray-950 text-gray-100 antialiased">
-        <Nav />
-        {children}
+        <ToastProvider>
+          <Nav />
+          {children}
+        </ToastProvider>
       </body>
     </html>
   );

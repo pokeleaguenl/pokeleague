@@ -3,8 +3,6 @@ import { createClient } from "@/lib/supabase/server";
 export async function PointsHistoryDebug({ userId }: { userId: string }) {
   const supabase = await createClient();
   
-  console.log('[DEBUG] Fetching history for user:', userId);
-  
   const { data: history, error } = await supabase
     .from('tournament_scores')
     .select(`
@@ -16,8 +14,6 @@ export async function PointsHistoryDebug({ userId }: { userId: string }) {
     .eq('user_id', userId)
     .order('created_at', { ascending: false })
     .limit(10);
-  
-  console.log('[DEBUG] Query result:', { history, error });
   
   if (error) {
     return (

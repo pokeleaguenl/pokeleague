@@ -33,7 +33,10 @@ export async function isSquadLocked(supabase: SupabaseClient): Promise<{
   
   // Lock time is midnight UTC on the event date
   const lockTime = new Date(`${nextEvent.event_date}T00:00:00.000Z`);
-  
+  if (isNaN(lockTime.getTime())) {
+    return { locked: false };
+  }
+
   if (now >= lockTime) {
     // Past the lock deadline
     return {
