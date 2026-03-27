@@ -63,7 +63,7 @@ export async function POST(req: Request) {
     hand_1, hand_2, hand_3, hand_4,
     active_variant, bench_1_variant, bench_2_variant, bench_3_variant, bench_4_variant, bench_5_variant,
     hand_1_variant, hand_2_variant, hand_3_variant, hand_4_variant,
-    event_effect,
+    event_effect, effect_charges,
   } = body;
 
   const { data, error } = await supabase
@@ -91,6 +91,7 @@ export async function POST(req: Request) {
       hand_3_variant: hand_3_variant ?? null,
       hand_4_variant: hand_4_variant ?? null,
       event_effect: event_effect ?? null,
+      effect_charges: effect_charges ?? 5,
       updated_at: new Date().toISOString(),
     }, { onConflict: "user_id" })
     .select()

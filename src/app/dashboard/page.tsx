@@ -5,6 +5,7 @@ import Image from "next/image";
 import LogoutButton from "./logout-button";
 import { PointsHistory } from "@/components/points-history";
 import EventCountdown from "@/components/event-countdown";
+import PredictionWidget from "@/components/prediction-widget";
 
 export const dynamic = 'force-dynamic';
 
@@ -32,7 +33,9 @@ export default async function Dashboard() {
 
   await supabase.from("profiles").upsert({ id: user.id }, { onConflict: "id" });
 
-  const [{ data: profile }, { data: sq }, { data: upcoming }, { data: allProfiles }, { data: recentEvents }] = await Promise.all([
+  const today = new Date().toISOString().split("T")[0];
+
+  const [{ data: profile }, { data: sq }, { data: upcoming }, { data: allProfiles }, { data: recentEvents }, { data: topDecks }] = await Promise.all([
     supabase.from("profiles").select("display_name, username, total_points").eq("id", user.id).single(),
     supabase.from("squads").select(`
       total_points, locked, event_effect,
@@ -47,19 +50,24 @@ export default async function Dashboard() {
       hand3:decks!squads_hand_3_fkey(id, name, image_url, tier, cost),
       hand4:decks!squads_hand_4_fkey(id, name, image_url, tier, cost)
     `).eq("user_id", user.id).maybeSingle(),
-    supabase.from("tournaments").select("id, name, event_date")
-      .gte("event_date", new Date().toISOString().split("T")[0])
+    supabase.from("tournaments").select("id, name, event_date, status")
+      .gte("event_date", today)
       .order("event_date").limit(1).maybeSingle(),
     supabase.from("profiles").select("id, total_points").order("total_points", { ascending: false }),
     supabase.from("tournaments").select("id, name, event_date")
       .order("event_date", { ascending: false }).limit(3),
+    supabase.from("decks").select("id, name, tier, image_url").in("tier", ["S", "A", "B"]).order("tier").limit(30),
   ]);
 
   const lastEvent = recentEvents?.[0];
-  const { data: lastScore } = lastEvent ? await supabase
-    .from("league_scores").select("points_earned")
-    .eq("user_id", user.id).eq("tournament_id", lastEvent.id).maybeSingle()
-    : { data: null };
+  const [{ data: lastScore }, { data: existingPrediction }] = await Promise.all([
+    lastEvent
+      ? supabase.from("league_scores").select("points_earned").eq("user_id", user.id).eq("tournament_id", lastEvent.id).maybeSingle()
+      : Promise.resolve({ data: null }),
+    upcoming && upcoming.status !== "completed"
+      ? supabase.from("tournament_predictions").select("predicted_deck_id, correct, bonus_points").eq("user_id", user.id).eq("tournament_id", upcoming.id).maybeSingle()
+      : Promise.resolve({ data: null }),
+  ]);
 
   const displayName = profile?.display_name ?? profile?.username ?? user.email?.split("@")[0] ?? "Trainer";
   const rank = allProfiles ? allProfiles.findIndex((p: { id: string }) => p.id === user.id) + 1 : null;
@@ -140,6 +148,16 @@ export default async function Dashboard() {
             <p className="text-[10px] text-gray-600">points earned</p>
           </div>
         </div>
+      )}
+
+      {/* Prediction widget */}
+      {upcoming && upcoming.status !== "completed" && topDecks && topDecks.length > 0 && (
+        <PredictionWidget
+          tournamentId={upcoming.id}
+          tournamentName={upcoming.name}
+          decks={topDecks}
+          existing={existingPrediction ?? null}
+        />
       )}
 
       {/* Squad preview */}
@@ -246,7 +264,7 @@ export default async function Dashboard() {
           {[
             { href: "/squad", emoji: "🎴", label: "My Squad", sub: sq?.locked ? "🔒 Locked" : filledSlots > 0 ? `${filledSlots}/10 picks` : "Build squad" },
             { href: "/decks", emoji: "📊", label: "Meta Decks", sub: "Browse & analyse" },
-            { href: "/events", emoji: "📅", label: "Events", sub: lastScore?.points_earned != null ? `+${lastScore.points_earned}pts last event` : "Season schedule" },
+            { href: "/leagues", emoji: "🏅", label: "Leagues", sub: "Private competitions" },
             { href: "/leaderboard", emoji: "🏆", label: "Leaderboard", sub: rank ? `You are ${rankLabel} globally` : "See global rankings" },
           ].map((a) => (
             <Link key={a.href} href={a.href}

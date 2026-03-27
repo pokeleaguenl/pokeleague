@@ -24,6 +24,7 @@ export interface StandingsSnapshot {
 export interface SnapshotPayload {
   archetypes: ArchetypeResult[];
   recorded_at?: string;
+  tournament_size?: number;
 }
 
 export interface StandingsEntry {
@@ -37,15 +38,23 @@ export interface StandingsEntry {
 export interface ArchetypeResult {
   archetype_slug: string;
   archetype_name: string;
-  variant_name?: string;    // Which variant placed (e.g. "Charizard ex / Pidgeot ex")
-  placement?: number;       // Best single placement (legacy; prefer count fields for scoring)
-  top32_count: number;      // Number of players who made top 32
-  top8_count: number;       // Number of players who made top 8
+  variant_name?: string;
+  placement?: number;
+  best_rank?: number;
+  top32_count: number;
+  top8_count: number;
+  top16_count?: number;
+  top4_count?: number;
+  top2_count?: number;
   made_day2: boolean;
   top8: boolean;
+  top16?: boolean;
+  top4?: boolean;
+  top2?: boolean;
   won: boolean;
   win_rate: number;
   had_win: boolean;
+  deck_tier?: string;
 }
 
 export interface ArchetypeScoreLive {
@@ -67,14 +76,16 @@ export interface TeamScoreLive {
 export interface TeamScoreBreakdown {
   slots: SlotScore[];
   total: number;
+  bonus_points?: number;
+  catchup_applied?: boolean;
 }
 
 export interface SlotScore {
-  slot: string; // "active" | "bench_1" | ...
+  slot: string;
   archetype_slug: string | null;
-  variant_name?: string | null;  // Which variant was matched for this slot
+  variant_name?: string | null;
   base_points: number;
   multiplier: number;
   final_points: number;
-  warning?: string;              // Set if deck couldn't be matched
+  warning?: string;
 }

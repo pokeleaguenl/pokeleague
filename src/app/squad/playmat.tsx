@@ -7,6 +7,8 @@ import VariantPicker, { type Variant } from "./variant-picker";
 import { THEMES, DEFAULT_THEME, type Theme } from "@/lib/themes";
 import { SQUAD_BUDGET } from "@/lib/constants";
 import { useToast } from "@/components/toast";
+import { EFFECTS, EFFECT_COLOR_CLASSES, type EffectType } from "@/lib/fantasy/effects";
+import { FANTASY_CONFIG } from "@/lib/fantasy/config";
 
 export interface Deck {
   id: number;
@@ -59,9 +61,17 @@ const tierBorders: Record<string, string> = {
 };
 
 interface StadiumEffects {
+  // Per-effect permanent use flags
   x3Used: boolean;
   handBoostUsed: boolean;
+  benchBlitzUsed: boolean;
+  metaCallUsed: boolean;
+  darkHorseUsed: boolean;
+  captainSwapUsed: boolean;
+  // Currently queued effect for this event
   eventEffect: string | null;
+  // Remaining charge budget
+  effectCharges: number;
 }
 
 interface Props {
@@ -194,14 +204,32 @@ export default function Playmat({
     setUnsaved(true);
   };
 
-  const toggleEffect = (effect: "x3" | "hand_boost") => {
+  const isEffectUsed = (effectId: EffectType): boolean => {
+    const map: Record<EffectType, boolean> = {
+      x3: effects.x3Used,
+      hand_boost: effects.handBoostUsed,
+      bench_blitz: effects.benchBlitzUsed,
+      meta_call: effects.metaCallUsed,
+      dark_horse: effects.darkHorseUsed,
+      captain_swap: effects.captainSwapUsed,
+    };
+    return map[effectId];
+  };
+
+  const chargesUsedThisEvent = effects.eventEffect
+    ? (FANTASY_CONFIG.EFFECT_COSTS[effects.eventEffect] ?? 0)
+    : 0;
+  const availableCharges = effects.effectCharges - chargesUsedThisEvent;
+
+  const toggleEffect = (effectId: EffectType) => {
     if (locked) return;
-    if (effect === "x3" && effects.x3Used) return;
-    if (effect === "hand_boost" && effects.handBoostUsed) return;
-    setEffects((e) => ({
-      ...e,
-      eventEffect: e.eventEffect === effect ? null : effect,
-    }));
+    if (isEffectUsed(effectId)) return;
+    const cost = FANTASY_CONFIG.EFFECT_COSTS[effectId] ?? 1;
+    // If toggling on, check we have enough charges (count charges excluding current selection)
+    const currentCost = effects.eventEffect ? (FANTASY_CONFIG.EFFECT_COSTS[effects.eventEffect] ?? 0) : 0;
+    const chargesAfterRemovingCurrent = effects.effectCharges - currentCost;
+    if (effects.eventEffect !== effectId && cost > chargesAfterRemovingCurrent) return;
+    setEffects((e) => ({ ...e, eventEffect: e.eventEffect === effectId ? null : effectId }));
     setUnsaved(true);
   };
 
@@ -230,6 +258,7 @@ export default function Playmat({
       hand_3_variant: variants.hand_3,
       hand_4_variant: variants.hand_4,
       event_effect: effects.eventEffect,
+      effect_charges: effects.effectCharges,
     };
     try {
       const res = await fetch("/api/squad", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
@@ -430,75 +459,71 @@ export default function Playmat({
             STADIUM EFFECTS
         ══════════════════════════════════════ */}
         <div className="rounded-xl border border-white/10 bg-black/20 p-3.5 backdrop-blur-sm">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="text-base">🏟</span>
-            <p className="text-xs font-bold uppercase tracking-widest text-gray-400">Stadium Effects</p>
-            <span className="text-[10px] text-gray-700 ml-1">· 1 active per event · 1 per season each</span>
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <span className="text-base">🏟</span>
+              <p className="text-xs font-bold uppercase tracking-widest text-gray-400">Stadium Effects</p>
+            </div>
+            <div className="flex items-center gap-1.5">
+              {Array.from({ length: FANTASY_CONFIG.EFFECT_CHARGES }).map((_, i) => (
+                <div
+                  key={i}
+                  className={`h-2 w-2 rounded-full transition-colors ${
+                    i < availableCharges ? "bg-yellow-400" : "bg-gray-700"
+                  }`}
+                />
+              ))}
+              <span className="text-[10px] text-gray-600 ml-1">{availableCharges}/{FANTASY_CONFIG.EFFECT_CHARGES} charges</span>
+            </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-2.5">
-            {/* ×3 Effect */}
-            <button
-              disabled={locked || effects.x3Used}
-              onClick={() => toggleEffect("x3")}
-              className={`flex flex-col items-start gap-1.5 rounded-xl border p-3 text-left transition-all
-                ${effects.x3Used
-                  ? "border-gray-700/50 bg-gray-900/30 opacity-50 cursor-not-allowed"
-                  : effects.eventEffect === "x3"
-                    ? "border-yellow-400/60 bg-yellow-400/10 shadow-[0_0_12px_rgba(250,204,21,0.1)]"
-                    : "border-white/10 hover:border-yellow-400/40 hover:bg-yellow-400/5 cursor-pointer"
-                }`}
-            >
-              <div className="flex items-center gap-1.5 w-full">
-                <span className="text-base">⚡</span>
-                <span className={`text-sm font-bold ${effects.x3Used ? "text-gray-600" : effects.eventEffect === "x3" ? "text-yellow-300" : "text-gray-300"}`}>
-                  ×3 Active
-                </span>
-                {effects.x3Used && (
-                  <span className="ml-auto rounded bg-gray-700 px-1.5 py-0.5 text-[9px] text-gray-500 font-semibold">USED</span>
-                )}
-                {!effects.x3Used && effects.eventEffect === "x3" && (
-                  <span className="ml-auto rounded bg-yellow-400/30 px-1.5 py-0.5 text-[9px] text-yellow-400 font-semibold">ON</span>
-                )}
-              </div>
-              {!effects.x3Used && (
-                <p className="text-[10px] text-gray-500 leading-snug">Active deck earns 3× points this event</p>
-              )}
-            </button>
+          <div className="grid grid-cols-3 gap-2">
+            {EFFECTS.map((effect) => {
+              const used = isEffectUsed(effect.id);
+              const active = effects.eventEffect === effect.id;
+              const colors = EFFECT_COLOR_CLASSES[effect.color];
+              const costAfterRemovingCurrent = effects.effectCharges - (effects.eventEffect && effects.eventEffect !== effect.id ? (FANTASY_CONFIG.EFFECT_COSTS[effects.eventEffect] ?? 0) : 0);
+              const canAfford = active || effect.cost <= costAfterRemovingCurrent;
 
-            {/* Hand Boost Effect */}
-            <button
-              disabled={locked || effects.handBoostUsed}
-              onClick={() => toggleEffect("hand_boost")}
-              className={`flex flex-col items-start gap-1.5 rounded-xl border p-3 text-left transition-all
-                ${effects.handBoostUsed
-                  ? "border-gray-700/50 bg-gray-900/30 opacity-50 cursor-not-allowed"
-                  : effects.eventEffect === "hand_boost"
-                    ? "border-blue-400/60 bg-blue-400/10 shadow-[0_0_12px_rgba(96,165,250,0.1)]"
-                    : "border-white/10 hover:border-blue-400/40 hover:bg-blue-400/5 cursor-pointer"
-                }`}
-            >
-              <div className="flex items-center gap-1.5 w-full">
-                <span className="text-base">🃏</span>
-                <span className={`text-sm font-bold ${effects.handBoostUsed ? "text-gray-600" : effects.eventEffect === "hand_boost" ? "text-blue-300" : "text-gray-300"}`}>
-                  Hand Boost
-                </span>
-                {effects.handBoostUsed && (
-                  <span className="ml-auto rounded bg-gray-700 px-1.5 py-0.5 text-[9px] text-gray-500 font-semibold">USED</span>
-                )}
-                {!effects.handBoostUsed && effects.eventEffect === "hand_boost" && (
-                  <span className="ml-auto rounded bg-blue-400/30 px-1.5 py-0.5 text-[9px] text-blue-400 font-semibold">ON</span>
-                )}
-              </div>
-              {!effects.handBoostUsed && (
-                <p className="text-[10px] text-gray-500 leading-snug">Reserve decks score 1× for this event</p>
-              )}
-            </button>
+              return (
+                <button
+                  key={effect.id}
+                  disabled={locked || used || (!active && !canAfford)}
+                  onClick={() => toggleEffect(effect.id)}
+                  title={effect.strategicTip}
+                  className={`flex flex-col items-start gap-1 rounded-xl border p-2.5 text-left transition-all
+                    ${used
+                      ? "border-gray-700/40 bg-gray-900/20 opacity-40 cursor-not-allowed"
+                      : !active && !canAfford
+                        ? "border-gray-700/40 opacity-40 cursor-not-allowed"
+                        : active
+                          ? `${colors.border} ${colors.bg}`
+                          : "border-white/10 hover:border-white/30 cursor-pointer"
+                    }`}
+                >
+                  <div className="flex items-center gap-1 w-full">
+                    <span className="text-sm">{effect.emoji}</span>
+                    <span className={`text-xs font-bold flex-1 min-w-0 truncate ${used ? "text-gray-600" : active ? colors.text : "text-gray-300"}`}>
+                      {effect.label}
+                    </span>
+                    {used
+                      ? <span className="rounded bg-gray-700 px-1 py-0.5 text-[8px] text-gray-500 font-bold shrink-0">USED</span>
+                      : active
+                        ? <span className={`rounded px-1 py-0.5 text-[8px] font-bold shrink-0 ${colors.badge}`}>ON</span>
+                        : <span className="rounded bg-white/10 px-1 py-0.5 text-[8px] text-gray-500 shrink-0">{effect.cost}⚡</span>
+                    }
+                  </div>
+                  {!used && (
+                    <p className="text-[9px] text-gray-600 leading-tight">{effect.description}</p>
+                  )}
+                </button>
+              );
+            })}
           </div>
 
           {effects.eventEffect && !locked && (
             <p className="mt-2 text-center text-[10px] text-gray-600">
-              Only one Stadium Effect active per event — selecting another replaces the current one.
+              One effect active per event · selecting another replaces it · charges reset next season
             </p>
           )}
         </div>

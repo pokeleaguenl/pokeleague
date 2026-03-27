@@ -104,8 +104,17 @@ export default async function SquadPage() {
   const stadiumEffects = sq ? {
     x3Used: (sq.x3_effect_used as boolean) ?? false,
     handBoostUsed: (sq.hand_boost_used as boolean) ?? false,
+    benchBlitzUsed: (sq.bench_blitz_used as boolean) ?? false,
+    metaCallUsed: (sq.meta_call_used as boolean) ?? false,
+    darkHorseUsed: (sq.dark_horse_used as boolean) ?? false,
+    captainSwapUsed: (sq.captain_swap_used as boolean) ?? false,
     eventEffect: (sq.event_effect as string) ?? null,
-  } : { x3Used: false, handBoostUsed: false, eventEffect: null };
+    effectCharges: (sq.effect_charges as number) ?? 5,
+  } : {
+    x3Used: false, handBoostUsed: false, benchBlitzUsed: false,
+    metaCallUsed: false, darkHorseUsed: false, captainSwapUsed: false,
+    eventEffect: null, effectCharges: 5,
+  };
 
   const lastSaved = sq?.updated_at ? new Date(sq.updated_at as string).toLocaleString("en-GB", {
     day: "numeric",
